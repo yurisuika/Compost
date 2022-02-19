@@ -44,7 +44,7 @@ For Fabric 1.18.1!
 
 #### Dependencies
 
-Blossom requires *[Fabric API](https://www.modrinth.com/mod/fabric-api)* as a dependency!
+Compost requires *[Fabric API](https://www.modrinth.com/mod/fabric-api)* as a dependency!
 
 #### Servers
 
