@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "compost",
+  "version": "${version}",
+
+  "name": "Compost",
+  "description": "Composters compost organic materials into dirt!",
+  "authors": [
+    "yurisuika"
+  ],
+  "contributors": [
+  ],
+  "contact": {
+    "homepage": "https://suikacraft.com",
+    "sources": "https://github.com/yurisuika/Compost"
+  },
+
+  "license": "GNU General Public License 3.0",
+  "icon": "assets/compost/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.yurisuika.compost.Compost"
+    ]
+  },
+  "mixins": [
+    "compost.mixins.json"
+  ],
+
+  "accessWidener" : "compost.accesswidener",
+
+  "depends": {
+    "fabricloader": ">=0.11.6",
+    "fabric": "*",
+    "minecraft": "1.18.x",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}

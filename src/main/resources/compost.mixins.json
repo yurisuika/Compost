@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.yurisuika.compost.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "mixins": [
+    "blocks.ComposterBlockFullComposterInventoryMixin",
+    "blocks.ComposterBlockMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
