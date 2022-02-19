@@ -19,7 +19,7 @@ When using Git, just choose a directory you wish to keep the project root folder
 ```shell script
 git clone --branch Fabric-1.18 --recursive https://github.com/yurisuika/compost.git
 
-cd ./blossom
+cd ./compost
 
 ./gradlew build
 ```
