@@ -28,18 +28,6 @@ cd ./compost
 
 Afterwards, your compiled JAR will be in `./build/libs`.
 
-### Released Builds
-
-While you can compile from source, you can always download the latest releases right off of GitHub. Either click the links below or check the releases tab.
-
-#### Latest Builds
-
-Stable releases of Compost ready to be consumed by the public!
-
-##### 1.18 - [*`1.0.1`*](https://github.com/yurisuika/Compost/releases/download/1.0.1/compost-1.18.1-1.0.1.jar)
-
-For Fabric 1.18.1!
-
 ---
 
 ## <p align="center">LINKS</p>
@@ -47,10 +35,6 @@ For Fabric 1.18.1!
 #### Dependencies
 
 Compost requires *[Fabric API](https://www.modrinth.com/mod/fabric-api)* as a dependency!
-
-#### Servers
-
-Join *`play.suikacraft.com`* to play on SuikaCraft today!
 
 #### Community
 
