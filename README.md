@@ -4,6 +4,8 @@
 
 Compost is a Fabric mod that makes composters compost organic materials into dirt! Have you ever thought that bone meal wasn't quite the right product that a composter should bring to Minecraft? Well now you can use them to produce dirt! Bring out the true essence of a composter and get dirty!
 
+If you still wish to have a way to automate bone meal production, you are not left out! Bones can now be smelted to produce bone meal! You will also get a bit of experience to boot!
+
 ---
 
 ## <p align="center">DOWNLOADS</p>
@@ -34,7 +36,7 @@ While you can compile from source, you can always download the latest releases r
 
 Stable releases of Compost ready to be consumed by the public!
 
-##### 1.18 - [*`1.0.0`*](https://github.com/yurisuika/Compost/releases/download/1.0.0/compost-1.18.1-1.0.0.jar)
+##### 1.18 - [*`1.0.1`*](https://github.com/yurisuika/Compost/releases/download/1.0.1/compost-1.18.1-1.0.1.jar)
 
 For Fabric 1.18.1!
 
