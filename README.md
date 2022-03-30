@@ -4,9 +4,7 @@
 
 If you still wish to have a way to automate bone meal production, you are not left out! Bones can now be smelted to produce bone meal! You will also get a bit of experience to boot!
 
-<p align="center">− × − × − × − × − × − × − × − × − × − × − × − × − × − × − × − × − × − × − × − × − × − × − × − × − × − × − × −</p>
-
-#### Source Building
+#### Compiling
 
 To build from source you will need have JDK 17 to compile and, optionally, Git to clone the repository. Otherwise, download the archive and just run `./gradlew build` from the root project folder.
 
@@ -25,8 +23,6 @@ Afterwards, your compiled JAR will be in `./build/libs`.
 #### Releases
 
 Don't want to bother building from source? Get the releases *[right here](https://github.com/yurisuika/Compost/releases)* now!
-
-<p align="center">− × − × − × − × − × − × − × − × − × − × − × − × − × − × − × − × − × − × − × − × − × − × − × − × − × − × − × −</p>
 
 #### Repositories
 
