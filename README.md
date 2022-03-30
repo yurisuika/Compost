@@ -28,11 +28,18 @@ cd ./compost
 
 Afterwards, your compiled JAR will be in `./build/libs`.
 
+### Releases
+
+Don't want to bother building from source? Get the releases *[right here](https://github.com/yurisuika/Compost/releases)* now!
+
 ---
 
 ## <p align="center">LINKS</p>
 
+#### Repositories
+
+You can find Compost on both *[CurseForge](https://www.curseforge.com/minecraft/mc-mods/compost)* and *[Modrinth](https://modrinth.com/mod/compost)*!
 
 #### Community
 
-The one and only! Join the *[SuikaCraft Discord](https://discord.gg/0zdNEkQle7Qg9C1H)* to find the latest discussion on the resource pack and server or just to chat!
+The one and only! Join the *[SuikaCraft Discord](https://discord.gg/0zdNEkQle7Qg9C1H)* for the latest discussion on our server, resource pack, mods, or just to chat!
