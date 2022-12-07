@@ -1,8 +1,8 @@
 <p align="center"><img src="https://github.com/yurisuika/Compost/blob/Fabric-1.18/src/main/resources/assets/compost/icon.png?raw=true" width="256" height="256"></p>
 
-**Compost** is a Fabric/Forge mod for Minecraft that makes composters compost organic materials into dirt! Have you ever thought that bone meal wasn't quite the right product that a composter should bring to the game? Well, now you can use them to produce dirt! Bring out the true essence of a composter and get dirty! If you still wish to have a way to automate bone meal production, you are not left out! Bones can be smelted to produce bone meal! You will also get a bit of experience to boot!
+**Compost** is a Fabric/Forge mod for Minecraft that makes composters turn your food waste into whatever you want! Have you ever thought that bone meal wasn't quite the right product that a composter should bring to the game? Well, now you can change the composter to produce dirt, apples, or even diamonds! Bring out the true essence of a composter and get dirty!
 
-You can run Compost on just server-side if you wish, but be sure to run it on your client to see the dirt-filled compost texture!
+Compost now features JSON configurability! The default config has entries for both dirt and bone meal, but you can make it whatever you want! Simply set the item name, the chance, and the min/max range for the number of the item to be dropped! You can have as many entries as you desire!
 
 #### Compiling
 
