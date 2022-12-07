@@ -4,7 +4,6 @@
   "package": "com.yurisuika.compost.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "blocks.ComposterBlockFullComposterInventoryMixin",
     "blocks.ComposterBlockMixin"
   ],
   "client": [
