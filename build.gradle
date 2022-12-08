@@ -6,11 +6,12 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
-archivesBaseName = project.archives_base_name
+archivesBaseName = "${project.archives_base_name}-fabric-${project.minecraft_version}"
 version = project.mod_version
 group = project.maven_group
 
 repositories {
+	maven { url "https://maven.architectury.dev" }
 }
 
 dependencies {
@@ -19,6 +20,10 @@ dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:9.1.577"
+	modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:9.1.577"
+	modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:9.1.577"
 }
 
 processResources {
@@ -49,7 +54,8 @@ jar {
 	from("LICENSE") {
 		rename { "${it}_${project.archives_base_name}"}
 	}
-	archiveAppendix = "fabric-${project.minecraft_version}"
+//	This is not working for some reason:
+//	archiveAppendix = "fabric-${project.minecraft_version}"
 }
 
 publishing {
