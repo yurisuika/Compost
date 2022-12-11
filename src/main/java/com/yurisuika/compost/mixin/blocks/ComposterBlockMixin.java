@@ -7,9 +7,9 @@ import net.minecraft.block.ComposterBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -33,7 +33,7 @@ public class ComposterBlockMixin {
             double d = (double)(world.random.nextFloat() * 0.7F) + 0.15000000596046448D;
             double e = (double)(world.random.nextFloat() * 0.7F) + 0.06000000238418579D + 0.6D;
             double g = (double)(world.random.nextFloat() * 0.7F) + 0.15000000596046448D;
-            ItemEntity itemEntity = new ItemEntity(world, (double)pos.getX() + d, (double)pos.getY() + e, (double)pos.getZ() + g, new ItemStack(Registry.ITEM.get(new Identifier(group.item)), ThreadLocalRandom.current().nextInt(group.min, group.max + 1)));
+            ItemEntity itemEntity = new ItemEntity(world, (double)pos.getX() + d, (double)pos.getY() + e, (double)pos.getZ() + g, new ItemStack(Registries.ITEM.get(new Identifier(group.item)), ThreadLocalRandom.current().nextInt(group.min, group.max + 1)));
             itemEntity.setToDefaultPickupDelay();
             if(ThreadLocalRandom.current().nextFloat() < group.chance) {
                 world.spawnEntity(itemEntity);
