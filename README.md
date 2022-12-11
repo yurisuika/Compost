@@ -4,6 +4,8 @@
 
 Compost now features JSON configurability! The default config has entries for both dirt and bone meal, but you can make it whatever you want! Simply set the item name, the chance, and the min/max range for the number of items to be dropped! You can have as many entries as you desire!
 
+While Compost can be ran only server-side, you may want to run it on your client as well for its <a href="https://www.curseforge.com/minecraft/mc-mods/roughly-enough-items">Roughly Enough Items</a> integration!
+
 #### Compiling
 
 To build from source you will need have JDK 17 to compile and, optionally, Git to clone the repository. Otherwise, download the archive and just run `./gradlew build` from the root project folder.
