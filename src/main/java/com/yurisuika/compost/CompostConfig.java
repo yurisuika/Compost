@@ -2,6 +2,8 @@ package com.yurisuika.compost;
 
 public class CompostConfig {
 
+    public boolean shuffle = true;
+
     public Group[] items = {
             new Group("minecraft:dirt", 1.0F, 1,1),
             new Group("minecraft:bone_meal", 1.0F, 1, 1)
