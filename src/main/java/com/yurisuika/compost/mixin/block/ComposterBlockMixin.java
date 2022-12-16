@@ -5,6 +5,7 @@ import com.yurisuika.compost.Compost;
 import com.yurisuika.compost.block.ArrayComposterInventory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ComposterBlock;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.Item;
@@ -17,6 +18,7 @@ import net.minecraft.world.WorldAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Arrays;
@@ -26,6 +28,11 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Mixin(ComposterBlock.class)
 public abstract class ComposterBlockMixin {
+
+    @Redirect(method = "emptyFullComposter", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;spawnEntity(Lnet/minecraft/entity/Entity;)Z"))
+    private static boolean redirectEmptyFullComposter(World world, Entity entity) {
+        return false;
+    }
 
     @Inject(method = "emptyFullComposter", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;spawnEntity(Lnet/minecraft/entity/Entity;)Z", shift = At.Shift.AFTER))
     private static void injectEmptyFullComposter(BlockState state, World world, BlockPos pos, CallbackInfoReturnable<BlockState> cir) {
