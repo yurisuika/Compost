@@ -2,14 +2,20 @@ package com.yurisuika.compost;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Files;
+
+import static net.minecraft.server.command.CommandManager.*;
 
 public class Compost implements ModInitializer {
 
@@ -51,6 +57,11 @@ public class Compost implements ModInitializer {
         return config;
     }
 
+    public static void setShuffle(boolean bool) {
+        config.shuffle = bool;
+        saveConfig();
+    }
+
     @Override
     public void onInitialize() {
         LOGGER.info("Loading Compost!");
@@ -59,6 +70,17 @@ public class Compost implements ModInitializer {
             saveConfig();
         }
         loadConfig();
+
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher
+                .register(literal("compost")
+                .then(literal("shuffle")
+                .then(argument("shouldShuffle", BoolArgumentType.bool()).executes(context -> {
+                    boolean bool = BoolArgumentType.getBool(context, "shouldShuffle");
+                    setShuffle(bool);
+                    context.getSource().sendFeedback(Text.translatable("compost.commands.shuffle", bool), true);
+                    return 1;
+                }))
+                .requires(source -> source.hasPermissionLevel(4)))));
     }
 
 }
