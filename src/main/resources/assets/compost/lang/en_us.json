@@ -1,3 +1,4 @@
 {
-  "compost.commands.shuffle": "Composter inventory shuffling is now set to: %s"
+  "compost.commands.shuffle.query": "Composter inventory shuffling is currently set to: %s",
+  "compost.commands.shuffle.set": "Composter inventory shuffling is now set to: %s"
 }

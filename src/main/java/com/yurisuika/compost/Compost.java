@@ -6,6 +6,7 @@ import com.mojang.brigadier.arguments.BoolArgumentType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.server.command.GameRuleCommand;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
@@ -24,7 +25,18 @@ public class Compost implements ModInitializer {
     public static File file = new File(FabricLoader.getInstance().getConfigDir().toFile(), "compost.json");
     public static Gson gson = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().create();
 
-    public static CompostConfig config = new CompostConfig();
+    public static Config config = new Config();
+
+    public static class Config {
+
+        public boolean shuffle = true;
+
+        public Group[] items = {
+                new Group("minecraft:dirt", 1.0F, 1,1),
+                new Group("minecraft:bone_meal", 1.0F, 1, 1)
+        };
+
+    }
 
     public static void saveConfig() {
         try {
@@ -39,9 +51,9 @@ public class Compost implements ModInitializer {
     static void loadConfig() {
         try {
             if (file.exists()) {
-                config = gson.fromJson(Files.readString(file.toPath()), CompostConfig.class);
+                config = gson.fromJson(Files.readString(file.toPath()), Config.class);
             } else {
-                config = new CompostConfig();
+                config = new Config();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,17 +61,33 @@ public class Compost implements ModInitializer {
         setConfig(config);
     }
 
-    public static void setConfig(CompostConfig config) {
+    public static void setConfig(Config config) {
         Compost.config = config;
     }
 
-    public static CompostConfig getConfig() {
+    public static Config getConfig() {
         return config;
     }
 
     public static void setShuffle(boolean bool) {
         config.shuffle = bool;
         saveConfig();
+    }
+
+    public static class Group {
+
+        public String item;
+        public float chance;
+        public int min;
+        public int max;
+
+        Group(String item, float chance, int min, int max) {
+            this.item = item;
+            this.chance = chance;
+            this.min = min;
+            this.max = max;
+        }
+
     }
 
     @Override
@@ -73,11 +101,15 @@ public class Compost implements ModInitializer {
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher
                 .register(literal("compost")
-                .then(literal("shuffle")
+                .then(literal("shuffle").executes(context -> {
+                    boolean bool = config.shuffle;
+                    context.getSource().sendFeedback(Text.translatable("compost.commands.shuffle.query", bool), false);
+                    return 1;
+                })
                 .then(argument("shouldShuffle", BoolArgumentType.bool()).executes(context -> {
                     boolean bool = BoolArgumentType.getBool(context, "shouldShuffle");
                     setShuffle(bool);
-                    context.getSource().sendFeedback(Text.translatable("compost.commands.shuffle", bool), true);
+                    context.getSource().sendFeedback(Text.translatable("compost.commands.shuffle.set", bool), true);
                     return 1;
                 }))
                 .requires(source -> source.hasPermissionLevel(4)))));
