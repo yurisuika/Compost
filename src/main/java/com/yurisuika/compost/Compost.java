@@ -2,21 +2,17 @@ package com.yurisuika.compost;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.yurisuika.compost.server.command.CompostCommand;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.server.command.GameRuleCommand;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
+import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Files;
-
-import static net.minecraft.server.command.CommandManager.*;
 
 public class Compost implements ModInitializer {
 
@@ -32,8 +28,8 @@ public class Compost implements ModInitializer {
         public boolean shuffle = true;
 
         public Group[] items = {
-                new Group("minecraft:dirt", 1.0F, 1,1),
-                new Group("minecraft:bone_meal", 1.0F, 1, 1)
+                new Group("minecraft:dirt", 1.0D, 1,1),
+                new Group("minecraft:bone_meal", 1.0D, 1, 1)
         };
 
     }
@@ -74,14 +70,48 @@ public class Compost implements ModInitializer {
         saveConfig();
     }
 
+    public static void setGroup(int group, String item, double chance, int min, int max) {
+        config.items[group] = new Group(item, chance, min, max);
+        saveConfig();
+    }
+
+    public static Group getGroup(int group) {
+        return ArrayUtils.get(config.items, group);
+    }
+
+    public static void addGroup(String item, double chance, int min, int max) {
+        config.items = ArrayUtils.add(config.items, new Group(item, chance, min, max));
+        saveConfig();
+    }
+
+    public static void insertGroup(int group, String item, double chance, int min, int max) {
+        config.items = ArrayUtils.insert(group, config.items, new Group(item, chance, min, max));
+        saveConfig();
+    }
+
+    public static void removeGroup(int group) {
+        config.items = ArrayUtils.remove(config.items, group);
+        saveConfig();
+    }
+
+    public static void reverseGroups() {
+        ArrayUtils.reverse(config.items);
+        saveConfig();
+    }
+
+    public static void shuffleGroups() {
+        ArrayUtils.shuffle(config.items);
+        saveConfig();
+    }
+
     public static class Group {
 
         public String item;
-        public float chance;
+        public double chance;
         public int min;
         public int max;
 
-        Group(String item, float chance, int min, int max) {
+        Group(String item, double chance, int min, int max) {
             this.item = item;
             this.chance = chance;
             this.min = min;
@@ -99,20 +129,7 @@ public class Compost implements ModInitializer {
         }
         loadConfig();
 
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher
-                .register(literal("compost")
-                .then(literal("shuffle").executes(context -> {
-                    boolean bool = config.shuffle;
-                    context.getSource().sendFeedback(Text.translatable("compost.commands.shuffle.query", bool), false);
-                    return 1;
-                })
-                .then(argument("shouldShuffle", BoolArgumentType.bool()).executes(context -> {
-                    boolean bool = BoolArgumentType.getBool(context, "shouldShuffle");
-                    setShuffle(bool);
-                    context.getSource().sendFeedback(Text.translatable("compost.commands.shuffle.set", bool), true);
-                    return 1;
-                }))
-                .requires(source -> source.hasPermissionLevel(4)))));
+        CommandRegistrationCallback.EVENT.register(CompostCommand::register);
     }
 
 }

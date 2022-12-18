@@ -42,7 +42,7 @@ public abstract class ComposterBlockMixin {
             double g = (double)(world.random.nextFloat() * 0.7F) + 0.15000000596046448D;
             ItemEntity itemEntity = new ItemEntity(world, (double)pos.getX() + d, (double)pos.getY() + e, (double)pos.getZ() + g, new ItemStack(Registries.ITEM.get(new Identifier(group.item)), ThreadLocalRandom.current().nextInt(group.min, group.max + 1)));
             itemEntity.setToDefaultPickupDelay();
-            if(ThreadLocalRandom.current().nextFloat() < group.chance) {
+            if(ThreadLocalRandom.current().nextDouble() < group.chance) {
                 world.spawnEntity(itemEntity);
             }
         });
@@ -52,7 +52,7 @@ public abstract class ComposterBlockMixin {
     private void injectGetInventory(BlockState state, WorldAccess world, BlockPos pos, CallbackInfoReturnable<SidedInventory> cir) {
         List<ItemStack> list = Lists.newArrayList();
         Arrays.stream(Compost.config.items).forEach(group -> {
-            if(ThreadLocalRandom.current().nextFloat() < group.chance) {
+            if(ThreadLocalRandom.current().nextDouble() < group.chance) {
                 Item output = Registries.ITEM.get(new Identifier(group.item));
                 int count = ThreadLocalRandom.current().nextInt(group.min, group.max + 1);
                 list.add(new ItemStack(output, count));
