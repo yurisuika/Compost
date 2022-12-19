@@ -6,13 +6,13 @@
   "commands.compost.shuffle.set": "Shuffling is now set to: %s",
 
   "commands.compost.groups.query": "Composter contains %d groups",
-  "commands.compost.groups.get": "Composter group %d: %d%% chance of %d-%d %s",
+  "commands.compost.groups.get": "%d: %s (chance: %d%%, min: %d, max: %d)",
   "commands.compost.groups.reverse": "Composter groups reversed",
   "commands.compost.groups.shuffle": "Composter groups shuffled",
 
-  "commands.compost.group.get": "Composter group %d: %d%% chance of %d-%d %s",
-  "commands.compost.group.remove": "Composter group %d removed",
-  "commands.compost.group.add": "Composter group added: %d%% chance of %d-%d %s",
-  "commands.compost.group.insert": "Composter group %d inserted: %d%% chance of %d-%d %s",
-  "commands.compost.group.set": "Composter group %d set: %d%% chance of %d-%d %s"
+  "commands.compost.group.get": "%d: %s (chance: %d%%, min: %d, max: %d)",
+  "commands.compost.group.remove": "Removed %s (chance: %d%%, min: %d, max: %d)",
+  "commands.compost.group.add": "Added %s (chance: %d%%, min: %d, max: %d)",
+  "commands.compost.group.insert": "Inserted %s (chance: %d%%, min: %d, max: %d)",
+  "commands.compost.group.set": "Set %s (chance: %d%%, min: %d, max: %d)"
 }
