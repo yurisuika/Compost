@@ -6,9 +6,11 @@ import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.ItemStackArgumentType;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.math.BigDecimal;
@@ -21,6 +23,28 @@ public class CompostCommand {
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(literal("compost")
+                .then(literal("config")
+                        .requires(source -> source.hasPermissionLevel(4))
+                        .then(literal("reload")
+                                .executes(context -> {
+                                    loadConfig();
+                                    context.getSource().sendFeedback(Text.translatable("commands.compost.config.reload"), true);
+                                    return 1;
+                                })
+                        )
+                        .then(literal("reset")
+                                .executes(context -> {
+                                    for (int i = 0; i < config.items.length; i++) {
+                                        removeGroup(i);
+                                    }
+                                    addGroup("minecraft:dirt", 1.0D, 1,1);
+                                    addGroup("minecraft:bone_meal", 1.0D, 1,1);
+                                    setShuffle(true);
+                                    context.getSource().sendFeedback(Text.translatable("commands.compost.config.reset"), true);
+                                    return 1;
+                                })
+                        )
+                )
                 .then(literal("shuffle")
                         .requires(source -> source.hasPermissionLevel(4))
                         .then(literal("query")
@@ -51,7 +75,21 @@ public class CompostCommand {
                         .then(literal("get")
                                 .executes(context -> {
                                     for (Group group : config.items) {
-                                        context.getSource().sendFeedback(Text.translatable("commands.compost.groups.get", ArrayUtils.indexOf(config.items, group), new DecimalFormat("0.###############").format(BigDecimal.valueOf(group.chance).multiply(BigDecimal.valueOf(100))), group.min, group.max, group.item), false);
+                                        int index;
+                                        String name;
+                                        String id;
+                                        if (group.item.contains("{")) {
+                                            index = group.item.indexOf("{");
+                                            name = Registries.ITEM.get(new Identifier(group.item.substring(0, group.item.indexOf("{")))).getName().getString();
+                                            id = group.item.substring(0, index);
+                                        } else {
+                                            name = Registries.ITEM.get(new Identifier(group.item)).getName().getString();
+                                            id = group.item;
+                                        }
+                                        int limit = Registries.ITEM.get(new Identifier(id)).getMaxCount();
+                                        int min = Math.min(group.min, limit);
+                                        int max = Math.min(group.max, limit);
+                                        context.getSource().sendFeedback(Text.translatable("commands.compost.groups.get", ArrayUtils.indexOf(config.items, group), new DecimalFormat("0.###############").format(BigDecimal.valueOf(group.chance).multiply(BigDecimal.valueOf(100))), min, max, name), false);
                                     }
                                     return 1;
                                 })
@@ -76,8 +114,22 @@ public class CompostCommand {
                         .then(literal("get")
                                 .then(argument("group", IntegerArgumentType.integer(0, config.items.length - 1))
                                         .executes(context -> {
-                                            int group = IntegerArgumentType.getInteger(context, "group");
-                                            context.getSource().sendFeedback(Text.translatable("commands.compost.group.get", group, new DecimalFormat("0.###############").format(BigDecimal.valueOf(getGroup(group).chance).multiply(BigDecimal.valueOf(100))), getGroup(group).min, getGroup(group).max, getGroup(group).item), false);
+                                            Group group = getGroup(IntegerArgumentType.getInteger(context, "group"));
+                                            int index;
+                                            String item;
+                                            String id;
+                                            if (group.item.contains("{")) {
+                                                index = group.item.indexOf("{");
+                                                item = Registries.ITEM.get(new Identifier(group.item.substring(0, group.item.indexOf("{")))).getName().getString();
+                                                id = group.item.substring(0, index);
+                                            } else {
+                                                item = Registries.ITEM.get(new Identifier(group.item)).getName().getString();
+                                                id = group.item;
+                                            }
+                                            int limit = Registries.ITEM.get(new Identifier(id)).getMaxCount();
+                                            int min = Math.min(group.min, limit);
+                                            int max = Math.min(group.max, limit);
+                                            context.getSource().sendFeedback(Text.translatable("commands.compost.groups.get", ArrayUtils.indexOf(config.items, group), new DecimalFormat("0.###############").format(BigDecimal.valueOf(group.chance).multiply(BigDecimal.valueOf(100))), min, max, item), false);
                                             return 1;
                                         })
                                 )
@@ -85,9 +137,9 @@ public class CompostCommand {
                         .then(literal("remove")
                                 .then(argument("group", IntegerArgumentType.integer(0, config.items.length - 1))
                                         .executes(context -> {
-                                            int group = IntegerArgumentType.getInteger(context, "group");
-                                            removeGroup(group);
-                                            context.getSource().sendFeedback(Text.translatable("commands.compost.group.remove", group), true);
+                                            int number = IntegerArgumentType.getInteger(context, "group");
+                                            removeGroup(number);
+                                            context.getSource().sendFeedback(Text.translatable("commands.compost.group.remove", number), true);
                                             return 1;
                                         })
                                 )
@@ -99,13 +151,23 @@ public class CompostCommand {
                                                         .then(argument("max", IntegerArgumentType.integer(1, 64))
                                                                 .executes(context -> {
                                                                     String item = ItemStackArgumentType.getItemStackArgument(context, "item").asString();
+                                                                    String name;
+                                                                    String id;
+                                                                    int index;
+                                                                    if (item.contains("{")) {
+                                                                        index = item.indexOf("{");
+                                                                        name = Registries.ITEM.get(new Identifier(item.substring(0, index))).getName().getString();
+                                                                        id = item.substring(0, index);
+                                                                    } else {
+                                                                        name = Registries.ITEM.get(new Identifier(item)).getName().getString();
+                                                                        id = item;
+                                                                    }
                                                                     double chance = DoubleArgumentType.getDouble(context, "chance");
-                                                                    int min = IntegerArgumentType.getInteger(context, "min");
-                                                                    int max = IntegerArgumentType.getInteger(context, "max");
+                                                                    int limit = Registries.ITEM.get(new Identifier(id)).getMaxCount();
+                                                                    int min = Math.min(IntegerArgumentType.getInteger(context, "min"), limit);
+                                                                    int max = Math.min(IntegerArgumentType.getInteger(context, "max"), limit);
                                                                     addGroup(item, chance, min, max);
-                                                                    String itemx = ItemStackArgumentType.getItemStackArgument(context, "item").getItem().getName().getString();
-                                                                    context.getSource().sendFeedback(Text.translatable("commands.compost.group.add", new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), min, max, itemx), true);
-                                                                    LOGGER.info(item);
+                                                                    context.getSource().sendFeedback(Text.translatable("commands.compost.group.add", new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), min, max, name), true);
                                                                     return 1;
                                                                 })
                                                         )
@@ -120,13 +182,25 @@ public class CompostCommand {
                                                         .then(argument("min", IntegerArgumentType.integer(0, 64))
                                                                 .then(argument("max", IntegerArgumentType.integer(1, 64))
                                                                         .executes(context -> {
-                                                                            int group = IntegerArgumentType.getInteger(context, "group");
+                                                                            int number = IntegerArgumentType.getInteger(context, "group");
                                                                             String item = ItemStackArgumentType.getItemStackArgument(context, "item").asString();
+                                                                            String name;
+                                                                            String id;
+                                                                            int index;
+                                                                            if (item.contains("{")) {
+                                                                                index = item.indexOf("{");
+                                                                                name = Registries.ITEM.get(new Identifier(item.substring(0, index))).getName().getString();
+                                                                                id = item.substring(0, index);
+                                                                            } else {
+                                                                                name = Registries.ITEM.get(new Identifier(item)).getName().getString();
+                                                                                id = item;
+                                                                            }
                                                                             double chance = DoubleArgumentType.getDouble(context, "chance");
-                                                                            int min = IntegerArgumentType.getInteger(context, "min");
-                                                                            int max = IntegerArgumentType.getInteger(context, "max");
-                                                                            insertGroup(group, item, chance, min, max);
-                                                                            context.getSource().sendFeedback(Text.translatable("commands.compost.group.insert", group, new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), min, max, item), true);
+                                                                            int limit = Registries.ITEM.get(new Identifier(id)).getMaxCount();
+                                                                            int min = Math.min(IntegerArgumentType.getInteger(context, "min"), limit);
+                                                                            int max = Math.min(IntegerArgumentType.getInteger(context, "max"), limit);
+                                                                            insertGroup(number, item, chance, min, max);
+                                                                            context.getSource().sendFeedback(Text.translatable("commands.compost.group.insert", number, new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), min, max, name), true);
                                                                             return 1;
                                                                         })
                                                                 )
@@ -142,13 +216,25 @@ public class CompostCommand {
                                                         .then(argument("min", IntegerArgumentType.integer(0, 64))
                                                                 .then(argument("max", IntegerArgumentType.integer(1, 64))
                                                                         .executes(context -> {
-                                                                            int group = IntegerArgumentType.getInteger(context, "group");
+                                                                            int number = IntegerArgumentType.getInteger(context, "group");
                                                                             String item = ItemStackArgumentType.getItemStackArgument(context, "item").asString();
+                                                                            String name;
+                                                                            String id;
+                                                                            int index;
+                                                                            if (item.contains("{")) {
+                                                                                index = item.indexOf("{");
+                                                                                name = Registries.ITEM.get(new Identifier(item.substring(0, index))).getName().getString();
+                                                                                id = item.substring(0, index);
+                                                                            } else {
+                                                                                name = Registries.ITEM.get(new Identifier(item)).getName().getString();
+                                                                                id = item;
+                                                                            }
                                                                             double chance = DoubleArgumentType.getDouble(context, "chance");
-                                                                            int min = IntegerArgumentType.getInteger(context, "min");
-                                                                            int max = IntegerArgumentType.getInteger(context, "max");
-                                                                            setGroup(group, item, chance, min, max);
-                                                                            context.getSource().sendFeedback(Text.translatable("commands.compost.group.set", group, new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), min, max, item), true);
+                                                                            int limit = Registries.ITEM.get(new Identifier(id)).getMaxCount();
+                                                                            int min = Math.min(IntegerArgumentType.getInteger(context, "min"), limit);
+                                                                            int max = Math.min(IntegerArgumentType.getInteger(context, "max"), limit);
+                                                                            setGroup(number, item, chance, min, max);
+                                                                            context.getSource().sendFeedback(Text.translatable("commands.compost.group.set", number, new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), min, max, name), true);
                                                                             return 1;
                                                                         })
                                                                 )

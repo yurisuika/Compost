@@ -44,7 +44,7 @@ public class Compost implements ModInitializer {
         }
     }
 
-    static void loadConfig() {
+    public static void loadConfig() {
         try {
             if (file.exists()) {
                 config = gson.fromJson(Files.readString(file.toPath()), Config.class);

@@ -1,6 +1,7 @@
 package com.yurisuika.compost.mixin.block;
 
 import com.google.common.collect.Lists;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.yurisuika.compost.Compost;
 import com.yurisuika.compost.block.ArrayComposterInventory;
 import net.minecraft.block.BlockState;
@@ -10,6 +11,8 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -37,12 +40,35 @@ public abstract class ComposterBlockMixin {
     @Inject(method = "emptyFullComposter", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;spawnEntity(Lnet/minecraft/entity/Entity;)Z", shift = At.Shift.AFTER))
     private static void injectEmptyFullComposter(BlockState state, World world, BlockPos pos, CallbackInfoReturnable<BlockState> cir) {
         Arrays.stream(Compost.config.items).forEach(group -> {
-            double d = (double)(world.random.nextFloat() * 0.7F) + 0.15000000596046448D;
-            double e = (double)(world.random.nextFloat() * 0.7F) + 0.06000000238418579D + 0.6D;
-            double g = (double)(world.random.nextFloat() * 0.7F) + 0.15000000596046448D;
-            ItemEntity itemEntity = new ItemEntity(world, (double)pos.getX() + d, (double)pos.getY() + e, (double)pos.getZ() + g, new ItemStack(Registries.ITEM.get(new Identifier(group.item)), ThreadLocalRandom.current().nextInt(group.min, group.max + 1)));
-            itemEntity.setToDefaultPickupDelay();
             if(ThreadLocalRandom.current().nextDouble() < group.chance) {
+                double x = (double)(world.random.nextFloat() * 0.7F) + 0.15000000596046448D;
+                double y = (double)(world.random.nextFloat() * 0.7F) + 0.06000000238418579D + 0.6D;
+                double z = (double)(world.random.nextFloat() * 0.7F) + 0.15000000596046448D;
+                Item item;
+                int index;
+                if (group.item.contains("{")) {
+                    index = group.item.indexOf("{");
+                    String id = group.item.substring(0, index);
+                    item = Registries.ITEM.get(new Identifier(id));
+                } else {
+                    index = 0;
+                    item = Registries.ITEM.get(new Identifier(group.item));
+                }
+                Compost.LOGGER.info(item.getName().getString());
+                int maxCount = item.getMaxCount();
+                ItemStack itemStack = new ItemStack(item, ThreadLocalRandom.current().nextInt(Math.min(group.min, maxCount), Math.min(group.max, maxCount) + 1));
+                if (group.item.contains("{")) {
+                    NbtCompound nbt;
+                    try {
+                        nbt = StringNbtReader.parse(group.item.substring(index));
+                        itemStack.setNbt(nbt);
+                        Compost.LOGGER.info(nbt.toString());
+                    } catch (CommandSyntaxException e) {
+                        e.printStackTrace();
+                    }
+                }
+                ItemEntity itemEntity = new ItemEntity(world, (double)pos.getX() + x, (double)pos.getY() + y, (double)pos.getZ() + z, itemStack);
+                itemEntity.setToDefaultPickupDelay();
                 world.spawnEntity(itemEntity);
             }
         });
@@ -53,9 +79,30 @@ public abstract class ComposterBlockMixin {
         List<ItemStack> list = Lists.newArrayList();
         Arrays.stream(Compost.config.items).forEach(group -> {
             if(ThreadLocalRandom.current().nextDouble() < group.chance) {
-                Item output = Registries.ITEM.get(new Identifier(group.item));
-                int count = ThreadLocalRandom.current().nextInt(group.min, group.max + 1);
-                list.add(new ItemStack(output, count));
+                Item item;
+                int index;
+                if (group.item.contains("{")) {
+                    index = group.item.indexOf("{");
+                    String id = group.item.substring(0, index);
+                    item = Registries.ITEM.get(new Identifier(id));
+                } else {
+                    index = 0;
+                    item = Registries.ITEM.get(new Identifier(group.item));
+                }
+                Compost.LOGGER.info(item.getName().getString());
+                int maxCount = item.getMaxCount();
+                ItemStack itemStack = new ItemStack(item, ThreadLocalRandom.current().nextInt(Math.min(group.min, maxCount), Math.min(group.max, maxCount) + 1));
+                if (group.item.contains("{")) {
+                    NbtCompound nbt;
+                    try {
+                        nbt = StringNbtReader.parse(group.item.substring(index));
+                        itemStack.setNbt(nbt);
+                        Compost.LOGGER.info(nbt.toString());
+                    } catch (CommandSyntaxException e) {
+                        e.printStackTrace();
+                    }
+                }
+                list.add(itemStack);
             }
         });
 

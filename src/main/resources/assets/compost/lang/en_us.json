@@ -1,15 +1,18 @@
 {
+  "commands.compost.config.reload": "Compost config reloaded",
+  "commands.compost.config.reset": "Compost config reset to defaults",
+
+  "commands.compost.shuffle.query": "Shuffling is currently set to: %s",
+  "commands.compost.shuffle.set": "Shuffling is now set to: %s",
+
   "commands.compost.groups.query": "Composter contains %d groups",
   "commands.compost.groups.get": "Composter group %d: %d%% chance of %d-%d %s",
   "commands.compost.groups.reverse": "Composter groups reversed",
   "commands.compost.groups.shuffle": "Composter groups shuffled",
 
-  "commands.compost.shuffle.query": "Shuffling is currently set to: %s",
-  "commands.compost.shuffle.set": "Shuffling is now set to: %s",
-
   "commands.compost.group.get": "Composter group %d: %d%% chance of %d-%d %s",
   "commands.compost.group.remove": "Composter group %d removed",
   "commands.compost.group.add": "Composter group added: %d%% chance of %d-%d %s",
-  "commands.compost.group.insert": "Composter group inserted at %d: %d%% chance of %d-%d %s",
-  "commands.compost.group.set": "Composter group at %d set: %d%% chance of %d-%d %s"
+  "commands.compost.group.insert": "Composter group %d inserted: %d%% chance of %d-%d %s",
+  "commands.compost.group.set": "Composter group %d set: %d%% chance of %d-%d %s"
 }
