@@ -54,7 +54,6 @@ public abstract class ComposterBlockMixin {
                     index = 0;
                     item = Registries.ITEM.get(new Identifier(group.item));
                 }
-                Compost.LOGGER.info(item.getName().getString());
                 int maxCount = item.getMaxCount();
                 ItemStack itemStack = new ItemStack(item, ThreadLocalRandom.current().nextInt(Math.min(group.min, maxCount), Math.min(group.max, maxCount) + 1));
                 if (group.item.contains("{")) {
@@ -62,7 +61,6 @@ public abstract class ComposterBlockMixin {
                     try {
                         nbt = StringNbtReader.parse(group.item.substring(index));
                         itemStack.setNbt(nbt);
-                        Compost.LOGGER.info(nbt.toString());
                     } catch (CommandSyntaxException e) {
                         e.printStackTrace();
                     }
@@ -89,7 +87,6 @@ public abstract class ComposterBlockMixin {
                     index = 0;
                     item = Registries.ITEM.get(new Identifier(group.item));
                 }
-                Compost.LOGGER.info(item.getName().getString());
                 int maxCount = item.getMaxCount();
                 ItemStack itemStack = new ItemStack(item, ThreadLocalRandom.current().nextInt(Math.min(group.min, maxCount), Math.min(group.max, maxCount) + 1));
                 if (group.item.contains("{")) {
@@ -97,7 +94,6 @@ public abstract class ComposterBlockMixin {
                     try {
                         nbt = StringNbtReader.parse(group.item.substring(index));
                         itemStack.setNbt(nbt);
-                        Compost.LOGGER.info(nbt.toString());
                     } catch (CommandSyntaxException e) {
                         e.printStackTrace();
                     }

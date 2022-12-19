@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.yurisuika.compost.Compost;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.ItemStackArgumentType;
 import net.minecraft.registry.Registries;
@@ -15,6 +16,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 
 import static com.yurisuika.compost.Compost.*;
 import static net.minecraft.server.command.CommandManager.*;
@@ -34,8 +36,9 @@ public class CompostCommand {
                         )
                         .then(literal("reset")
                                 .executes(context -> {
-                                    for (int i = 0; i < config.items.length; i++) {
-                                        removeGroup(i);
+                                    int length = config.items.length;
+                                    for (int i = 0; i < length; i++) {
+                                        removeGroup(0);
                                     }
                                     addGroup("minecraft:dirt", 1.0D, 1,1);
                                     addGroup("minecraft:bone_meal", 1.0D, 1,1);
