@@ -111,7 +111,7 @@ public class CompostCommand {
                                         int min = Math.min(group.min, limit);
                                         int max = Math.min(group.max, limit);
 
-                                        context.getSource().sendFeedback(Text.translatable("commands.compost.groups.get", ArrayUtils.indexOf(config.items, group), itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), min, max), false);
+                                        context.getSource().sendFeedback(Text.translatable("commands.compost.groups.get", ArrayUtils.indexOf(config.items, group) + 1, itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), min, max), false);
                                     }
                                     return 1;
                                 })
@@ -136,72 +136,83 @@ public class CompostCommand {
                 .then(literal("group")
                         .requires(source -> source.hasPermissionLevel(4))
                         .then(literal("get")
-                                .then(argument("group", IntegerArgumentType.integer(0, config.items.length - 1))
+                                .then(argument("group", IntegerArgumentType.integer(1))
                                         .executes(context -> {
-                                            Group group = getGroup(IntegerArgumentType.getInteger(context, "group"));
-                                            ItemStackArgument arg = ItemStackArgumentType.getItemStackArgument(context, "item");
-                                            int index;
-                                            Item item;
-                                            if (group.item.contains("{")) {
-                                                index = group.item.indexOf("{");
-                                                item = Registries.ITEM.get(new Identifier(group.item.substring(0, index)));
+                                            int range = IntegerArgumentType.getInteger(context, "group");
+                                            if (range > config.items.length) {
+                                                context.getSource().sendError(Text.translatable("commands.compost.group.failed", range, config.items.length));
+                                                return 0;
                                             } else {
-                                                index = 0;
-                                                item = Registries.ITEM.get(new Identifier(group.item));
-                                            }
-                                            ItemStack itemStack = new ItemStack(item);
-                                            if (group.item.contains("{")) {
-                                                NbtCompound nbt;
-                                                try {
-                                                    nbt = StringNbtReader.parse(group.item.substring(index));
-                                                    itemStack.setNbt(nbt);
-                                                } catch (CommandSyntaxException e) {
-                                                    e.printStackTrace();
+                                                Group group = getGroup(range - 1);
+                                                int index;
+                                                Item item;
+                                                if (group.item.contains("{")) {
+                                                    index = group.item.indexOf("{");
+                                                    item = Registries.ITEM.get(new Identifier(group.item.substring(0, index)));
+                                                } else {
+                                                    index = 0;
+                                                    item = Registries.ITEM.get(new Identifier(group.item));
                                                 }
-                                            }
-                                            double chance = Math.max(0.0D, Math.min(group.chance, 1.0D));
-                                            int limit = itemStack.getMaxCount();
-                                            int min = Math.min(group.min, limit);
-                                            int max = Math.min(group.max, limit);
+                                                ItemStack itemStack = new ItemStack(item);
+                                                if (group.item.contains("{")) {
+                                                    NbtCompound nbt;
+                                                    try {
+                                                        nbt = StringNbtReader.parse(group.item.substring(index));
+                                                        itemStack.setNbt(nbt);
+                                                    } catch (CommandSyntaxException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                                double chance = Math.max(0.0D, Math.min(group.chance, 1.0D));
+                                                int limit = itemStack.getMaxCount();
+                                                int min = Math.min(group.min, limit);
+                                                int max = Math.min(group.max, limit);
 
-                                            context.getSource().sendFeedback(Text.translatable("commands.compost.groups.get", ArrayUtils.indexOf(config.items, group), itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), min, max), false);
-                                            return 1;
+                                                context.getSource().sendFeedback(Text.translatable("commands.compost.groups.get", ArrayUtils.indexOf(config.items, group) + 1, itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), min, max), false);
+                                                return 1;
+                                            }
                                         })
                                 )
                         )
                         .then(literal("remove")
-                                .then(argument("group", IntegerArgumentType.integer(0, config.items.length - 1))
+                                .then(argument("group", IntegerArgumentType.integer(1))
                                         .executes(context -> {
-                                            int number = IntegerArgumentType.getInteger(context, "group");
-                                            Group group = getGroup(number);
-                                            int index;
-                                            Item item;
-                                            if (group.item.contains("{")) {
-                                                index = group.item.indexOf("{");
-                                                item = Registries.ITEM.get(new Identifier(group.item.substring(0, index)));
+                                            int range = IntegerArgumentType.getInteger(context, "group");
+                                            if (range > config.items.length) {
+                                                context.getSource().sendError(Text.translatable("commands.compost.group.failed", range, config.items.length));
+                                                return 0;
                                             } else {
-                                                index = 0;
-                                                item = Registries.ITEM.get(new Identifier(group.item));
-                                            }
-                                            ItemStack itemStack = new ItemStack(item);
-                                            if (group.item.contains("{")) {
-                                                NbtCompound nbt;
-                                                try {
-                                                    nbt = StringNbtReader.parse(group.item.substring(index));
-                                                    itemStack.setNbt(nbt);
-                                                } catch (CommandSyntaxException e) {
-                                                    e.printStackTrace();
+                                                int number = IntegerArgumentType.getInteger(context, "group") - 1;
+                                                Group group = getGroup(number);
+                                                int index;
+                                                Item item;
+                                                if (group.item.contains("{")) {
+                                                    index = group.item.indexOf("{");
+                                                    item = Registries.ITEM.get(new Identifier(group.item.substring(0, index)));
+                                                } else {
+                                                    index = 0;
+                                                    item = Registries.ITEM.get(new Identifier(group.item));
                                                 }
+                                                ItemStack itemStack = new ItemStack(item);
+                                                if (group.item.contains("{")) {
+                                                    NbtCompound nbt;
+                                                    try {
+                                                        nbt = StringNbtReader.parse(group.item.substring(index));
+                                                        itemStack.setNbt(nbt);
+                                                    } catch (CommandSyntaxException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                                double chance = Math.max(0.0D, Math.min(group.chance, 1.0D));
+                                                int limit = itemStack.getMaxCount();
+                                                int min = Math.min(group.min, limit);
+                                                int max = Math.min(group.max, limit);
+
+                                                removeGroup(number);
+
+                                                context.getSource().sendFeedback(Text.translatable("commands.compost.group.remove", itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), min, max), true);
+                                                return 1;
                                             }
-                                            double chance = Math.max(0.0D, Math.min(group.chance, 1.0D));
-                                            int limit = itemStack.getMaxCount();
-                                            int min = Math.min(group.min, limit);
-                                            int max = Math.min(group.max, limit);
-
-                                            removeGroup(number);
-
-                                            context.getSource().sendFeedback(Text.translatable("commands.compost.group.remove", itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), min, max), true);
-                                            return 1;
                                         })
                                 )
                         )
@@ -230,25 +241,31 @@ public class CompostCommand {
                                 )
                         )
                         .then(literal("insert")
-                                .then(argument("group", IntegerArgumentType.integer(0, config.items.length - 1))
+                                .then(argument("group", IntegerArgumentType.integer(1))
                                         .then(argument("item", ItemStackArgumentType.itemStack(registryAccess))
                                                 .then(argument("chance", DoubleArgumentType.doubleArg(0.0D, 1.0D))
                                                         .then(argument("min", IntegerArgumentType.integer(0, 64))
                                                                 .then(argument("max", IntegerArgumentType.integer(1, 64))
                                                                         .executes(context -> {
-                                                                            int number = IntegerArgumentType.getInteger(context, "group");
-                                                                            ItemStackArgument arg = ItemStackArgumentType.getItemStackArgument(context, "item");
-                                                                            ItemStack itemStack = arg.createStack(1, false);
-                                                                            String item = arg.asString();
-                                                                            double chance = Math.max(0.0D, Math.min(DoubleArgumentType.getDouble(context, "chance"), 1.0D));
-                                                                            int limit = itemStack.getMaxCount();
-                                                                            int min = Math.min(IntegerArgumentType.getInteger(context, "min"), limit);
-                                                                            int max = Math.min(IntegerArgumentType.getInteger(context, "max"), limit);
+                                                                            int range = IntegerArgumentType.getInteger(context, "group");
+                                                                            if (range > config.items.length) {
+                                                                                context.getSource().sendError(Text.translatable("commands.compost.group.failed", range, config.items.length));
+                                                                                return 0;
+                                                                            } else {
+                                                                                int number = IntegerArgumentType.getInteger(context, "group") - 1;
+                                                                                ItemStackArgument arg = ItemStackArgumentType.getItemStackArgument(context, "item");
+                                                                                ItemStack itemStack = arg.createStack(1, false);
+                                                                                String item = arg.asString();
+                                                                                double chance = Math.max(0.0D, Math.min(DoubleArgumentType.getDouble(context, "chance"), 1.0D));
+                                                                                int limit = itemStack.getMaxCount();
+                                                                                int min = Math.min(IntegerArgumentType.getInteger(context, "min"), limit);
+                                                                                int max = Math.min(IntegerArgumentType.getInteger(context, "max"), limit);
 
-                                                                            insertGroup(number, item, chance, min, max);
+                                                                                insertGroup(number, item, chance, min, max);
 
-                                                                            context.getSource().sendFeedback(Text.translatable("commands.compost.group.insert", itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), min, max), true);
-                                                                            return 1;
+                                                                                context.getSource().sendFeedback(Text.translatable("commands.compost.group.insert", itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), min, max), true);
+                                                                                return 1;
+                                                                            }
                                                                         })
                                                                 )
                                                         )
@@ -257,25 +274,31 @@ public class CompostCommand {
                                 )
                         )
                         .then(literal("set")
-                                .then(argument("group", IntegerArgumentType.integer(0, config.items.length - 1))
+                                .then(argument("group", IntegerArgumentType.integer(1))
                                         .then(argument("item", ItemStackArgumentType.itemStack(registryAccess))
                                                 .then(argument("chance", DoubleArgumentType.doubleArg(0.0D, 1.0D))
                                                         .then(argument("min", IntegerArgumentType.integer(0, 64))
                                                                 .then(argument("max", IntegerArgumentType.integer(1, 64))
                                                                         .executes(context -> {
-                                                                            int number = IntegerArgumentType.getInteger(context, "group");
-                                                                            ItemStackArgument arg = ItemStackArgumentType.getItemStackArgument(context, "item");
-                                                                            ItemStack itemStack = arg.createStack(1, false);
-                                                                            String item = arg.asString();
-                                                                            double chance = Math.max(0.0D, Math.min(DoubleArgumentType.getDouble(context, "chance"), 1.0D));
-                                                                            int limit = itemStack.getMaxCount();
-                                                                            int min = Math.min(IntegerArgumentType.getInteger(context, "min"), limit);
-                                                                            int max = Math.min(IntegerArgumentType.getInteger(context, "max"), limit);
+                                                                            int range = IntegerArgumentType.getInteger(context, "group");
+                                                                            if (range > config.items.length) {
+                                                                                context.getSource().sendError(Text.translatable("commands.compost.group.failed", range, config.items.length));
+                                                                                return 0;
+                                                                            } else {
+                                                                                int number = IntegerArgumentType.getInteger(context, "group") - 1;
+                                                                                ItemStackArgument arg = ItemStackArgumentType.getItemStackArgument(context, "item");
+                                                                                ItemStack itemStack = arg.createStack(1, false);
+                                                                                String item = arg.asString();
+                                                                                double chance = Math.max(0.0D, Math.min(DoubleArgumentType.getDouble(context, "chance"), 1.0D));
+                                                                                int limit = itemStack.getMaxCount();
+                                                                                int min = Math.min(IntegerArgumentType.getInteger(context, "min"), limit);
+                                                                                int max = Math.min(IntegerArgumentType.getInteger(context, "max"), limit);
 
-                                                                            setGroup(number, item, chance, min, max);
+                                                                                setGroup(number, item, chance, min, max);
 
-                                                                            context.getSource().sendFeedback(Text.translatable("commands.compost.group.set", itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), min, max), true);
-                                                                            return 1;
+                                                                                context.getSource().sendFeedback(Text.translatable("commands.compost.group.set", itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), min, max), true);
+                                                                                return 1;
+                                                                            }
                                                                         })
                                                                 )
                                                         )
