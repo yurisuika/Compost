@@ -45,11 +45,10 @@ public class CompostCommand {
                                     for (int i = 0; i < length; i++) {
                                         removeGroup(0);
                                     }
+
                                     addGroup("minecraft:dirt", 1.0D, 1,1);
                                     addGroup("minecraft:bone_meal", 1.0D, 1,1);
-
                                     setShuffle(true);
-
                                     context.getSource().sendFeedback(Text.translatable("commands.compost.config.reset"), true);
                                     return 1;
                                 })
@@ -69,7 +68,6 @@ public class CompostCommand {
                                             boolean value = BoolArgumentType.getBool(context, "value");
 
                                             setShuffle(value);
-
                                             context.getSource().sendFeedback(Text.translatable("commands.compost.shuffle.set", value), true);
                                             return 1;
                                         })
@@ -107,9 +105,9 @@ public class CompostCommand {
                                             }
                                         }
                                         double chance = Math.max(0.0D, Math.min(group.chance, 1.0D));
-                                        int limit = itemStack.getMaxCount();
-                                        int min = Math.min(group.min, limit);
-                                        int max = Math.min(group.max, limit);
+                                        int maxCount = itemStack.getMaxCount();
+                                        int max = Math.min(group.max, maxCount);
+                                        int min = Math.min(Math.min(group.min, maxCount), max);
 
                                         context.getSource().sendFeedback(Text.translatable("commands.compost.groups.get", ArrayUtils.indexOf(config.items, group) + 1, itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), min, max), false);
                                     }
@@ -164,9 +162,9 @@ public class CompostCommand {
                                                     }
                                                 }
                                                 double chance = Math.max(0.0D, Math.min(group.chance, 1.0D));
-                                                int limit = itemStack.getMaxCount();
-                                                int min = Math.min(group.min, limit);
-                                                int max = Math.min(group.max, limit);
+                                                int maxCount = itemStack.getMaxCount();
+                                                int max = Math.min(group.max, maxCount);
+                                                int min = Math.min(Math.min(group.min, maxCount), max);
 
                                                 context.getSource().sendFeedback(Text.translatable("commands.compost.groups.get", ArrayUtils.indexOf(config.items, group) + 1, itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), min, max), false);
                                                 return 1;
@@ -204,12 +202,11 @@ public class CompostCommand {
                                                     }
                                                 }
                                                 double chance = Math.max(0.0D, Math.min(group.chance, 1.0D));
-                                                int limit = itemStack.getMaxCount();
-                                                int min = Math.min(group.min, limit);
-                                                int max = Math.min(group.max, limit);
+                                                int maxCount = itemStack.getMaxCount();
+                                                int max = Math.min(group.max, maxCount);
+                                                int min = Math.min(Math.min(group.min, maxCount), max);
 
                                                 removeGroup(number);
-
                                                 context.getSource().sendFeedback(Text.translatable("commands.compost.group.remove", itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), min, max), true);
                                                 return 1;
                                             }
@@ -226,12 +223,11 @@ public class CompostCommand {
                                                                     ItemStack itemStack = arg.createStack(1, false);
                                                                     String item = arg.asString();
                                                                     double chance = Math.max(0.0D, Math.min(DoubleArgumentType.getDouble(context, "chance"), 1.0D));
-                                                                    int limit = itemStack.getMaxCount();
-                                                                    int min = Math.min(IntegerArgumentType.getInteger(context, "min"), limit);
-                                                                    int max = Math.min(IntegerArgumentType.getInteger(context, "max"), limit);
+                                                                    int maxCount = itemStack.getMaxCount();
+                                                                    int max = Math.min(IntegerArgumentType.getInteger(context, "max"), maxCount);
+                                                                    int min = Math.min(Math.min(IntegerArgumentType.getInteger(context, "min"), maxCount), max);
 
                                                                     addGroup(item, chance, min, max);
-
                                                                     context.getSource().sendFeedback(Text.translatable("commands.compost.group.add", itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), min, max), true);
                                                                     return 1;
                                                                 })
@@ -257,12 +253,11 @@ public class CompostCommand {
                                                                                 ItemStack itemStack = arg.createStack(1, false);
                                                                                 String item = arg.asString();
                                                                                 double chance = Math.max(0.0D, Math.min(DoubleArgumentType.getDouble(context, "chance"), 1.0D));
-                                                                                int limit = itemStack.getMaxCount();
-                                                                                int min = Math.min(IntegerArgumentType.getInteger(context, "min"), limit);
-                                                                                int max = Math.min(IntegerArgumentType.getInteger(context, "max"), limit);
+                                                                                int maxCount = itemStack.getMaxCount();
+                                                                                int max = Math.min(IntegerArgumentType.getInteger(context, "max"), maxCount);
+                                                                                int min = Math.min(Math.min(IntegerArgumentType.getInteger(context, "min"), maxCount), max);
 
                                                                                 insertGroup(number, item, chance, min, max);
-
                                                                                 context.getSource().sendFeedback(Text.translatable("commands.compost.group.insert", itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), min, max), true);
                                                                                 return 1;
                                                                             }
@@ -290,12 +285,11 @@ public class CompostCommand {
                                                                                 ItemStack itemStack = arg.createStack(1, false);
                                                                                 String item = arg.asString();
                                                                                 double chance = Math.max(0.0D, Math.min(DoubleArgumentType.getDouble(context, "chance"), 1.0D));
-                                                                                int limit = itemStack.getMaxCount();
-                                                                                int min = Math.min(IntegerArgumentType.getInteger(context, "min"), limit);
-                                                                                int max = Math.min(IntegerArgumentType.getInteger(context, "max"), limit);
+                                                                                int maxCount = itemStack.getMaxCount();
+                                                                                int max = Math.min(IntegerArgumentType.getInteger(context, "max"), maxCount);
+                                                                                int min = Math.min(Math.min(IntegerArgumentType.getInteger(context, "min"), maxCount), max);
 
                                                                                 setGroup(number, item, chance, min, max);
-
                                                                                 context.getSource().sendFeedback(Text.translatable("commands.compost.group.set", itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), min, max), true);
                                                                                 return 1;
                                                                             }

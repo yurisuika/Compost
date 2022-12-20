@@ -15,5 +15,5 @@
   "commands.compost.group.add": "Added %s (chance: %d%%, min: %d, max: %d)",
   "commands.compost.group.insert": "Inserted %s (chance: %d%%, min: %d, max: %d)",
   "commands.compost.group.set": "Set %s (chance: %d%%, min: %d, max: %d)",
-  "commands.compost.group.failed": "Requested %d, range is %d (use '/compost groups query' to see range)"
+  "commands.compost.group.failed": "%d exceeds range of %d (use '/compost groups query' to see range)"
 }

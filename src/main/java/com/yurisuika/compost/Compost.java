@@ -6,6 +6,9 @@ import com.yurisuika.compost.server.command.CompostCommand;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
+import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Files;
+import java.util.Arrays;
 
 public class Compost implements ModInitializer {
 
@@ -54,6 +58,7 @@ public class Compost implements ModInitializer {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        checkBounds();
         setConfig(config);
     }
 
@@ -63,6 +68,25 @@ public class Compost implements ModInitializer {
 
     public static Config getConfig() {
         return config;
+    }
+
+    public static void checkBounds() {
+        Arrays.stream(Compost.config.items).forEach(group -> {
+            Item item;
+            int index;
+            if (group.item.contains("{")) {
+                index = group.item.indexOf("{");
+                String id = group.item.substring(0, index);
+                item = Registries.ITEM.get(new Identifier(id));
+            } else {
+                item = Registries.ITEM.get(new Identifier(group.item));
+            }
+            group.chance = Math.max(0.0D, Math.min(group.chance, 1.0D));
+            int maxCount = item.getMaxCount();
+            group.max = Math.min(group.max, maxCount);
+            group.min = Math.min(Math.min(group.min, maxCount), group.max);
+        });
+        saveConfig();
     }
 
     public static void setShuffle(boolean bool) {

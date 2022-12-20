@@ -55,7 +55,9 @@ public abstract class ComposterBlockMixin {
                     item = Registries.ITEM.get(new Identifier(group.item));
                 }
                 int maxCount = item.getMaxCount();
-                ItemStack itemStack = new ItemStack(item, ThreadLocalRandom.current().nextInt(Math.min(group.min, maxCount), Math.min(group.max, maxCount) + 1));
+                int max = Math.min(group.max, maxCount);
+                int min = Math.min(Math.min(group.min, maxCount), max);
+                ItemStack itemStack = new ItemStack(item, ThreadLocalRandom.current().nextInt(min, max + 1));
                 if (group.item.contains("{")) {
                     NbtCompound nbt;
                     try {
@@ -88,7 +90,9 @@ public abstract class ComposterBlockMixin {
                     item = Registries.ITEM.get(new Identifier(group.item));
                 }
                 int maxCount = item.getMaxCount();
-                ItemStack itemStack = new ItemStack(item, ThreadLocalRandom.current().nextInt(Math.min(group.min, maxCount), Math.min(group.max, maxCount) + 1));
+                int max = Math.min(group.max, maxCount);
+                int min = Math.min(Math.min(group.min, maxCount), max);
+                ItemStack itemStack = new ItemStack(item, ThreadLocalRandom.current().nextInt(min, max + 1));
                 if (group.item.contains("{")) {
                     NbtCompound nbt;
                     try {
