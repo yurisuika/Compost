@@ -11,7 +11,7 @@
   "contributors": [
   ],
   "contact": {
-    "homepage": "https://suikacraft.com",
+    "homepage": "https://yurisuika.dev",
     "sources": "https://github.com/yurisuika/Compost",
     "issues": "https://github.com/yurisuika/Compost/issues"
   },
@@ -22,10 +22,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.yurisuika.compost.Compost"
+      "dev.yurisuika.compost.Compost"
     ],
     "rei_client": [
-      "com.yurisuika.compost.integration.roughlyenoughitems.CompostClientPlugin"
+      "dev.yurisuika.compost.integration.roughlyenoughitems.CompostClientPlugin"
     ]
   },
   "mixins": [

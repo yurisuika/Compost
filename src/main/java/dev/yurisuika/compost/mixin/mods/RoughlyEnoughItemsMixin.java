@@ -1,4 +1,4 @@
-package com.yurisuika.compost.mixin.mods;
+package dev.yurisuika.compost.mixin.mods;
 
 import me.shedaniel.rei.plugin.client.DefaultClientPlugin;
 import org.spongepowered.asm.mixin.Mixin;

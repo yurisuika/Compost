@@ -1,7 +1,7 @@
-package com.yurisuika.compost.integration.roughlyenoughitems;
+package dev.yurisuika.compost.integration.roughlyenoughitems;
 
 import com.google.common.collect.Iterators;
-import com.yurisuika.compost.Compost;
+import dev.yurisuika.compost.Compost;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;

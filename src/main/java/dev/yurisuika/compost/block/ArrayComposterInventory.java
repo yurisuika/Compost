@@ -1,6 +1,6 @@
-package com.yurisuika.compost.block;
+package dev.yurisuika.compost.block;
 
-import com.yurisuika.compost.mixin.block.ComposterBlockInvoker;
+import dev.yurisuika.compost.mixin.block.ComposterBlockInvoker;
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.inventory.SimpleInventory;

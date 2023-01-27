@@ -1,4 +1,4 @@
-package com.yurisuika.compost;
+package dev.yurisuika.compost;
 
 import com.google.common.collect.ImmutableMap;
 import net.fabricmc.loader.api.FabricLoader;
@@ -16,7 +16,7 @@ public class CompostMixinPlugin implements IMixinConfigPlugin {
     private static final Supplier<Boolean> TRUE = () -> true;
 
     private static final Map<String, Supplier<Boolean>> CONDITIONS = ImmutableMap.of(
-            "com.yurisuika.compost.mixin.mods.RoughlyEnoughItemsMixin$DefaultClientPluginMixin", () -> FabricLoader.getInstance().isModLoaded("roughlyenoughitems")
+            "dev.yurisuika.compost.mixin.mods.RoughlyEnoughItemsMixin$DefaultClientPluginMixin", () -> FabricLoader.getInstance().isModLoaded("roughlyenoughitems")
     );
 
     @Override

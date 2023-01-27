@@ -1,9 +1,9 @@
-package com.yurisuika.compost.mixin.block;
+package dev.yurisuika.compost.mixin.block;
 
 import com.google.common.collect.Lists;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.yurisuika.compost.Compost;
-import com.yurisuika.compost.block.ArrayComposterInventory;
+import dev.yurisuika.compost.Compost;
+import dev.yurisuika.compost.block.ArrayComposterInventory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ComposterBlock;
 import net.minecraft.entity.Entity;

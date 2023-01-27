@@ -1,4 +1,4 @@
-package com.yurisuika.compost.mixin.block;
+package dev.yurisuika.compost.mixin.block;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ComposterBlock;

@@ -1,6 +1,6 @@
-package com.yurisuika.compost.mixin.block.entity;
+package dev.yurisuika.compost.mixin.block.entity;
 
-import com.yurisuika.compost.block.ArrayComposterInventory;
+import dev.yurisuika.compost.block.ArrayComposterInventory;
 import net.minecraft.block.entity.Hopper;
 import net.minecraft.block.entity.HopperBlockEntity;
 import net.minecraft.inventory.Inventory;
