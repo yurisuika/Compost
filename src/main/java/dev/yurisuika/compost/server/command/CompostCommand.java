@@ -75,12 +75,6 @@ public class CompostCommand {
                         .requires(source -> source.hasPermissionLevel(4))
                         .then(literal("query")
                                 .executes(context -> {
-                                    context.getSource().sendFeedback(Text.translatable("commands.compost.groups.query", config.items.length), false);
-                                    return 1;
-                                })
-                        )
-                        .then(literal("get")
-                                .executes(context -> {
                                     for (Group group : config.items) {
                                         int index;
                                         Item item;
@@ -101,7 +95,7 @@ public class CompostCommand {
                                                 e.printStackTrace();
                                             }
                                         }
-                                        context.getSource().sendFeedback(Text.translatable("commands.compost.groups.get", ArrayUtils.indexOf(config.items, group) + 1, itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(group.chance).multiply(BigDecimal.valueOf(100))), group.min, group.max), false);
+                                        context.getSource().sendFeedback(Text.translatable("commands.compost.groups.query", ArrayUtils.indexOf(config.items, group) + 1, itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(group.chance).multiply(BigDecimal.valueOf(100))), group.min, group.max), false);
                                     }
                                     return 1;
                                 })
@@ -123,7 +117,7 @@ public class CompostCommand {
                 )
                 .then(literal("group")
                         .requires(source -> source.hasPermissionLevel(4))
-                        .then(literal("get")
+                        .then(literal("query")
                                 .then(argument("group", IntegerArgumentType.integer(1))
                                         .executes(context -> {
                                             int range = IntegerArgumentType.getInteger(context, "group");
@@ -151,7 +145,7 @@ public class CompostCommand {
                                                         e.printStackTrace();
                                                     }
                                                 }
-                                                context.getSource().sendFeedback(Text.translatable("commands.compost.groups.get", ArrayUtils.indexOf(config.items, group) + 1, itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(group.chance).multiply(BigDecimal.valueOf(100))), group.min, group.max), false);
+                                                context.getSource().sendFeedback(Text.translatable("commands.compost.groups.query", ArrayUtils.indexOf(config.items, group) + 1, itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(group.chance).multiply(BigDecimal.valueOf(100))), group.min, group.max), false);
                                                 return 1;
                                             }
                                         })
