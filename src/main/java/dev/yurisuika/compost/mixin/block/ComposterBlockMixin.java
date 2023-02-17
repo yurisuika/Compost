@@ -54,10 +54,7 @@ public abstract class ComposterBlockMixin {
                     index = 0;
                     item = Registries.ITEM.get(new Identifier(group.item));
                 }
-                int maxCount = item.getMaxCount();
-                int max = Math.min(group.max, maxCount);
-                int min = Math.min(Math.min(group.min, maxCount), max);
-                ItemStack itemStack = new ItemStack(item, ThreadLocalRandom.current().nextInt(min, max + 1));
+                ItemStack itemStack = new ItemStack(item, ThreadLocalRandom.current().nextInt(group.min, group.max + 1));
                 if (group.item.contains("{")) {
                     NbtCompound nbt;
                     try {
@@ -89,10 +86,7 @@ public abstract class ComposterBlockMixin {
                     index = 0;
                     item = Registries.ITEM.get(new Identifier(group.item));
                 }
-                int maxCount = item.getMaxCount();
-                int max = Math.min(group.max, maxCount);
-                int min = Math.min(Math.min(group.min, maxCount), max);
-                ItemStack itemStack = new ItemStack(item, ThreadLocalRandom.current().nextInt(min, max + 1));
+                ItemStack itemStack = new ItemStack(item, ThreadLocalRandom.current().nextInt(group.min, group.max + 1));
                 if (group.item.contains("{")) {
                     NbtCompound nbt;
                     try {
@@ -105,16 +99,13 @@ public abstract class ComposterBlockMixin {
                 list.add(itemStack);
             }
         });
-
         if (Compost.config.shuffle) {
             Collections.shuffle(list);
         }
-
         ItemStack[] itemStacks = new ItemStack[list.size()];
-        for (int m = 0; m < list.size(); m++) {
-            itemStacks[m] = list.get(m);
+        for (int i = 0; i < list.size(); i++) {
+            itemStacks[i] = list.get(i);
         }
-
         cir.setReturnValue(new ArrayComposterInventory(state, world, pos, itemStacks));
     }
 

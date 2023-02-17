@@ -10,8 +10,6 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.ArrayUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -20,11 +18,8 @@ import java.util.Arrays;
 
 public class Compost implements ModInitializer {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger("compost");
-
     public static File file = new File(FabricLoader.getInstance().getConfigDir().toFile(), "compost.json");
     public static Gson gson = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().create();
-
     public static Config config = new Config();
 
     public static class Config {
@@ -35,6 +30,22 @@ public class Compost implements ModInitializer {
                 new Group("minecraft:dirt", 1.0D, 1,1),
                 new Group("minecraft:bone_meal", 1.0D, 1, 1)
         };
+
+    }
+
+    public static class Group {
+
+        public String item;
+        public double chance;
+        public int min;
+        public int max;
+
+        public Group(String item, double chance, int min, int max) {
+            this.item = item;
+            this.chance = chance;
+            this.min = min;
+            this.max = max;
+        }
 
     }
 
@@ -82,9 +93,10 @@ public class Compost implements ModInitializer {
                 item = Registries.ITEM.get(new Identifier(group.item));
             }
             group.chance = Math.max(0.0D, Math.min(group.chance, 1.0D));
-            int maxCount = item.getMaxCount();
-            group.max = Math.min(group.max, maxCount);
-            group.min = Math.min(Math.min(group.min, maxCount), group.max);
+            int min = Math.max(Math.min(Math.min(group.min, item.getMaxCount()), group.max), 0);
+            int max = Math.max(Math.max(Math.min(group.max, item.getMaxCount()), group.min), 1);
+            group.min = min;
+            group.max = max;
         });
         saveConfig();
     }
@@ -128,26 +140,8 @@ public class Compost implements ModInitializer {
         saveConfig();
     }
 
-    public static class Group {
-
-        public String item;
-        public double chance;
-        public int min;
-        public int max;
-
-        Group(String item, double chance, int min, int max) {
-            this.item = item;
-            this.chance = chance;
-            this.min = min;
-            this.max = max;
-        }
-
-    }
-
     @Override
     public void onInitialize() {
-        LOGGER.info("Loading Compost!");
-
         if (!file.exists()) {
             saveConfig();
         }
