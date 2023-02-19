@@ -4,19 +4,13 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.ItemStackArgument;
 import net.minecraft.command.argument.ItemStackArgumentType;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.StringNbtReader;
-import net.minecraft.registry.Registries;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.math.BigDecimal;
@@ -76,26 +70,7 @@ public class CompostCommand {
                         .then(literal("query")
                                 .executes(context -> {
                                     for (Group group : config.items) {
-                                        int index;
-                                        Item item;
-                                        if (group.item.contains("{")) {
-                                            index = group.item.indexOf("{");
-                                            item = Registries.ITEM.get(new Identifier(group.item.substring(0, index)));
-                                        } else {
-                                            index = 0;
-                                            item = Registries.ITEM.get(new Identifier(group.item));
-                                        }
-                                        ItemStack itemStack = new ItemStack(item);
-                                        if (group.item.contains("{")) {
-                                            NbtCompound nbt;
-                                            try {
-                                                nbt = StringNbtReader.parse(group.item.substring(index));
-                                                itemStack.setNbt(nbt);
-                                            } catch (CommandSyntaxException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                        context.getSource().sendFeedback(Text.translatable("commands.compost.groups.query", ArrayUtils.indexOf(config.items, group) + 1, itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(group.chance).multiply(BigDecimal.valueOf(100))), group.min, group.max), false);
+                                        context.getSource().sendFeedback(Text.translatable("commands.compost.groups.query", ArrayUtils.indexOf(config.items, group) + 1, createItemStack(group).toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(group.chance).multiply(BigDecimal.valueOf(100))), group.min, group.max), false);
                                     }
                                     return 1;
                                 })
@@ -126,26 +101,7 @@ public class CompostCommand {
                                                 return 0;
                                             } else {
                                                 Group group = getGroup(range - 1);
-                                                int index;
-                                                Item item;
-                                                if (group.item.contains("{")) {
-                                                    index = group.item.indexOf("{");
-                                                    item = Registries.ITEM.get(new Identifier(group.item.substring(0, index)));
-                                                } else {
-                                                    index = 0;
-                                                    item = Registries.ITEM.get(new Identifier(group.item));
-                                                }
-                                                ItemStack itemStack = new ItemStack(item);
-                                                if (group.item.contains("{")) {
-                                                    NbtCompound nbt;
-                                                    try {
-                                                        nbt = StringNbtReader.parse(group.item.substring(index));
-                                                        itemStack.setNbt(nbt);
-                                                    } catch (CommandSyntaxException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-                                                context.getSource().sendFeedback(Text.translatable("commands.compost.groups.query", ArrayUtils.indexOf(config.items, group) + 1, itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(group.chance).multiply(BigDecimal.valueOf(100))), group.min, group.max), false);
+                                                context.getSource().sendFeedback(Text.translatable("commands.compost.groups.query", ArrayUtils.indexOf(config.items, group) + 1, createItemStack(group).toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(group.chance).multiply(BigDecimal.valueOf(100))), group.min, group.max), false);
                                                 return 1;
                                             }
                                         })
@@ -161,27 +117,8 @@ public class CompostCommand {
                                             } else {
                                                 int number = IntegerArgumentType.getInteger(context, "group") - 1;
                                                 Group group = getGroup(number);
-                                                int index;
-                                                Item item;
-                                                if (group.item.contains("{")) {
-                                                    index = group.item.indexOf("{");
-                                                    item = Registries.ITEM.get(new Identifier(group.item.substring(0, index)));
-                                                } else {
-                                                    index = 0;
-                                                    item = Registries.ITEM.get(new Identifier(group.item));
-                                                }
-                                                ItemStack itemStack = new ItemStack(item);
-                                                if (group.item.contains("{")) {
-                                                    NbtCompound nbt;
-                                                    try {
-                                                        nbt = StringNbtReader.parse(group.item.substring(index));
-                                                        itemStack.setNbt(nbt);
-                                                    } catch (CommandSyntaxException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
                                                 removeGroup(number);
-                                                context.getSource().sendFeedback(Text.translatable("commands.compost.group.remove", itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(group.chance).multiply(BigDecimal.valueOf(100))), group.min, group.max), true);
+                                                context.getSource().sendFeedback(Text.translatable("commands.compost.group.remove", createItemStack(group).toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(group.chance).multiply(BigDecimal.valueOf(100))), group.min, group.max), true);
                                                 return 1;
                                             }
                                         })
