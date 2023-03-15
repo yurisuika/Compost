@@ -34,7 +34,7 @@ public abstract class ComposterBlockMixin {
     }
 
     @Inject(method = "emptyFullComposter", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;spawnEntity(Lnet/minecraft/entity/Entity;)Z", shift = At.Shift.AFTER))
-    private static void injectEmptyFullComposter(BlockState state, World world, BlockPos pos, CallbackInfoReturnable<BlockState> cir) {
+    private static void injectEmptyFullComposter(Entity user, BlockState state, World world, BlockPos pos, CallbackInfoReturnable<BlockState> cir) {
         Arrays.stream(Compost.config.items).forEach(group -> {
             if(ThreadLocalRandom.current().nextDouble() < group.chance) {
                 double x = (double)(world.random.nextFloat() * 0.7F) + 0.15000000596046448D;

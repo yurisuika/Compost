@@ -2,6 +2,7 @@ package dev.yurisuika.compost.block;
 
 import dev.yurisuika.compost.mixin.block.ComposterBlockInvoker;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
@@ -41,7 +42,7 @@ public class ArrayComposterInventory extends SimpleInventory implements SidedInv
     }
 
     public void markDirty() {
-        ComposterBlockInvoker.invokeEmptyComposter(this.state, this.world, this.pos);
+        ComposterBlockInvoker.invokeEmptyComposter((Entity)null, this.state, this.world, this.pos);
         this.dirty = true;
     }
 
