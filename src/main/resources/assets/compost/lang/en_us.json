@@ -1,18 +1,10 @@
 {
   "commands.compost.config.reload": "Compost config reloaded",
   "commands.compost.config.reset": "Compost config reset to defaults",
-
-  "commands.compost.shuffle.query": "Shuffling is currently set to: %s",
-  "commands.compost.shuffle.set": "Shuffling is now set to: %s",
-
   "commands.compost.groups.query": "%d: %s (chance: %d%%, min: %d, max: %d)",
-  "commands.compost.groups.reverse": "Composter groups reversed",
-  "commands.compost.groups.shuffle": "Composter groups shuffled",
+  "commands.compost.groups.add": "Added %s (chance: %d%%, min: %d, max: %d)",
+  "commands.compost.groups.remove": "Removed %s (chance: %d%%, min: %d, max: %d)",
+  "commands.compost.groups.remove.failed": "%d exceeds range of %d",
 
-  "commands.compost.group.query": "%d: %s (chance: %d%%, min: %d, max: %d)",
-  "commands.compost.group.remove": "Removed %s (chance: %d%%, min: %d, max: %d)",
-  "commands.compost.group.add": "Added %s (chance: %d%%, min: %d, max: %d)",
-  "commands.compost.group.insert": "Inserted %s (chance: %d%%, min: %d, max: %d)",
-  "commands.compost.group.set": "Set %s (chance: %d%%, min: %d, max: %d)",
-  "commands.compost.group.failed": "%d exceeds range of %d"
+  "container.compost.composter": "Composter"
 }
