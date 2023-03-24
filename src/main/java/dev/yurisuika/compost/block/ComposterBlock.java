@@ -42,13 +42,6 @@ public class ComposterBlock extends net.minecraft.block.ComposterBlock implement
     }
 
     @Override
-    public boolean onSyncedBlockEvent(BlockState state, World world, BlockPos pos, int type, int data) {
-        super.onSyncedBlockEvent(state, world, pos, type, data);
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-        return blockEntity != null && blockEntity.onSyncedBlockEvent(type, data);
-    }
-
-    @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         int i = state.get(LEVEL);
         BlockEntity blockEntity = world.getBlockEntity(pos);
