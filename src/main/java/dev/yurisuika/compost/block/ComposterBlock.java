@@ -44,7 +44,6 @@ public class ComposterBlock extends net.minecraft.block.ComposterBlock implement
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         int i = state.get(LEVEL);
-        BlockEntity blockEntity = world.getBlockEntity(pos);
         ItemStack itemStack = player.getStackInHand(hand);
         if (i < 8 && ITEM_TO_LEVEL_INCREASE_CHANCE.containsKey(itemStack.getItem())) {
             if (i < 7 && !world.isClient) {
