@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -19,10 +20,12 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldEvents;
+import net.minecraft.world.event.GameEvent;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -56,31 +59,30 @@ public class ComposterBlock extends net.minecraft.block.ComposterBlock implement
             return ActionResult.success(world.isClient);
         }
         if (i == 8) {
-            ComposterBlock.emptyFullComposter(state, world, pos);
+            ComposterBlock.emptyFullComposter(player, state, world, pos);
             return ActionResult.success(world.isClient);
         }
         return ActionResult.PASS;
     }
 
-    public static BlockState emptyFullComposter(BlockState state, World world, BlockPos pos) {
+    public static BlockState emptyFullComposter(Entity user, BlockState state, World world, BlockPos pos) {
         if (!world.isClient) {
             for (int i = 0; i < 27; i++) {
-                double x = (double)(world.random.nextFloat() * 0.7F) + 0.15000000596046448D;
-                double y = (double)(world.random.nextFloat() * 0.7F) + 0.06000000238418579D + 0.6D;
-                double z = (double)(world.random.nextFloat() * 0.7F) + 0.15000000596046448D;
-                ItemEntity itemEntity = new ItemEntity(world, (double)pos.getX() + x, (double)pos.getY() + y, (double)pos.getZ() + z, ((ComposterBlockEntity)Objects.requireNonNull(world.getBlockEntity(pos))).inventory.get(i));
+                Vec3d vec3d = Vec3d.add(pos, 0.5, 1.01, 0.5).addRandom(world.random, 0.7F);
+                ItemEntity itemEntity = new ItemEntity(world, vec3d.getX(), vec3d.getY(), vec3d.getZ(), ((ComposterBlockEntity)Objects.requireNonNull(world.getBlockEntity(pos))).inventory.get(i));
                 itemEntity.setToDefaultPickupDelay();
                 world.spawnEntity(itemEntity);
             }
         }
-        BlockState blockState = ComposterBlock.emptyComposter(state, world, pos);
+        BlockState blockState = ComposterBlock.emptyComposter(user, state, world, pos);
         world.playSound(null, pos, SoundEvents.BLOCK_COMPOSTER_EMPTY, SoundCategory.BLOCKS, 1.0f, 1.0f);
         return blockState;
     }
 
-    public static BlockState emptyComposter(BlockState state, WorldAccess world, BlockPos pos) {
+    public static BlockState emptyComposter(Entity user, BlockState state, WorldAccess world, BlockPos pos) {
         BlockState blockState = state.with(LEVEL, 0);
         world.setBlockState(pos, blockState, Block.NOTIFY_ALL);
+        world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(user, blockState));
         return blockState;
     }
 

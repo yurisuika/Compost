@@ -99,7 +99,7 @@ public class ComposterBlockEntity extends LootableContainerBlockEntity implement
     @Override
     public void markDirty() {
         if (this.isEmpty()) {
-            ComposterBlock.emptyComposter(this.getCachedState(), this.world, this.pos);
+            ComposterBlock.emptyComposter(null, this.getCachedState(), this.world, this.pos);
         }
     }
 
