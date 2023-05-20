@@ -16,7 +16,7 @@ public class BlocksMixin {
 
     @Redirect(method = "<clinit>", slice = @Slice(from = @At(value = "CONSTANT", args = "stringValue=composter")), at = @At(value = "NEW", target = "net/minecraft/block/ComposterBlock", ordinal = 0))
     private static net.minecraft.block.ComposterBlock redirectComposter(AbstractBlock.Settings settings) {
-        return new ComposterBlock(AbstractBlock.Settings.of().mapColor(MapColor.OAK_TAN).instrument(Instrument.BASS).strength(0.6f).sounds(BlockSoundGroup.WOOD).burnable());
+        return new ComposterBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(Instrument.BASS).strength(0.6f).sounds(BlockSoundGroup.WOOD).burnable());
     }
 
 }
