@@ -27,7 +27,7 @@ public class CompostCommand {
                         .then(literal("reload")
                                 .executes(context -> {
                                     loadConfig();
-                                    context.getSource().sendFeedback(Text.translatable("commands.compost.config.reload"), true);
+                                    context.getSource().sendFeedback(() -> Text.translatable("commands.compost.config.reload"), true);
                                     return 1;
                                 })
                         )
@@ -39,7 +39,7 @@ public class CompostCommand {
                                     }
                                     addGroup("minecraft:dirt", 1.0D, 1,1);
                                     addGroup("minecraft:bone_meal", 1.0D, 1,1);
-                                    context.getSource().sendFeedback(Text.translatable("commands.compost.config.reset"), true);
+                                    context.getSource().sendFeedback(() -> Text.translatable("commands.compost.config.reset"), true);
                                     return 1;
                                 })
                         )
@@ -49,7 +49,7 @@ public class CompostCommand {
                         .then(literal("query")
                                 .executes(context -> {
                                     for (Group group : config.items) {
-                                        context.getSource().sendFeedback(Text.translatable("commands.compost.groups.query", ArrayUtils.indexOf(config.items, group) + 1, createItemStack(group).toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(group.chance).multiply(BigDecimal.valueOf(100))), group.min, group.max), false);
+                                        context.getSource().sendFeedback(() -> Text.translatable("commands.compost.groups.query", ArrayUtils.indexOf(config.items, group) + 1, createItemStack(group).toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(group.chance).multiply(BigDecimal.valueOf(100))), group.min, group.max), false);
                                     }
                                     return 1;
                                 })
@@ -67,7 +67,7 @@ public class CompostCommand {
                                                                     int min = Math.min(Math.min(IntegerArgumentType.getInteger(context, "min"), itemStack.getMaxCount()), IntegerArgumentType.getInteger(context, "max"));
                                                                     int max = Math.max(Math.min(IntegerArgumentType.getInteger(context, "max"), itemStack.getMaxCount()), IntegerArgumentType.getInteger(context, "min"));
                                                                     addGroup(item, chance, min, max);
-                                                                    context.getSource().sendFeedback(Text.translatable("commands.compost.groups.add", itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), min, max), true);
+                                                                    context.getSource().sendFeedback(() -> Text.translatable("commands.compost.groups.add", itemStack.toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), min, max), true);
                                                                     return 1;
                                                                 })
                                                         )
@@ -86,7 +86,7 @@ public class CompostCommand {
                                                 int number = IntegerArgumentType.getInteger(context, "group") - 1;
                                                 Group group = getGroup(number);
                                                 removeGroup(number);
-                                                context.getSource().sendFeedback(Text.translatable("commands.compost.groups.remove", createItemStack(group).toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(group.chance).multiply(BigDecimal.valueOf(100))), group.min, group.max), true);
+                                                context.getSource().sendFeedback(() -> Text.translatable("commands.compost.groups.remove", createItemStack(group).toHoverableText(), new DecimalFormat("0.###############").format(BigDecimal.valueOf(group.chance).multiply(BigDecimal.valueOf(100))), group.min, group.max), true);
                                                 return 1;
                                             }
                                         })
