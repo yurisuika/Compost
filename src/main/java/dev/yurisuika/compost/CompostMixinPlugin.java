@@ -13,15 +13,13 @@ import java.util.function.Supplier;
 
 public class CompostMixinPlugin implements IMixinConfigPlugin {
 
-    private static final Supplier<Boolean> TRUE = () -> true;
-
-    private static final Map<String, Supplier<Boolean>> CONDITIONS = ImmutableMap.of(
+    private static final Map<String, Supplier<Boolean>> ROUGHLYENOUGHITEMS = ImmutableMap.of(
             "dev.yurisuika.compost.mixin.mods.RoughlyEnoughItemsMixin$DefaultClientPluginMixin", () -> FabricLoader.getInstance().isModLoaded("roughlyenoughitems")
     );
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        return CONDITIONS.getOrDefault(mixinClassName, TRUE).get();
+        return ROUGHLYENOUGHITEMS.getOrDefault(mixinClassName, () -> true).get();
     }
 
     @Override
