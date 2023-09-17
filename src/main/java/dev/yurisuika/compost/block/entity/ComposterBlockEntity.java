@@ -1,7 +1,5 @@
 package dev.yurisuika.compost.block.entity;
 
-import dev.yurisuika.compost.Compost;
-import dev.yurisuika.compost.block.ComposterBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -18,12 +16,15 @@ import net.minecraft.util.math.Direction;
 
 import java.util.stream.IntStream;
 
+import static dev.yurisuika.compost.Compost.*;
+import static dev.yurisuika.compost.block.ComposterBlock.*;
+
 public class ComposterBlockEntity extends LootableContainerBlockEntity implements SidedInventory {
 
     public DefaultedList<ItemStack> inventory = DefaultedList.ofSize(27, ItemStack.EMPTY);
 
     public ComposterBlockEntity(BlockPos pos, BlockState state) {
-        super(Compost.COMPOSTER, pos, state);
+        super(COMPOSTER, pos, state);
     }
 
     @Override
@@ -99,7 +100,7 @@ public class ComposterBlockEntity extends LootableContainerBlockEntity implement
     @Override
     public void markDirty() {
         if (this.isEmpty()) {
-            ComposterBlock.emptyComposter(null, this.getCachedState(), this.world, this.pos);
+            emptyComposter(null, this.getCachedState(), this.world, this.pos);
         }
     }
 

@@ -1,4 +1,4 @@
-package dev.yurisuika.compost;
+package dev.yurisuika.compost.mixin;
 
 import com.google.common.collect.ImmutableMap;
 import net.fabricmc.loader.api.FabricLoader;

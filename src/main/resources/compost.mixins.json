@@ -15,5 +15,5 @@
   "injectors": {
     "defaultRequire": 1
   },
-  "plugin": "dev.yurisuika.compost.CompostMixinPlugin"
+  "plugin": "dev.yurisuika.compost.mixin.CompostMixinPlugin"
 }
