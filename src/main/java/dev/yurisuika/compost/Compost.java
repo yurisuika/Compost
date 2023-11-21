@@ -1,6 +1,6 @@
 package dev.yurisuika.compost;
 
-import dev.yurisuika.compost.block.entity.ComposterBlockEntity;
+import dev.yurisuika.compost.block.ComposterBlockEntity;
 import dev.yurisuika.compost.server.command.CompostCommand;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
