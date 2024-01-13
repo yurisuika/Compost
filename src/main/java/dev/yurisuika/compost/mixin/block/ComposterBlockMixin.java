@@ -12,8 +12,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ComposterBlock.class)
 public abstract class ComposterBlockMixin {
+
     @Inject(method = "getInventory", at = @At(value = "HEAD"), cancellable = true)
     private void injectGetInventory(BlockState state, WorldAccess world, BlockPos pos, CallbackInfoReturnable<SidedInventory> cir) {
         cir.setReturnValue((SidedInventory)world.getBlockEntity(pos));
     }
+
 }

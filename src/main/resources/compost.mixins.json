@@ -8,7 +8,7 @@
     "block.BlocksMixin",
     "block.ComposterBlockInvoker",
     "block.ComposterBlockMixin",
-    "mods.FabricTransferAPIMixin"
+    "mods.FabricMixin$ItemStorageMixin"
   ],
   "client": [
     "mods.RoughlyEnoughItemsMixin$DefaultClientPluginMixin"
