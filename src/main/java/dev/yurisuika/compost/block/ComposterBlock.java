@@ -10,6 +10,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -68,16 +69,17 @@ public class ComposterBlock extends net.minecraft.block.ComposterBlock implement
 
     public static BlockState emptyFullComposter(Entity user, BlockState state, World world, BlockPos pos) {
         if (!world.isClient) {
+            ComposterBlockEntity blockEntity = (ComposterBlockEntity)Objects.requireNonNull(world.getBlockEntity(pos));
             for (int i = 0; i < 27; i++) {
                 Vec3d vec3d = Vec3d.add(pos, 0.5, 1.01, 0.5).addRandom(world.random, 0.7F);
-                ItemEntity itemEntity = new ItemEntity(world, vec3d.getX(), vec3d.getY(), vec3d.getZ(), ((ComposterBlockEntity)Objects.requireNonNull(world.getBlockEntity(pos))).inventory.get(i));
+                ItemEntity itemEntity = new ItemEntity(world, vec3d.getX(), vec3d.getY(), vec3d.getZ(), blockEntity.removeStack(i));
                 itemEntity.setToDefaultPickupDelay();
                 world.spawnEntity(itemEntity);
             }
+            blockEntity.markDirty();
         }
-        BlockState blockState = emptyComposter(user, state, world, pos);
         world.playSound(null, pos, SoundEvents.BLOCK_COMPOSTER_EMPTY, SoundCategory.BLOCKS, 1.0f, 1.0f);
-        return blockState;
+        return emptyComposter(user, state, world, pos);
     }
 
     public static BlockState emptyComposter(Entity user, BlockState state, WorldAccess world, BlockPos pos) {
@@ -90,19 +92,26 @@ public class ComposterBlock extends net.minecraft.block.ComposterBlock implement
     @Override
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         if (state.get(LEVEL) == 7) {
+            ComposterBlockEntity blockEntity = (ComposterBlockEntity)Objects.requireNonNull(world.getBlockEntity(pos));
             List<ItemStack> list = Lists.newArrayList();
             Arrays.stream(config.items).forEach(group -> {
-                if(ThreadLocalRandom.current().nextDouble() < group.chance) {
+                if (ThreadLocalRandom.current().nextDouble() < group.chance) {
                     list.add(createItemStack(group));
                 }
             });
             Collections.shuffle(list);
             for (ItemStack itemStack : list) {
-                ((ComposterBlockEntity)Objects.requireNonNull(world.getBlockEntity(pos))).inventory.set(list.indexOf(itemStack), itemStack).copy();
+                blockEntity.setStack(list.indexOf(itemStack), itemStack);
             }
             world.setBlockState(pos, state.cycle(LEVEL), Block.NOTIFY_ALL);
             world.playSound(null, pos, SoundEvents.BLOCK_COMPOSTER_READY, SoundCategory.BLOCKS, 1.0f, 1.0f);
+            blockEntity.markDirty();
         }
+    }
+
+    @Override
+    public SidedInventory getInventory(BlockState state, WorldAccess world, BlockPos pos) {
+        return (SidedInventory)world.getBlockEntity(pos);
     }
 
 }
