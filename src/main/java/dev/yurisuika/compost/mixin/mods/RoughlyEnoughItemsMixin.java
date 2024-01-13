@@ -9,14 +9,14 @@ import org.spongepowered.asm.mixin.injection.Slice;
 
 import java.util.Iterator;
 
-public class RoughlyEnoughItemsMixin {
+public abstract class RoughlyEnoughItemsMixin {
 
     @Pseudo
     @Mixin(DefaultPlugin.class)
-    public static class DefaultPluginMixin {
+    public abstract static class DefaultPluginMixin {
 
         @Redirect(method = "registerRecipeDisplays", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/block/ComposterBlock;registerDefaultCompostableItems()V"), to = @At(value = "INVOKE", target = "Lme/shedaniel/rei/plugin/stripping/DummyAxeItem;getStrippedBlocksMap()Ljava/util/Map;")))
-        private boolean redirectRegisterRecipeDisplays(Iterator instance) {
+        private boolean redirectRegisterDefaultCompostableItems(Iterator instance) {
             return false;
         }
 
