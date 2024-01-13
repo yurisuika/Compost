@@ -1,5 +1,7 @@
 package dev.yurisuika.compost.block.entity;
 
+import dev.yurisuika.compost.block.ComposterBlock;
+import dev.yurisuika.compost.mixin.block.ComposterBlockInvoker;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -13,7 +15,9 @@ import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.WorldEvents;
 
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 import static dev.yurisuika.compost.Compost.*;
@@ -21,7 +25,7 @@ import static dev.yurisuika.compost.block.ComposterBlock.*;
 
 public class ComposterBlockEntity extends LootableContainerBlockEntity implements SidedInventory {
 
-    public DefaultedList<ItemStack> inventory = DefaultedList.ofSize(27, ItemStack.EMPTY);
+    public DefaultedList<ItemStack> inventory = DefaultedList.ofSize(27 + 1, ItemStack.EMPTY);
 
     public ComposterBlockEntity(BlockPos pos, BlockState state) {
         super(COMPOSTER, pos, state);
@@ -45,16 +49,40 @@ public class ComposterBlockEntity extends LootableContainerBlockEntity implement
     }
 
     @Override
+    public ItemStack getStack(int index) {
+        return this.inventory.get(index);
+    }
+
+    @Override
+    public ItemStack removeStack(int slot, int amount) {
+        return Inventories.splitStack(this.inventory, slot, amount);
+    }
+
+    @Override
+    public ItemStack removeStack(int slot) {
+        return Inventories.removeStack(this.inventory, slot);
+    }
+
+    @Override
     public void setStack(int slot, ItemStack stack) {
         this.inventory.set(slot, stack);
         if (stack.getCount() > this.getMaxCountPerStack()) {
-            stack.setCount(this.getMaxCountPerStack());
+            if (slot == 27) {
+                stack.setCount(1);
+            } else {
+                stack.setCount(this.getMaxCountPerStack());
+            }
         }
     }
 
     @Override
+    public void clear() {
+        this.inventory.clear();
+    }
+
+    @Override
     public int size() {
-        return 27;
+        return 27 + 1;
     }
 
     @Override
@@ -84,24 +112,32 @@ public class ComposterBlockEntity extends LootableContainerBlockEntity implement
 
     @Override
     public int[] getAvailableSlots(Direction side) {
-        return side == Direction.DOWN ? IntStream.range(0, this.size() - 1).toArray() : new int[0];
+        return side == Direction.DOWN ? IntStream.range(0, 27).toArray() : new int[]{27};
     }
 
     @Override
     public boolean canInsert(int slot, ItemStack stack, Direction dir) {
-        return false;
+        return dir == Direction.UP && this.getCachedState().get(ComposterBlock.LEVEL) < 7 && slot == 27 && this.getStack(27).isEmpty() && ITEM_TO_LEVEL_INCREASE_CHANCE.containsKey(stack.getItem());
     }
 
     @Override
     public boolean canExtract(int slot, ItemStack stack, Direction dir) {
-        return dir == Direction.DOWN && !stack.isEmpty();
+        return dir == Direction.DOWN && slot < 27 && !stack.isEmpty();
     }
 
     @Override
     public void markDirty() {
-        if (this.isEmpty()) {
-            emptyComposter(null, this.getCachedState(), this.world, this.pos);
+        BlockState state = Objects.requireNonNull(this.getCachedState());
+        ItemStack input = this.getStack(27);
+        if (!input.isEmpty() && state.get(ComposterBlock.LEVEL) < 7) {
+            state = ComposterBlockInvoker.invokeAddToComposter(null, state, this.world, this.pos, input);
+            this.world.syncWorldEvent(WorldEvents.COMPOSTER_USED, this.pos, state != this.getCachedState() ? 1 : 0);
+            this.removeStack(27);
         }
+        if (state.get(ComposterBlock.LEVEL) == 8 && this.isEmpty()) {
+            emptyComposter(null, state, Objects.requireNonNull(this.world), this.pos);
+        }
+        super.markDirty();
     }
 
 }
