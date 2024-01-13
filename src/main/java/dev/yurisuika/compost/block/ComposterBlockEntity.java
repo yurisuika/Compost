@@ -120,7 +120,7 @@ public class ComposterBlockEntity extends LootableContainerBlockEntity implement
 
     @Override
     public int getMaxCountPerStack() {
-        return 1;
+        return 64;
     }
 
     @Override
