@@ -8,7 +8,8 @@
     "block.BlocksMixin",
     "block.ComposterBlockInvoker",
     "block.ComposterBlockMixin",
-    "command.argument.ItemStackArgumentAccessor"
+    "command.argument.ItemStackArgumentAccessor",
+    "mods.FabricMixin$ItemStorageMixin"
   ],
   "client": [
     "mods.RoughlyEnoughItemsMixin$DefaultClientPluginMixin"
