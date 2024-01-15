@@ -15,6 +15,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.WorldEvents;
 
 import java.util.Objects;
 import java.util.stream.IntStream;
@@ -81,26 +82,26 @@ public class ComposterBlockEntity extends LootableContainerBlockEntity implement
 
     @Override
     public int size() {
-        return 27 + 1;
+        return this.inventory.size();
     }
 
     @Override
-    protected DefaultedList<ItemStack> getInvStackList() {
+    public DefaultedList<ItemStack> getInvStackList() {
         return this.inventory;
     }
 
     @Override
-    protected void setInvStackList(DefaultedList<ItemStack> list) {
+    public void setInvStackList(DefaultedList<ItemStack> list) {
         this.inventory = list;
     }
 
     @Override
-    protected Text getContainerName() {
+    public Text getContainerName() {
         return Text.translatable("container.compost.composter");
     }
 
     @Override
-    protected ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory) {
+    public ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory) {
         return GenericContainerScreenHandler.createGeneric9x3(syncId, playerInventory, this);
     }
 
@@ -112,6 +113,11 @@ public class ComposterBlockEntity extends LootableContainerBlockEntity implement
     @Override
     public int[] getAvailableSlots(Direction side) {
         return side == Direction.DOWN ? IntStream.range(0, 27).toArray() : new int[]{27};
+    }
+
+    @Override
+    public boolean isValid(int slot, ItemStack stack) {
+        return this.getCachedState().get(ComposterBlock.LEVEL) < 7 && slot == 27 && this.getStack(27).isEmpty() && ITEM_TO_LEVEL_INCREASE_CHANCE.containsKey(stack.getItem());
     }
 
     @Override
@@ -130,7 +136,7 @@ public class ComposterBlockEntity extends LootableContainerBlockEntity implement
         ItemStack input = this.getStack(27);
         if (!input.isEmpty() && state.get(ComposterBlock.LEVEL) < 7) {
             state = ComposterBlockInvoker.invokeAddToComposter(state, this.world, this.pos, input);
-            this.world.syncWorldEvent(1500, this.pos, state != this.getCachedState() ? 1 : 0);
+            this.world.syncWorldEvent(WorldEvents.COMPOSTER_USED, this.pos, state != this.getCachedState() ? 1 : 0);
             this.removeStack(27);
         }
         if (state.get(ComposterBlock.LEVEL) == 8 && this.isEmpty()) {
