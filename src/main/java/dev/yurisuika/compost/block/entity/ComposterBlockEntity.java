@@ -25,7 +25,7 @@ import static dev.yurisuika.compost.block.ComposterBlock.*;
 
 public class ComposterBlockEntity extends LootableContainerBlockEntity implements SidedInventory {
 
-    public DefaultedList<ItemStack> inventory = DefaultedList.ofSize(27 +1, ItemStack.EMPTY);
+    public DefaultedList<ItemStack> inventory = DefaultedList.ofSize(27 + 1, ItemStack.EMPTY);
 
     public ComposterBlockEntity(BlockPos pos, BlockState state) {
         super(COMPOSTER, pos, state);
@@ -82,26 +82,26 @@ public class ComposterBlockEntity extends LootableContainerBlockEntity implement
 
     @Override
     public int size() {
-        return 27 + 1;
+        return this.inventory.size();
     }
 
     @Override
-    protected DefaultedList<ItemStack> getInvStackList() {
+    public DefaultedList<ItemStack> getInvStackList() {
         return this.inventory;
     }
 
     @Override
-    protected void setInvStackList(DefaultedList<ItemStack> list) {
+    public void setInvStackList(DefaultedList<ItemStack> list) {
         this.inventory = list;
     }
 
     @Override
-    protected Text getContainerName() {
+    public Text getContainerName() {
         return Text.translatable("container.compost.composter");
     }
 
     @Override
-    protected ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory) {
+    public ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory) {
         return GenericContainerScreenHandler.createGeneric9x3(syncId, playerInventory, this);
     }
 
@@ -113,6 +113,11 @@ public class ComposterBlockEntity extends LootableContainerBlockEntity implement
     @Override
     public int[] getAvailableSlots(Direction side) {
         return side == Direction.DOWN ? IntStream.range(0, 27).toArray() : new int[]{27};
+    }
+
+    @Override
+    public boolean isValid(int slot, ItemStack stack) {
+        return this.getCachedState().get(ComposterBlock.LEVEL) < 7 && slot == 27 && this.getStack(27).isEmpty() && ITEM_TO_LEVEL_INCREASE_CHANCE.containsKey(stack.getItem());
     }
 
     @Override
