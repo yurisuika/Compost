@@ -82,26 +82,26 @@ public class ComposterBlockEntity extends LootableContainerBlockEntity implement
 
     @Override
     public int size() {
-        return 27 + 1;
+        return this.inventory.size();
     }
 
     @Override
-    protected DefaultedList<ItemStack> method_11282() {
+    public DefaultedList<ItemStack> method_11282() {
         return this.inventory;
     }
 
     @Override
-    protected void setInvStackList(DefaultedList<ItemStack> list) {
+    public void setInvStackList(DefaultedList<ItemStack> list) {
         this.inventory = list;
     }
 
     @Override
-    protected Text getContainerName() {
+    public Text getContainerName() {
         return Text.translatable("container.compost.composter");
     }
 
     @Override
-    protected ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory) {
+    public ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory) {
         return GenericContainerScreenHandler.createGeneric9x3(syncId, playerInventory, this);
     }
 
