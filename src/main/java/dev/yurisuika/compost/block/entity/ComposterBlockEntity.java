@@ -127,8 +127,7 @@ public class ComposterBlockEntity extends LootableContainerBlockEntity implement
 
     @Override
     public boolean canExtract(int slot, ItemStack stack, Direction dir) {
-//        return dir == Direction.DOWN && slot < 27 && !stack.isEmpty();
-        return dir == Direction.DOWN && this.getCachedState().get(ComposterBlock.LEVEL) == 8 && !stack.isEmpty();
+        return dir == Direction.DOWN && slot < 27 && !stack.isEmpty();
     }
 
     @Override
