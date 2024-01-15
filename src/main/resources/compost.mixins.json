@@ -7,7 +7,6 @@
   "mixins": [
     "block.BlocksMixin",
     "block.ComposterBlockInvoker",
-    "block.ComposterBlockMixin",
     "mods.FabricMixin$ItemStorageMixin"
   ],
   "client": [
