@@ -8,7 +8,6 @@
     "block.BlocksMixin",
     "block.ComposterBlockInvoker",
     "block.ComposterBlockMixin",
-    "block.entity.HopperBlockEntityMixin",
     "command.argument.ItemStackArgumentAccessor"
   ],
   "client": [
