@@ -61,7 +61,7 @@ public class CompostCommand {
                                                                 .executes(context -> {
                                                                     ItemStackArgument arg = ItemStackArgumentType.getItemStackArgument(context, "item");
                                                                     ItemStack itemStack = arg.createStack(1, false);
-                                                                    StringBuilder stringBuilder = new StringBuilder(arg.getItem().getTranslationKey().replace("item.", "").replace(".", ":"));
+                                                                    StringBuilder stringBuilder = new StringBuilder(arg.getItem().getTranslationKey().replace("item.", "").replace("block.", "").replace(".", ":"));
                                                                     if (((ItemStackArgumentAccessor) arg).getNbt() != null) {
                                                                         stringBuilder.append(((ItemStackArgumentAccessor) arg).getNbt());
                                                                     }
