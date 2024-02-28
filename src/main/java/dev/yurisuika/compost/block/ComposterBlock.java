@@ -87,7 +87,7 @@ public class ComposterBlock extends net.minecraft.block.ComposterBlock implement
             }
             blockEntity.markDirty();
         }
-        world.playSound(null, pos, SoundEvents.BLOCK_COMPOSTER_EMPTY, SoundCategory.BLOCKS, 1.0f, 1.0f);
+        world.playSound(null, pos, SoundEvents.BLOCK_COMPOSTER_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
         return emptyComposter(state, world, pos);
     }
 
@@ -112,7 +112,7 @@ public class ComposterBlock extends net.minecraft.block.ComposterBlock implement
                 blockEntity.setStack(list.indexOf(itemStack), itemStack);
             }
             world.setBlockState(pos, state.cycle(LEVEL), Block.NOTIFY_ALL);
-            world.playSound(null, pos, SoundEvents.BLOCK_COMPOSTER_READY, SoundCategory.BLOCKS, 1.0f, 1.0f);
+            world.playSound(null, pos, SoundEvents.BLOCK_COMPOSTER_READY, SoundCategory.BLOCKS, 1.0F, 1.0F);
             blockEntity.markDirty();
         }
     }
