@@ -9,6 +9,7 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
@@ -32,19 +33,19 @@ public class ComposterBlockEntity extends LootableContainerBlockEntity implement
     }
 
     @Override
-    public void readNbt(NbtCompound nbt) {
-        super.readNbt(nbt);
+    public void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+        super.readNbt(nbt, registryLookup);
         this.inventory = DefaultedList.ofSize(this.size(), ItemStack.EMPTY);
         if (!this.writeLootTable(nbt)) {
-            Inventories.readNbt(nbt, this.inventory);
+            Inventories.readNbt(nbt, this.inventory, registryLookup);
         }
     }
 
     @Override
-    public void writeNbt(NbtCompound nbt) {
-        super.writeNbt(nbt);
+    public void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+        super.writeNbt(nbt, registryLookup);
         if (!this.readLootTable(nbt)) {
-            Inventories.writeNbt(nbt, this.inventory, false);
+            Inventories.writeNbt(nbt, this.inventory, registryLookup);
         }
     }
 
@@ -86,12 +87,12 @@ public class ComposterBlockEntity extends LootableContainerBlockEntity implement
     }
 
     @Override
-    public DefaultedList<ItemStack> method_11282() {
+    public DefaultedList<ItemStack> getHeldStacks() {
         return this.inventory;
     }
 
     @Override
-    public void setInvStackList(DefaultedList<ItemStack> list) {
+    public void setHeldStacks(DefaultedList<ItemStack> list) {
         this.inventory = list;
     }
 

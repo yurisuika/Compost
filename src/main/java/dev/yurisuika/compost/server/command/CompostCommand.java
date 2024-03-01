@@ -62,7 +62,7 @@ public class CompostCommand {
                                                                 .executes(context -> {
                                                                     ItemStackArgument arg = ItemStackArgumentType.getItemStackArgument(context, "item");
                                                                     ItemStack itemStack = arg.createStack(1, false);
-                                                                    String item = arg.asString();
+                                                                    String item = arg.asString(context.getSource().getWorld().getRegistryManager());
                                                                     double chance = Math.max(0.0D, Math.min(DoubleArgumentType.getDouble(context, "chance"), 1.0D));
                                                                     int min = Math.min(Math.min(IntegerArgumentType.getInteger(context, "min"), itemStack.getMaxCount()), IntegerArgumentType.getInteger(context, "max"));
                                                                     int max = Math.max(Math.min(IntegerArgumentType.getInteger(context, "max"), itemStack.getMaxCount()), IntegerArgumentType.getInteger(context, "min"));

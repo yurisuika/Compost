@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.component.ComponentMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -21,7 +22,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class CompostConfig {
 
     public static File file = new File(FabricLoader.getInstance().getConfigDir().toFile(), "compost.json");
-    public static Gson gson = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().create();
+    public static Gson gson = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().disableHtmlEscaping().create();
     public static Config config = new Config();
 
     public static class Config {
@@ -96,19 +97,19 @@ public class CompostConfig {
     public static ItemStack createItemStack(Config.Group group) {
         int index;
         Item item;
-        if (group.item.contains("{")) {
-            index = group.item.indexOf("{");
+        if (group.item.contains("[")) {
+            index = group.item.indexOf("[");
             item = Registries.ITEM.get(new Identifier(group.item.substring(0, index)));
         } else {
             index = 0;
             item = Registries.ITEM.get(new Identifier(group.item));
         }
         ItemStack itemStack = new ItemStack(item, ThreadLocalRandom.current().nextInt(group.min, group.max + 1));
-        if (group.item.contains("{")) {
+        if (group.item.contains("[")) {
             NbtCompound nbt;
             try {
                 nbt = StringNbtReader.parse(group.item.substring(index));
-                itemStack.setNbt(nbt);
+                itemStack.copyComponentsFrom((ComponentMap)nbt);
             } catch (CommandSyntaxException e) {
                 e.printStackTrace();
             }
