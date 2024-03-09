@@ -9,7 +9,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;;
+import net.minecraft.util.Identifier;
 
 import static dev.yurisuika.compost.client.option.CompostConfig.*;
 
