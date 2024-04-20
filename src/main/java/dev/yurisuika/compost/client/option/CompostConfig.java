@@ -115,7 +115,7 @@ public class CompostConfig {
             Optional<Pair<ComponentMap, NbtElement>> component;
             try {
                 nbt = StringNbtReader.parse(group.item.substring(index));
-                component = ComponentMap.CODEC.decode(NbtOps.INSTANCE, nbt).result();
+                component = ComponentMap.CODEC.decode(NbtOps.INSTANCE, nbt).resultOrPartial();
                 itemStack.applyComponentsFrom(component.get().getFirst());
             } catch (CommandSyntaxException e) {
                 e.printStackTrace();
