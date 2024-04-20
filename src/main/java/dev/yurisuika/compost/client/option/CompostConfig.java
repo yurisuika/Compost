@@ -3,11 +3,15 @@ package dev.yurisuika.compost.client.option;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.datafixers.util.Pair;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.component.Component;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
@@ -17,6 +21,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class CompostConfig {
@@ -107,9 +112,11 @@ public class CompostConfig {
         ItemStack itemStack = new ItemStack(item, ThreadLocalRandom.current().nextInt(group.min, group.max + 1));
         if (group.item.contains("[")) {
             NbtCompound nbt;
+            Optional<Pair<ComponentMap, NbtElement>> component;
             try {
                 nbt = StringNbtReader.parse(group.item.substring(index));
-                itemStack.copyComponentsFrom((ComponentMap)nbt);
+                component = ComponentMap.CODEC.decode(NbtOps.INSTANCE, nbt).result();
+                itemStack.applyComponentsFrom(component.get().getFirst());
             } catch (CommandSyntaxException e) {
                 e.printStackTrace();
             }
