@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.datafixers.util.Pair;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.component.Component;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
