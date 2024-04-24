@@ -2,25 +2,20 @@ package dev.yurisuika.compost.client.option;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.datafixers.util.Pair;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.item.Item;
+import net.minecraft.command.argument.ItemStackArgument;
+import net.minecraft.command.argument.ItemStackArgumentType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.StringNbtReader;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
+import net.minecraft.registry.BuiltinRegistries;
+import net.minecraft.server.command.CommandManager;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Files;
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class CompostConfig {
@@ -99,28 +94,11 @@ public class CompostConfig {
     }
 
     public static ItemStack createItemStack(Config.Group group) {
-        int index;
-        Item item;
-        if (group.item.contains("[")) {
-            index = group.item.indexOf("[");
-            item = Registries.ITEM.get(new Identifier(group.item.substring(0, index)));
-        } else {
-            index = 0;
-            item = Registries.ITEM.get(new Identifier(group.item));
+        try {
+            return new ItemStackArgumentType(CommandManager.createRegistryAccess(BuiltinRegistries.createWrapperLookup())).parse(new StringReader(group.item)).createStack(ThreadLocalRandom.current().nextInt(group.min, group.max + 1), true);
+        } catch (CommandSyntaxException e) {
+            throw new RuntimeException(e);
         }
-        ItemStack itemStack = new ItemStack(item, ThreadLocalRandom.current().nextInt(group.min, group.max + 1));
-        if (group.item.contains("[")) {
-            NbtCompound nbt;
-            Optional<Pair<ComponentMap, NbtElement>> component;
-            try {
-                nbt = StringNbtReader.parse(group.item.substring(index));
-                component = ComponentMap.CODEC.decode(NbtOps.INSTANCE, nbt).resultOrPartial();
-                itemStack.applyComponentsFrom(component.get().getFirst());
-            } catch (CommandSyntaxException e) {
-                e.printStackTrace();
-            }
-        }
-        return itemStack;
     }
 
     public static Config.Group getGroup(int group) {
