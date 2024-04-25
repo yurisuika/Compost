@@ -5,11 +5,12 @@ import com.google.gson.GsonBuilder;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.command.argument.ItemStackArgument;
 import net.minecraft.command.argument.ItemStackArgumentType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.BuiltinRegistries;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.command.CommandManager;
+import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.File;
@@ -83,7 +84,7 @@ public class CompostConfig {
 
     public static void checkBounds() {
         Arrays.stream(config.items).forEach(group -> {
-            int maxCount = createItemStack(group).getItem().getMaxCount();
+            int maxCount = (group.item.contains("[") ? Registries.ITEM.get(new Identifier(group.item.substring(0, group.item.indexOf("[")))) : Registries.ITEM.get(new Identifier(group.item))).getMaxCount();
             int min = Math.max(Math.min(Math.min(group.min, maxCount), group.max), 0);
             int max = Math.max(Math.max(Math.min(group.max, maxCount), group.min), 1);
             group.chance = Math.max(0.0D, Math.min(group.chance, 1.0D));
