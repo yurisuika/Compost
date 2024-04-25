@@ -2,11 +2,10 @@ package dev.yurisuika.compost.client.option;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.item.Item;
+import net.minecraft.command.argument.ItemStackArgumentType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraftforge.fml.loading.FMLPaths;
@@ -83,7 +82,7 @@ public class CompostConfig {
 
     public static void checkBounds() {
         Arrays.stream(config.items).forEach(group -> {
-            int maxCount = createItemStack(group).getItem().getMaxCount();
+            int maxCount = (group.item.contains("{") ? Registry.ITEM.get(new Identifier(group.item.substring(0, group.item.indexOf("{")))) : Registry.ITEM.get(new Identifier(group.item))).getMaxCount();
             int min = Math.max(Math.min(Math.min(group.min, maxCount), group.max), 0);
             int max = Math.max(Math.max(Math.min(group.max, maxCount), group.min), 1);
             group.chance = Math.max(0.0D, Math.min(group.chance, 1.0D));
@@ -94,26 +93,11 @@ public class CompostConfig {
     }
 
     public static ItemStack createItemStack(Config.Group group) {
-        int index;
-        Item item;
-        if (group.item.contains("{")) {
-            index = group.item.indexOf("{");
-            item = Registry.ITEM.get(new Identifier(group.item.substring(0, index)));
-        } else {
-            index = 0;
-            item = Registry.ITEM.get(new Identifier(group.item));
+        try {
+            return new ItemStackArgumentType().parse(new StringReader(group.item)).createStack(ThreadLocalRandom.current().nextInt(group.min, group.max + 1), true);
+        } catch (CommandSyntaxException e) {
+            throw new RuntimeException(e);
         }
-        ItemStack itemStack = new ItemStack(item, ThreadLocalRandom.current().nextInt(group.min, group.max + 1));
-        if (group.item.contains("{")) {
-            NbtCompound nbt;
-            try {
-                nbt = StringNbtReader.parse(group.item.substring(index));
-                itemStack.setNbt(nbt);
-            } catch (CommandSyntaxException e) {
-                e.printStackTrace();
-            }
-        }
-        return itemStack;
     }
 
     public static Config.Group getGroup(int group) {
