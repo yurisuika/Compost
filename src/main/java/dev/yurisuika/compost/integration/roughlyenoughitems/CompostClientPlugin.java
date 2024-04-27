@@ -14,7 +14,7 @@ import java.util.*;
 import static dev.yurisuika.compost.client.option.CompostConfig.*;
 
 @REIPluginClient
-public class  CompostClientPlugin implements REIClientPlugin {
+public class CompostClientPlugin implements REIClientPlugin {
 
     @Override
     public void registerDisplays(DisplayRegistry registry) {
