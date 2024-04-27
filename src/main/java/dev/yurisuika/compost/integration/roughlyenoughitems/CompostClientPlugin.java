@@ -9,9 +9,11 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.ComposterBlock;
 import net.minecraft.item.ItemConvertible;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static dev.yurisuika.compost.client.option.CompostConfig.*;
 
@@ -20,15 +22,19 @@ public class CompostClientPlugin implements REIPluginV0 {
 
     @Override
     public void registerRecipeDisplays(RecipeHelper recipeHelper) {
+        List<ItemStack> output = new ArrayList<>();
         Object2FloatMap<ItemConvertible> compostables = ComposterBlock.ITEM_TO_LEVEL_INCREASE_CHANCE;
+        int page = 0;
+
         Arrays.stream(config.items).forEach(group -> {
-            int i = 0;
-            Iterator<List<Object2FloatMap.Entry<ItemConvertible>>> iterator = Iterators.partition(compostables.object2FloatEntrySet().stream().sorted(Map.Entry.comparingByValue()).iterator(), 48);
-            while (iterator.hasNext()) {
-                recipeHelper.registerDisplay(new DefaultCompostingDisplay(i, iterator.next(), compostables, createItemStack(group)));
-                i++;
-            }
+            output.add(createItemStack(group));
         });
+
+        Iterator<List<Object2FloatMap.Entry<ItemConvertible>>> iterator = Iterators.partition(compostables.object2FloatEntrySet().stream().sorted(Map.Entry.comparingByValue()).iterator(), 48);
+        while (iterator.hasNext()) {
+            recipeHelper.registerDisplay(new DefaultCompostingDisplay(page, iterator.next(), compostables, output.get(ThreadLocalRandom.current().nextInt(output.size()))));
+            page++;
+        }
     }
 
     @Override
