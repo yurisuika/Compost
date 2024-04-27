@@ -20,9 +20,9 @@ dependencies {
 
     forge "net.minecraftforge:forge:${project.forge_version}"
 
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-forge:10.0.596"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-forge:10.0.596"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-forge:10.0.596"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-forge:10.0.646"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-forge:10.0.646"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-forge:10.0.646"
 }
 
 processResources {
