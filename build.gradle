@@ -19,9 +19,9 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:13.0.666"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:13.0.666"
-    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:13.0.666"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:14.0.690-alpha"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:14.0.690-alpha"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-fabric:14.0.690-alpha"
 }
 
 processResources {
