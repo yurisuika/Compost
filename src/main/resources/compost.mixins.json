@@ -7,11 +7,10 @@
   "mixins": [
     "block.BlocksMixin",
     "block.ComposterBlockInvoker",
-    "mods.EMIInvoker$VanillaPluginInvoker",
-    "mods.EMIMixin$VanillaPluginMixin",
     "mods.FabricMixin$ItemStorageMixin"
   ],
   "client": [
+    "mods.EMIMixin$EmiCompostingRecipeMixin",
     "mods.RoughlyEnoughItemsMixin$DefaultClientPluginMixin"
   ],
   "injectors": {

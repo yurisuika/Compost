@@ -14,8 +14,7 @@ import java.util.function.Supplier;
 public class CompostMixinPlugin implements IMixinConfigPlugin {
 
     private static final Map<String, Supplier<Boolean>> EMI = ImmutableMap.of(
-            "dev.yurisuika.compost.mixin.mods.EMIInvoker$VanillaPluginInvoker", () -> FabricLoader.getInstance().isModLoaded("emi"),
-            "dev.yurisuika.compost.mixin.mods.EMIMixin$VanillaPluginMixin", () -> FabricLoader.getInstance().isModLoaded("emi")
+            "dev.yurisuika.compost.mixin.mods.EMIMixin$EmiCompostingRecipeMixin", () -> FabricLoader.getInstance().isModLoaded("emi")
     );
 
     private static final Map<String, Supplier<Boolean>> ROUGHLYENOUGHITEMS = ImmutableMap.of(
