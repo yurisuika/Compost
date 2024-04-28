@@ -10,6 +10,7 @@
     "mods.FabricMixin$ItemStorageMixin"
   ],
   "client": [
+    "mods.EMIMixin$EmiCompostingRecipeMixin",
     "mods.RoughlyEnoughItemsMixin$DefaultClientPluginMixin"
   ],
   "injectors": {
