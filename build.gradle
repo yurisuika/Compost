@@ -11,13 +11,17 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
-    maven { url "https://maven.architectury.dev" }
+    maven { url "https://maven.architectury.dev/" }
+    maven { url "https://maven.terraformersmc.com/" }
 }
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+    modCompileOnly "dev.emi:emi-fabric:1.1.4+1.20.4:api"
+    modCompileOnly "dev.emi:emi-fabric:1.1.4+1.20.4"
 
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:14.0.690-alpha"
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:14.0.690-alpha"
