@@ -30,6 +30,13 @@ ordering = "NONE"
 side = "SERVER"
 
 [[dependencies.compost]]
+modId = "emi"
+mandatory = false
+versionRange = "[1,)"
+ordering = "NONE"
+side = "CLIENT"
+
+[[dependencies.compost]]
 modId = "roughlyenoughitems"
 mandatory = false
 versionRange = "[10,)"
