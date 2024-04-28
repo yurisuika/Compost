@@ -24,6 +24,9 @@
     "main": [
       "dev.yurisuika.compost.Compost"
     ],
+    "emi": [
+      "dev.yurisuika.compost.integration.emi.CompostEmiPlugin"
+    ],
     "rei_client": [
       "dev.yurisuika.compost.integration.roughlyenoughitems.CompostClientPlugin"
     ]
