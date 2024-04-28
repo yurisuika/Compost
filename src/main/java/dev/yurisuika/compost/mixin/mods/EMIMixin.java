@@ -33,8 +33,8 @@ public abstract class EMIMixin {
         private EmiStack getStacks(Random random) {
             Config.Group group = config.items[random.nextInt(config.items.length)];
             ItemStack stack = createItemStack(group);
-
-            return EmiStack.of(stack).setAmount(stack.getCount()).setChance((float)group.chance);
+            stack.setCount((group.min + group.max) / 2);
+            return EmiStack.of(stack).setAmount((group.min + group.max) / 2).setChance((float)group.chance);
         }
 
     }
