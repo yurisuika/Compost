@@ -13,13 +13,17 @@ import java.util.function.Supplier;
 
 public class CompostMixinPlugin implements IMixinConfigPlugin {
 
+    private static final Map<String, Supplier<Boolean>> EMI = ImmutableMap.of(
+            "dev.yurisuika.compost.mixin.mods.EMIMixin$EmiCompostingRecipeMixin", () -> FMLLoader.getLoadingModList().getModFileById("emi") != null
+    );
+
     private static final Map<String, Supplier<Boolean>> ROUGHLYENOUGHITEMS = ImmutableMap.of(
             "dev.yurisuika.compost.mixin.mods.RoughlyEnoughItemsMixin$DefaultClientPluginMixin", () -> FMLLoader.getLoadingModList().getModFileById("roughlyenoughitems") != null
     );
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        return ROUGHLYENOUGHITEMS.getOrDefault(mixinClassName, () -> true).get();
+        return EMI.getOrDefault(mixinClassName, () -> true).get() && ROUGHLYENOUGHITEMS.getOrDefault(mixinClassName, () -> true).get();
     }
 
     @Override
