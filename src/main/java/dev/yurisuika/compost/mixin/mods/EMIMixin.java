@@ -26,7 +26,6 @@ public abstract class EMIMixin {
         private void injectWidgetAndCancel(WidgetHolder widgets, CallbackInfo ci) {
             widgets.addGeneratedSlot(this::getStacks, EmiUtil.RANDOM.nextInt(), 90, 0).recipeContext((EmiCompostingRecipe)(Object)this);
             ci.cancel();
-
         }
 
         @Unique
