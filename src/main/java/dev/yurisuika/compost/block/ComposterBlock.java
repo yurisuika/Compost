@@ -26,7 +26,8 @@ import net.minecraft.world.WorldAccess;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static dev.yurisuika.compost.client.option.CompostConfig.*;
+import static dev.yurisuika.compost.server.option.CompostConfig.*;
+import static dev.yurisuika.compost.util.ConfigUtil.*;
 
 public class ComposterBlock extends net.minecraft.block.ComposterBlock implements BlockEntityProvider {
 
@@ -99,7 +100,7 @@ public class ComposterBlock extends net.minecraft.block.ComposterBlock implement
         if (state.get(LEVEL) == 7) {
             ComposterBlockEntity blockEntity = (ComposterBlockEntity)Objects.requireNonNull(world.getBlockEntity(pos));
             List<ItemStack> list = Lists.newArrayList();
-            Arrays.stream(config.items).forEach(group -> {
+            Arrays.stream(config.worlds[getIndex(world.getServer().getSaveProperties().getLevelName()).get()].items).forEach(group -> {
                 if (ThreadLocalRandom.current().nextDouble() < group.chance) {
                     list.add(createItemStack(group));
                 }
