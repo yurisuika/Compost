@@ -21,12 +21,12 @@ dependencies {
 
     forge "net.minecraftforge:forge:${project.forge_version}"
 
-    modCompileOnly "dev.emi:emi-forge:1.1.6+1.20.2:api"
-    modCompileOnly "dev.emi:emi-forge:1.1.6+1.20.2"
+    modCompileOnly "dev.emi:emi-forge:1.1.6+1.20.1:api"
+    modCompileOnly "dev.emi:emi-forge:1.1.6+1.20.1"
 
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-forge:13.1.719"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-forge:13.1.719"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-forge:13.1.719"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-forge:12.1.725"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-forge:12.1.725"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-forge:12.1.725"
 }
 
 processResources {

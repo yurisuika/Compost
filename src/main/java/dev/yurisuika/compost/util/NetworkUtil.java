@@ -32,7 +32,7 @@ public class NetworkUtil {
                     });
                 }
             });
-            CompostHandler.CHANNEL.send(new CompostS2CPacket(item, chance, min, max), PacketDistributor.PLAYER.with((ServerPlayerEntity)player));
+            CompostHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)player), new CompostS2CPacket(item, chance, min, max));
         }
     }
 

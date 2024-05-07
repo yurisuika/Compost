@@ -2,10 +2,11 @@ package dev.yurisuika.compost.network.packet.s2c;
 
 import dev.yurisuika.compost.server.option.CompostConfig;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static dev.yurisuika.compost.Compost.*;
 
@@ -34,15 +35,15 @@ public class CompostS2CPacket {
         return new CompostS2CPacket(buf.readList(PacketByteBuf::readString), buf.readList(PacketByteBuf::readDouble), buf.readList(PacketByteBuf::readInt), buf.readList(PacketByteBuf::readInt));
     }
 
-    public static void handle(final CompostS2CPacket message, CustomPayloadEvent.Context context) {
-        context.enqueueWork(() -> {
+    public static void handle(final CompostS2CPacket message, Supplier<NetworkEvent.Context> context) {
+        context.get().enqueueWork(() -> {
             List<CompostConfig.Config.World.Group> list = new ArrayList<>();
             for (int i = 0; i < message.item.size(); i++) {
                 list.add(new CompostConfig.Config.World.Group(message.item.get(i), message.chance.get(i), message.min.get(i), message.max.get(i)));
             }
             GROUPS = list.toArray(new CompostConfig.Config.World.Group[0]);
         });
-        context.setPacketHandled(true);
+        context.get().setPacketHandled(true);
     }
 
 }
