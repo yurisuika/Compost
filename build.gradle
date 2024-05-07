@@ -20,8 +20,8 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    modCompileOnly "dev.emi:emi-fabric:1.1.4+1.20.2:api"
-    modCompileOnly "dev.emi:emi-fabric:1.1.4+1.20.2"
+    modCompileOnly "dev.emi:emi-fabric:1.1.6+1.20.2:api"
+    modCompileOnly "dev.emi:emi-fabric:1.1.6+1.20.2"
 
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:13.1.719"
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:13.1.719"
