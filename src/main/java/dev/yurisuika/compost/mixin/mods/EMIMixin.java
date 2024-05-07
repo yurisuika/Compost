@@ -4,6 +4,7 @@ import dev.emi.emi.EmiUtil;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import dev.emi.emi.recipe.EmiCompostingRecipe;
+import dev.yurisuika.compost.server.option.CompostConfig;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
@@ -12,9 +13,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.List;
 import java.util.Random;
 
-import static dev.yurisuika.compost.client.option.CompostConfig.*;
+import static dev.yurisuika.compost.CompostClient.*;
+import static dev.yurisuika.compost.util.ConfigUtil.*;
 
 public abstract class EMIMixin {
 
@@ -30,9 +33,8 @@ public abstract class EMIMixin {
 
         @Unique
         private EmiStack getStacks(Random random) {
-            Config.Group group = config.items[random.nextInt(config.items.length)];
+            CompostConfig.Config.World.Group group = List.of(GROUPS).get(random.nextInt(GROUPS.length));
             ItemStack stack = createItemStack(group);
-            stack.setCount((group.min + group.max) / 2);
             return EmiStack.of(stack).setAmount((group.min + group.max) / 2).setChance((float)group.chance);
         }
 
