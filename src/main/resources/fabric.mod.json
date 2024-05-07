@@ -23,6 +23,9 @@
   "entrypoints": {
     "main": [
       "dev.yurisuika.compost.Compost"
+    ],
+    "client": [
+      "dev.yurisuika.compost.CompostClient"
     ]
   },
   "mixins": [
