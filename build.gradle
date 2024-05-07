@@ -21,8 +21,8 @@ dependencies {
 
     forge "net.minecraftforge:forge:${project.forge_version}"
 
-    modCompileOnly "dev.emi:emi-forge:1.1.4+1.19.4:api"
-    modCompileOnly "dev.emi:emi-forge:1.1.4+1.19.4"
+    modCompileOnly "dev.emi:emi-forge:1.1.6+1.19.4:api"
+    modCompileOnly "dev.emi:emi-forge:1.1.6+1.19.4"
 
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-forge:11.1.717"
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-forge:11.1.717"
