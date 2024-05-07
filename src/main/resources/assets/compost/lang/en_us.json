@@ -1,9 +1,9 @@
 {
   "commands.compost.config.reload": "Compost config reloaded",
   "commands.compost.config.reset": "Compost config reset to defaults",
-  "commands.compost.groups.query": "%d: %s (chance: %d%%, min: %d, max: %d)",
-  "commands.compost.groups.add": "Added %s (chance: %d%%, min: %d, max: %d)",
-  "commands.compost.groups.remove": "Removed %s (chance: %d%%, min: %d, max: %d)",
+  "commands.compost.groups.query": "%d: %d%% chance of %s %s",
+  "commands.compost.groups.add": "Added %d%% chance of %s %s",
+  "commands.compost.groups.remove": "Removed %s",
   "commands.compost.groups.remove.failed": "%d exceeds range of %d",
 
   "container.compost.composter": "Composter"
