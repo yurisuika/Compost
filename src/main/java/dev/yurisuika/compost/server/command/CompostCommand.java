@@ -78,7 +78,7 @@ public class CompostCommand {
                                                                     double chance = Math.max(0.0D, Math.min(DoubleArgumentType.getDouble(context, "chance"), 1.0D));
                                                                     int min = Math.min(Math.min(IntegerArgumentType.getInteger(context, "min"), itemStack.getMaxCount()), IntegerArgumentType.getInteger(context, "max"));
                                                                     int max = Math.max(Math.min(IntegerArgumentType.getInteger(context, "max"), itemStack.getMaxCount()), IntegerArgumentType.getInteger(context, "min"));
-                                                                    addGroup(config.worlds[getIndex(context.getSource().getServer().getSaveProperties().getLevelName()).get()].world, arg.asString(), chance, min, max);
+                                                                    addGroup(config.worlds[getIndex(context.getSource().getServer().getSaveProperties().getLevelName()).get()].world, arg.asString(context.getSource().getWorld().getRegistryManager()), chance, min, max);
                                                                     for (ServerPlayerEntity player : context.getSource().getServer().getPlayerManager().getPlayerList()) {
                                                                         sendGroups(context.getSource().getWorld(), player);
                                                                     }

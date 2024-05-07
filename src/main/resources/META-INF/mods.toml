@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[49,)"
+loaderVersion = "[50,)"
 license = "GNU Lesser General Public License v3.0"
 
 [[mods]]
@@ -18,14 +18,14 @@ Make composters turn your food waste into whatever you want!
 [[dependencies.compost]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.20.3,1.20.4]"
+versionRange = "[1.20.5,1.21]"
 ordering = "NONE"
 side = "SERVER"
 
 [[dependencies.compost]]
 modId = "forge"
 mandatory = true
-versionRange = "[49,)"
+versionRange = "[50,)"
 ordering = "NONE"
 side = "SERVER"
 

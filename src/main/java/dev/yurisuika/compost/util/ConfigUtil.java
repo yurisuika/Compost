@@ -2,6 +2,7 @@ package dev.yurisuika.compost.util;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.yurisuika.compost.server.option.CompostConfig;
 import net.minecraft.command.argument.ItemStackArgumentType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.BuiltinRegistries;
@@ -23,7 +24,7 @@ public class ConfigUtil {
 
     public static void checkBounds() {
         Arrays.stream(config.worlds).forEach(level -> Arrays.stream(level.items).forEach(group -> {
-            int maxCount = (group.item.contains("{") ? Registries.ITEM.get(new Identifier(group.item.substring(0, group.item.indexOf("{")))) : Registries.ITEM.get(new Identifier(group.item))).getMaxCount();
+            int maxCount = (group.item.contains("[") ? Registries.ITEM.get(new Identifier(group.item.substring(0, group.item.indexOf("[")))) : Registries.ITEM.get(new Identifier(group.item))).getMaxCount();
             int min = Math.max(Math.min(Math.min(group.min, maxCount), group.max), 0);
             int max = Math.max(Math.max(Math.min(group.max, maxCount), group.min), 1);
             group.chance = Math.max(0.0D, Math.min(group.chance, 1.0D));
@@ -42,9 +43,9 @@ public class ConfigUtil {
             }
         });
         if (!exists.get()) {
-            config.worlds = ArrayUtils.add(config.worlds, new Config.World(world, new Config.World.Group[]{
-                    new Config.World.Group("minecraft:dirt", 1.0D, 1, 1),
-                    new Config.World.Group("minecraft:bone_meal", 1.0D, 1, 1)
+            config.worlds = ArrayUtils.add(config.worlds, new CompostConfig.Config.World(world, new CompostConfig.Config.World.Group[]{
+                    new CompostConfig.Config.World.Group("minecraft:dirt", 1.0D, 1, 1),
+                    new CompostConfig.Config.World.Group("minecraft:bone_meal", 1.0D, 1, 1)
             }));
         }
         saveConfig();
@@ -60,7 +61,7 @@ public class ConfigUtil {
         return index;
     }
 
-    public static ItemStack createItemStack(Config.World.Group group) {
+    public static ItemStack createItemStack(CompostConfig.Config.World.Group group) {
         try {
             return new ItemStackArgumentType(CommandManager.createRegistryAccess(BuiltinRegistries.createWrapperLookup())).parse(new StringReader(group.item)).createStack(ThreadLocalRandom.current().nextInt(group.min, group.max + 1), true);
         } catch (CommandSyntaxException e) {

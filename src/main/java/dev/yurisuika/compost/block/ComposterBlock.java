@@ -19,6 +19,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -62,24 +63,30 @@ public class ComposterBlock extends net.minecraft.block.ComposterBlock implement
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         int i = state.get(LEVEL);
-        ItemStack itemStack = player.getStackInHand(hand);
-        if (i < 8 && ITEM_TO_LEVEL_INCREASE_CHANCE.containsKey(itemStack.getItem())) {
+        if (i < 8 && ITEM_TO_LEVEL_INCREASE_CHANCE.containsKey(stack.getItem())) {
             if (i < 7 && !world.isClient) {
-                world.syncWorldEvent(WorldEvents.COMPOSTER_USED, pos, state != ComposterBlockInvoker.invokeAddToComposter(player, state, world, pos, itemStack) ? 1 : 0);
-                player.incrementStat(Stats.USED.getOrCreateStat(itemStack.getItem()));
+                world.syncWorldEvent(WorldEvents.COMPOSTER_USED, pos, state != ComposterBlockInvoker.invokeAddToComposter(player, state, world, pos, stack) ? 1 : 0);
+                player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
                 if (!player.getAbilities().creativeMode) {
-                    itemStack.decrement(1);
+                    stack.decrement(1);
                 }
             }
-            return ActionResult.success(world.isClient);
+            return ItemActionResult.success(world.isClient);
+        } else {
+            return ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
-        if (i == 8) {
+    }
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        if (state.get(LEVEL) == 8) {
             emptyFullComposter(player, state, world, pos);
             return ActionResult.success(world.isClient);
+        } else {
+            return ActionResult.PASS;
         }
-        return ActionResult.PASS;
     }
 
     public static BlockState emptyFullComposter(Entity user, BlockState state, World world, BlockPos pos) {
