@@ -1,33 +1,34 @@
 package dev.yurisuika.compost.network.packet.s2c;
 
-import dev.yurisuika.compost.server.option.CompostConfig;
+import dev.yurisuika.compost.config.CompostConfig;
+import dev.yurisuika.compost.util.CompostUtil;
+import dev.yurisuika.compost.util.NetworkUtil;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static dev.yurisuika.compost.Compost.*;
-
 public class CompostS2CPacket {
 
-    public List<String> item;
-    public List<Double> chance;
-    public List<Integer> min;
-    public List<Integer> max;
+    public List<String> items;
+    public List<Double> chances;
+    public List<Integer> mins;
+    public List<Integer> maxes;
 
-    public CompostS2CPacket(List<String> item, List<Double> chance, List<Integer> min, List<Integer> max) {
-        this.item = item;
-        this.chance = chance;
-        this.min = min;
-        this.max = max;
+    public CompostS2CPacket(List<String> items, List<Double> chances, List<Integer> mins, List<Integer> maxes) {
+        this.items = items;
+        this.chances = chances;
+        this.mins = mins;
+        this.maxes = maxes;
     }
 
     public static void encode(CompostS2CPacket packet, PacketByteBuf buf) {
-        buf.writeCollection(packet.item, PacketByteBuf::writeString);
-        buf.writeCollection(packet.chance, PacketByteBuf::writeDouble);
-        buf.writeCollection(packet.min, PacketByteBuf::writeInt);
-        buf.writeCollection(packet.max, PacketByteBuf::writeInt);
+        buf.writeCollection(packet.items, PacketByteBuf::writeString);
+        buf.writeCollection(packet.chances, PacketByteBuf::writeDouble);
+        buf.writeCollection(packet.mins, PacketByteBuf::writeInt);
+        buf.writeCollection(packet.maxes, PacketByteBuf::writeInt);
     }
 
     public static CompostS2CPacket decode(PacketByteBuf buf) {
@@ -36,11 +37,13 @@ public class CompostS2CPacket {
 
     public static void handle(final CompostS2CPacket message, CustomPayloadEvent.Context context) {
         context.enqueueWork(() -> {
-            List<CompostConfig.Config.World.Group> list = new ArrayList<>();
-            for (int i = 0; i < message.item.size(); i++) {
-                list.add(new CompostConfig.Config.World.Group(message.item.get(i), message.chance.get(i), message.min.get(i), message.max.get(i)));
+            List<ItemStack> list = new ArrayList<>();
+            for (int i = 0; i < message.items.size(); i++) {
+                ItemStack stack = CompostUtil.createItemStack(new CompostConfig.Config.Level.Item(message.items.get(i), message.chances.get(i), message.mins.get(i), message.maxes.get(i)));
+                stack.setCount(message.maxes.get(i));
+                list.add(stack);
             }
-            GROUPS = list.toArray(new CompostConfig.Config.World.Group[0]);
+            NetworkUtil.stacks = list;
         });
         context.setPacketHandled(true);
     }
