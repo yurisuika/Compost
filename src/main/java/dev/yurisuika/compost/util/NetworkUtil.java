@@ -3,6 +3,7 @@ package dev.yurisuika.compost.util;
 import dev.yurisuika.compost.network.handler.CompostHandler;
 import dev.yurisuika.compost.network.packet.s2c.CompostS2CPacket;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.network.PacketDistributor;
@@ -12,27 +13,25 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static dev.yurisuika.compost.server.option.CompostConfig.*;
+import static dev.yurisuika.compost.config.CompostConfig.*;
 
 public class NetworkUtil {
 
-    public static void sendGroups(World world, PlayerEntity player) {
+    public static List<ItemStack> stacks;
+
+    public static void sendItems(World world, PlayerEntity player) {
         if (!world.isClient()) {
-            List<String> item = new ArrayList<>();
-            List<Double> chance = new ArrayList<>();
-            List<Integer> min = new ArrayList<>();
-            List<Integer> max = new ArrayList<>();
-            Arrays.stream(config.worlds).forEach(level -> {
-                if (Objects.equals(level.world, Objects.requireNonNull(world.getServer()).getSaveProperties().getLevelName())) {
-                    Arrays.stream(level.items).forEach(group -> {
-                        item.add(group.item);
-                        chance.add(group.chance);
-                        min.add(group.min);
-                        max.add(group.max);
+            List<ItemStack> stacks = new ArrayList<>();
+            Arrays.stream(config.levels).forEach(level -> {
+                if (Objects.equals(level.name, Objects.requireNonNull(world.getServer()).getSaveProperties().getLevelName())) {
+                    Arrays.stream(level.items).forEach(item -> {
+                        ItemStack stack = CompostUtil.createItemStack(item);
+                        stack.setCount(item.max);
+                        stacks.add(stack);
                     });
                 }
             });
-            CompostHandler.CHANNEL.send(new CompostS2CPacket(item, chance, min, max), PacketDistributor.PLAYER.with((ServerPlayerEntity)player));
+            CompostHandler.CHANNEL.send(new CompostS2CPacket(stacks), PacketDistributor.PLAYER.with((ServerPlayerEntity)player));
         }
     }
 
