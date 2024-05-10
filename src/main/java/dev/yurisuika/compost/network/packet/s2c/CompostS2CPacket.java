@@ -1,48 +1,38 @@
 package dev.yurisuika.compost.network.packet.s2c;
 
-import dev.yurisuika.compost.server.option.CompostConfig;
+import dev.yurisuika.compost.util.NetworkUtil;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraftforge.fml.network.NetworkEvent;
-import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.ArrayList;
 import java.util.function.Supplier;
-
-import static dev.yurisuika.compost.Compost.*;
 
 public class CompostS2CPacket {
 
     public int index;
-    public String item;
-    public Double chance;
-    public Integer min;
-    public Integer max;
+    public ItemStack stack;
 
-    public CompostS2CPacket(int index, String item, Double chance, Integer min, Integer max) {
+    public CompostS2CPacket(int index, ItemStack stack) {
         this.index = index;
-        this.item = item;
-        this.chance = chance;
-        this.min = min;
-        this.max = max;
+        this.stack = stack;
     }
 
     public static void encode(CompostS2CPacket packet, PacketByteBuf buf) {
         buf.writeInt(packet.index);
-        buf.writeString(packet.item);
-        buf.writeDouble(packet.chance);
-        buf.writeInt(packet.min);
-        buf.writeInt(packet.max);
+        buf.writeItemStack(packet.stack);
     }
 
     public static CompostS2CPacket decode(PacketByteBuf buf) {
-        return new CompostS2CPacket(buf.readInt(), buf.readString(), buf.readDouble(), buf.readInt(), buf.readInt());
+        return new CompostS2CPacket(buf.readInt(), buf.readItemStack());
     }
 
     public static void handle(final CompostS2CPacket message, Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(() -> {
             if (message.index == 0) {
-                GROUPS = new CompostConfig.Config.World.Group[0];
+                NetworkUtil.stacks = new ArrayList<>();
             }
-            GROUPS = ArrayUtils.add(GROUPS, new CompostConfig.Config.World.Group(message.item, message.chance, message.min, message.max));
+            NetworkUtil.stacks.add(message.stack);
         });
         context.get().setPacketHandled(true);
     }
