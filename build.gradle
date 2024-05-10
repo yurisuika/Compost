@@ -11,6 +11,7 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
+    maven { url "https://maven.neoforged.net/releases/" }
     maven { url "https://maven.architectury.dev/" }
     maven { url "https://maven.terraformersmc.com/" }
 }
@@ -19,14 +20,14 @@ dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 
-    forge "net.minecraftforge:forge:${project.forge_version}"
+    neoForge "net.neoforged:neoforge:${project.neo_version}"
 
-    modCompileOnly "dev.emi:emi-forge:1.1.6+1.20.2:api"
-    modCompileOnly "dev.emi:emi-forge:1.1.6+1.20.2"
+    modCompileOnly "dev.emi:emi-neoforge:1.1.6+1.20.6:api"
+    modCompileOnly "dev.emi:emi-neoforge:1.1.6+1.20.6"
 
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-forge:14.1.727"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-forge:14.1.727"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-forge:14.1.727"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:15.0.728"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:15.0.728"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-neoforge:15.0.728"
 }
 
 processResources {
@@ -39,17 +40,12 @@ processResources {
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
-    options.release = 21
+    options.release = 17
 }
 
 loom {
-    forge {
-        mixinConfigs = [
-                "${project.archives_base_name}.mixins.json"
-        ]
-    }
-
     mixin {
+        useLegacyMixinAp = true
         defaultRefmapName = "${project.archives_base_name}.refmap.json"
     }
 }
@@ -60,10 +56,10 @@ java {
 
 jar {
     from("LICENSE")
-    jar.archiveAppendix.set("forge-${project.minecraft_version}")
-    sourcesJar.archiveAppendix.set("forge-${project.minecraft_version}")
-    remapJar.archiveAppendix.set("forge-${project.minecraft_version}")
-    remapSourcesJar.archiveAppendix.set("forge-${project.minecraft_version}")
+    jar.archiveAppendix.set("neoforge-${project.minecraft_version}")
+    sourcesJar.archiveAppendix.set("neoforge-${project.minecraft_version}")
+    remapJar.archiveAppendix.set("neoforge-${project.minecraft_version}")
+    remapSourcesJar.archiveAppendix.set("neoforge-${project.minecraft_version}")
 }
 
 publishing {

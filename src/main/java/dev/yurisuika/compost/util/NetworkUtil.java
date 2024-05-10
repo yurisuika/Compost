@@ -1,12 +1,11 @@
 package dev.yurisuika.compost.util;
 
-import dev.yurisuika.compost.network.handler.CompostHandler;
 import dev.yurisuika.compost.network.packet.s2c.CompostS2CPacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,7 +34,7 @@ public class NetworkUtil {
                     });
                 }
             });
-            CompostHandler.CHANNEL.send(new CompostS2CPacket(names, chances, mins, maxes), PacketDistributor.PLAYER.with((ServerPlayerEntity)player));
+            PacketDistributor.PLAYER.with((ServerPlayerEntity)player).send(new CompostS2CPacket(names, chances, mins, maxes));
         }
     }
 
