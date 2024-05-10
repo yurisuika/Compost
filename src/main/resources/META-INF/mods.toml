@@ -20,28 +20,28 @@ config = "compost.mixins.json"
 
 [[dependencies.compost]]
 modId = "minecraft"
-type = "required"
+mandatory = true
 versionRange = "[1.20.2]"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.compost]]
 modId = "neoforge"
-type = "required"
+mandatory = true
 versionRange = "[20.2,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.compost]]
 modId = "emi"
-type = "optional"
+mandatory = false
 versionRange = "[1,)"
 ordering = "NONE"
 side = "CLIENT"
 
 [[dependencies.compost]]
 modId = "roughlyenoughitems"
-type = "optional"
+mandatory = false
 versionRange = "[13,)"
 ordering = "NONE"
 side = "CLIENT"
