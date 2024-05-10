@@ -20,14 +20,14 @@ modId = "minecraft"
 mandatory = true
 versionRange = "[1.17,1.18)"
 ordering = "NONE"
-side = "SERVER"
+side = "BOTH"
 
 [[dependencies.compost]]
 modId = "forge"
 mandatory = true
 versionRange = "[37,)"
 ordering = "NONE"
-side = "SERVER"
+side = "BOTH"
 
 [[dependencies.compost]]
 modId = "roughlyenoughitems"

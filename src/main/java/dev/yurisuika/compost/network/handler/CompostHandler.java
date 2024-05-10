@@ -7,12 +7,12 @@ import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
 
 public class CompostHandler {
 
-    public static SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
-        .named(new Identifier("compost", "groups"))
-        .networkProtocolVersion(() -> "1")
-        .clientAcceptedVersions(s -> true)
-        .serverAcceptedVersions(s -> true)
-        .simpleChannel();
+    public static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
+            .named(new Identifier("compost", "items"))
+            .networkProtocolVersion(() -> "1")
+            .clientAcceptedVersions(s -> true)
+            .serverAcceptedVersions(s -> true)
+            .simpleChannel();
 
     public static void register() {
         CHANNEL.registerMessage(1, CompostS2CPacket.class, CompostS2CPacket::encode, CompostS2CPacket::decode, CompostS2CPacket::handle);
