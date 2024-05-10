@@ -7,8 +7,8 @@ import net.minecraftforge.network.simple.SimpleChannel;
 
 public class CompostHandler {
 
-    public static SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
-        .named(new Identifier("compost", "groups"))
+    public static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
+        .named(new Identifier("compost", "items"))
         .networkProtocolVersion(() -> "1")
         .clientAcceptedVersions(s -> true)
         .serverAcceptedVersions(s -> true)
