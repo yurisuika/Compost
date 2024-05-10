@@ -12,20 +12,20 @@ import java.util.List;
 
 public class CompostS2CPacket {
 
-    public List<String> items;
+    public List<String> names;
     public List<Double> chances;
     public List<Integer> mins;
     public List<Integer> maxes;
 
-    public CompostS2CPacket(List<String> items, List<Double> chances, List<Integer> mins, List<Integer> maxes) {
-        this.items = items;
+    public CompostS2CPacket(List<String> names, List<Double> chances, List<Integer> mins, List<Integer> maxes) {
+        this.names = names;
         this.chances = chances;
         this.mins = mins;
         this.maxes = maxes;
     }
 
     public static void encode(CompostS2CPacket packet, PacketByteBuf buf) {
-        buf.writeCollection(packet.items, PacketByteBuf::writeString);
+        buf.writeCollection(packet.names, PacketByteBuf::writeString);
         buf.writeCollection(packet.chances, PacketByteBuf::writeDouble);
         buf.writeCollection(packet.mins, PacketByteBuf::writeInt);
         buf.writeCollection(packet.maxes, PacketByteBuf::writeInt);
@@ -38,8 +38,8 @@ public class CompostS2CPacket {
     public static void handle(final CompostS2CPacket message, CustomPayloadEvent.Context context) {
         context.enqueueWork(() -> {
             List<ItemStack> list = new ArrayList<>();
-            for (int i = 0; i < message.items.size(); i++) {
-                ItemStack stack = CompostUtil.createItemStack(new CompostConfig.Config.Level.Item(message.items.get(i), message.chances.get(i), message.mins.get(i), message.maxes.get(i)));
+            for (int i = 0; i < message.names.size(); i++) {
+                ItemStack stack = CompostUtil.createItemStack(new CompostConfig.Config.Level.Item(message.names.get(i), message.chances.get(i), message.mins.get(i), message.maxes.get(i)));
                 stack.setCount(message.maxes.get(i));
                 list.add(stack);
             }
