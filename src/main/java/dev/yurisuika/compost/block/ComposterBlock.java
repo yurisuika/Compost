@@ -1,8 +1,8 @@
 package dev.yurisuika.compost.block;
 
-import com.google.common.collect.Lists;
 import dev.yurisuika.compost.block.entity.ComposterBlockEntity;
 import dev.yurisuika.compost.mixin.block.ComposterBlockInvoker;
+import dev.yurisuika.compost.util.CompostUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -27,9 +27,6 @@ import net.minecraft.world.WorldEvents;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-
-import static dev.yurisuika.compost.server.option.CompostConfig.*;
-import static dev.yurisuika.compost.util.ConfigUtil.*;
 
 public class ComposterBlock extends net.minecraft.block.ComposterBlock implements BlockEntityProvider {
 
@@ -102,10 +99,10 @@ public class ComposterBlock extends net.minecraft.block.ComposterBlock implement
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         if (state.get(LEVEL) == 7) {
             ComposterBlockEntity blockEntity = (ComposterBlockEntity)Objects.requireNonNull(world.getBlockEntity(pos));
-            List<ItemStack> list = Lists.newArrayList();
-            Arrays.stream(config.worlds[getIndex(world.getServer().getSaveProperties().getLevelName()).get()].items).forEach(group -> {
-                if (ThreadLocalRandom.current().nextDouble() < group.chance) {
-                    list.add(createItemStack(group));
+            List<ItemStack> list = new ArrayList<>();
+            Arrays.stream(CompostUtil.getLevel(world.getServer().getSaveProperties().getLevelName()).items).forEach(item -> {
+                if (ThreadLocalRandom.current().nextDouble() < item.chance) {
+                    list.add(CompostUtil.createItemStack(item));
                 }
             });
             Collections.shuffle(list);

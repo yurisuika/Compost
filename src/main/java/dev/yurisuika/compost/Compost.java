@@ -3,10 +3,11 @@ package dev.yurisuika.compost;
 import dev.yurisuika.compost.block.entity.ComposterBlockEntity;
 import dev.yurisuika.compost.network.handler.CompostHandler;
 import dev.yurisuika.compost.server.command.CompostCommand;
-import dev.yurisuika.compost.server.option.CompostConfig;
+import dev.yurisuika.compost.util.ConfigUtil;
+import dev.yurisuika.compost.util.CompostUtil;
+import dev.yurisuika.compost.util.NetworkUtil;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -21,14 +22,8 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Objects;
 
-import static dev.yurisuika.compost.server.option.CompostConfig.*;
-import static dev.yurisuika.compost.util.ConfigUtil.*;
-import static dev.yurisuika.compost.util.NetworkUtil.*;
-
 @Mod("compost")
 public class Compost {
-
-    public static CompostConfig.Config.World.Group[] GROUPS;
 
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, "compost");
 
@@ -44,12 +39,12 @@ public class Compost {
 
         @SubscribeEvent
         public static void serverStartedEvents(ServerStartedEvent event) {
-            checkWorlds(Objects.requireNonNull(event.getServer()));
+            CompostUtil.checkLevels(Objects.requireNonNull(event.getServer()));
         }
 
         @SubscribeEvent
         public static void playerLoggedInEvents(PlayerEvent.PlayerLoggedInEvent event) {
-            sendGroups(event.getPlayer().getWorld(), event.getPlayer());
+            NetworkUtil.sendItems(event.getPlayer().getWorld(), event.getPlayer());
         }
 
     }
@@ -65,10 +60,7 @@ public class Compost {
     }
 
     public Compost() {
-        if (!file.exists()) {
-            saveConfig();
-        }
-        loadConfig();
+        ConfigUtil.loadConfig();
 
         MinecraftForge.EVENT_BUS.register(this);
 
