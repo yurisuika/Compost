@@ -1,26 +1,18 @@
 package dev.yurisuika.compost.network.handler;
 
 import dev.yurisuika.compost.network.packet.s2c.CompostS2CPacket;
-import net.minecraft.util.Identifier;
-import net.minecraftforge.network.ChannelBuilder;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.SimpleChannel;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 
 public class CompostHandler {
 
-    public static final SimpleChannel CHANNEL = ChannelBuilder
-            .named(new Identifier("compost", "items"))
-            .optional()
-            .networkProtocolVersion(1)
-            .acceptedVersions((status, version) -> true)
-            .simpleChannel();
-
-    public static void register() {
-        CHANNEL.messageBuilder(CompostS2CPacket.class, NetworkDirection.PLAY_TO_CLIENT)
-                .encoder(CompostS2CPacket::encode)
-                .decoder(CompostS2CPacket::decode)
-                .consumerMainThread(CompostS2CPacket::handle)
-                .add();
+    public static void register(RegisterPayloadHandlerEvent event) {
+        final IPayloadRegistrar registrar = event.registrar("compost")
+                .versioned("1")
+                .optional();
+        registrar.play(CompostS2CPacket.ID,
+                CompostS2CPacket::new,
+                handler -> handler.client(CompostS2CPacket::handle));
     }
 
 }

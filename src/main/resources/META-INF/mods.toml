@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[49,)"
+loaderVersion = "[1,)"
 license = "GNU Lesser General Public License v3.0"
 
 [[mods]]
@@ -15,30 +15,33 @@ description = '''
 Make composters turn your food waste into whatever you want!
 '''
 
+[[mixins]]
+config = "compost.mixins.json"
+
 [[dependencies.compost]]
 modId = "minecraft"
-mandatory = true
+type = "required"
 versionRange = "[1.20.3,1.20.4]"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.compost]]
-modId = "forge"
-mandatory = true
-versionRange = "[49,)"
+modId = "neoforge"
+type = "required"
+versionRange = "[20.3,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.compost]]
 modId = "emi"
-mandatory = false
+type = "optional"
 versionRange = "[1,)"
 ordering = "NONE"
 side = "CLIENT"
 
 [[dependencies.compost]]
 modId = "roughlyenoughitems"
-mandatory = false
+type = "optional"
 versionRange = "[14,)"
 ordering = "NONE"
 side = "CLIENT"

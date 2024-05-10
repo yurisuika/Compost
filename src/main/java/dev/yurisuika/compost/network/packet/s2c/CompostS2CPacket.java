@@ -3,31 +3,34 @@ package dev.yurisuika.compost.network.packet.s2c;
 import dev.yurisuika.compost.util.NetworkUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.util.Identifier;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
 import java.util.List;
 
-public class CompostS2CPacket {
+public record CompostS2CPacket(List<ItemStack> stacks) implements CustomPayload {
 
-    public List<ItemStack> stacks;
+    public static final Identifier ID = new Identifier("compost", "items");
 
-    public CompostS2CPacket(List<ItemStack> stacks) {
-        this.stacks = stacks;
+    public CompostS2CPacket(PacketByteBuf buf) {
+        this(buf.readList(PacketByteBuf::readItemStack));
     }
 
-    public static void encode(CompostS2CPacket packet, PacketByteBuf buf) {
-        buf.writeCollection(packet.stacks, PacketByteBuf::writeItemStack);
+    @Override
+    public void write(PacketByteBuf buf) {
+        buf.writeCollection(stacks, PacketByteBuf::writeItemStack);
     }
 
-    public static CompostS2CPacket decode(PacketByteBuf buf) {
-        return new CompostS2CPacket(buf.readList(PacketByteBuf::readItemStack));
+    @Override
+    public Identifier id() {
+        return ID;
     }
 
-    public static void handle(final CompostS2CPacket message, CustomPayloadEvent.Context context) {
-        context.enqueueWork(() -> {
+    public static void handle(final CompostS2CPacket message, PlayPayloadContext context) {
+        context.workHandler().submitAsync(() -> {
             NetworkUtil.stacks = message.stacks;
         });
-        context.setPacketHandled(true);
     }
 
 }
