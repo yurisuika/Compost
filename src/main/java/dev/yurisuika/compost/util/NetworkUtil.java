@@ -31,7 +31,7 @@ public class NetworkUtil {
                     });
                 }
             });
-            CompostHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() ->(ServerPlayerEntity)player), new CompostS2CPacket(stacks));
+            CompostHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)player), new CompostS2CPacket(stacks));
         }
     }
 
