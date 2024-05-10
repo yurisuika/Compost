@@ -3,7 +3,9 @@ package dev.yurisuika.compost.server.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import dev.yurisuika.compost.server.option.CompostConfig;
+import dev.yurisuika.compost.util.ConfigUtil;
+import dev.yurisuika.compost.util.CompostUtil;
+import dev.yurisuika.compost.util.NetworkUtil;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.ItemStackArgument;
 import net.minecraft.command.argument.ItemStackArgumentType;
@@ -16,11 +18,8 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import static dev.yurisuika.compost.server.option.CompostConfig.*;
-import static dev.yurisuika.compost.util.ConfigUtil.*;
-import static dev.yurisuika.compost.util.NetworkUtil.*;
+import static dev.yurisuika.compost.config.CompostConfig.*;
 import static net.minecraft.server.command.CommandManager.*;
 
 public class CompostCommand {
@@ -31,10 +30,10 @@ public class CompostCommand {
                         .requires(source -> source.hasPermissionLevel(4))
                         .then(literal("reload")
                                 .executes(context -> {
-                                    loadConfig();
-                                    checkWorlds(context.getSource().getServer());
+                                    ConfigUtil.loadConfig();
+                                    CompostUtil.checkLevels(context.getSource().getServer());
                                     for (ServerPlayerEntity player : context.getSource().getServer().getPlayerManager().getPlayerList()) {
-                                        sendGroups(context.getSource().getWorld(), player);
+                                        NetworkUtil.sendItems(context.getSource().getWorld(), player);
                                     }
                                     context.getSource().sendFeedback(() -> Text.translatable("commands.compost.config.reload"), true);
                                     return 1;
@@ -42,47 +41,47 @@ public class CompostCommand {
                         )
                         .then(literal("reset")
                                 .executes(context -> {
-                                    config.worlds = new CompostConfig.Config.World[]{};
-                                    config.worlds = ArrayUtils.add(config.worlds, new Config.World("world", new Config.World.Group[]{
-                                            new Config.World.Group("minecraft:dirt", 1.0D, 1, 1),
-                                            new Config.World.Group("minecraft:bone_meal", 1.0D, 1, 1)
+                                    config.levels = new Config.Level[]{};
+                                    config.levels = ArrayUtils.add(config.levels, new Config.Level("world", new Config.Level.Item[]{
+                                            new Config.Level.Item("minecraft:dirt", 1.0D, 1, 1),
+                                            new Config.Level.Item("minecraft:bone_meal", 1.0D, 1, 1)
                                     }));
-                                    checkWorlds(context.getSource().getServer());
+                                    CompostUtil.checkLevels(context.getSource().getServer());
                                     for (ServerPlayerEntity player : context.getSource().getServer().getPlayerManager().getPlayerList()) {
-                                        sendGroups(context.getSource().getWorld(), player);
+                                        NetworkUtil.sendItems(context.getSource().getWorld(), player);
                                     }
                                     context.getSource().sendFeedback(() -> Text.translatable("commands.compost.config.reset"), true);
                                     return 1;
                                 })
                         )
                 )
-                .then(literal("groups")
+                .then(literal("items")
                         .requires(source -> source.hasPermissionLevel(4))
                         .then(literal("query")
                                 .executes(context -> {
-                                    Config.World world = config.worlds[getIndex(context.getSource().getServer().getSaveProperties().getLevelName()).get()];
-                                    for (Config.World.Group group : world.items) {
-                                        context.getSource().sendFeedback(() -> Text.translatable("commands.compost.groups.query", ArrayUtils.indexOf(world.items, group) + 1, new DecimalFormat("0.###############").format(BigDecimal.valueOf(group.chance).multiply(BigDecimal.valueOf(100))), (group.min != group.max ? group.min + "-" + group.max : String.valueOf(group.max)), createItemStack(group).toHoverableText()), false);
+                                    Config.Level level = CompostUtil.getLevel(context.getSource().getServer().getSaveProperties().getLevelName());
+                                    for (Config.Level.Item item : level.items) {
+                                        context.getSource().sendFeedback(() -> Text.translatable("commands.compost.items.query", ArrayUtils.indexOf(level.items, item) + 1, new DecimalFormat("0.###############").format(BigDecimal.valueOf(item.chance).multiply(BigDecimal.valueOf(100))), (item.min != item.max ? item.min + "-" + item.max : String.valueOf(item.max)), CompostUtil.createItemStack(item).toHoverableText()), false);
                                     }
                                     return 1;
                                 })
                         )
                         .then(literal("add")
-                                .then(argument("item", ItemStackArgumentType.itemStack(registryAccess))
-                                        .then(argument("chance", DoubleArgumentType.doubleArg(0.0D, 1.0D))
-                                                .then(argument("min", IntegerArgumentType.integer(0, 64))
-                                                        .then(argument("max", IntegerArgumentType.integer(1, 64))
+                                .then(argument("names", ItemStackArgumentType.itemStack(registryAccess))
+                                        .then(argument("chances", DoubleArgumentType.doubleArg(0.0D, 1.0D))
+                                                .then(argument("mins", IntegerArgumentType.integer(0, 64))
+                                                        .then(argument("maxes", IntegerArgumentType.integer(1, 64))
                                                                 .executes(context -> {
-                                                                    ItemStackArgument arg = ItemStackArgumentType.getItemStackArgument(context, "item");
+                                                                    ItemStackArgument arg = ItemStackArgumentType.getItemStackArgument(context, "names");
                                                                     ItemStack itemStack = arg.createStack(1, false);
-                                                                    double chance = Math.max(0.0D, Math.min(DoubleArgumentType.getDouble(context, "chance"), 1.0D));
-                                                                    int min = Math.min(Math.min(IntegerArgumentType.getInteger(context, "min"), itemStack.getMaxCount()), IntegerArgumentType.getInteger(context, "max"));
-                                                                    int max = Math.max(Math.min(IntegerArgumentType.getInteger(context, "max"), itemStack.getMaxCount()), IntegerArgumentType.getInteger(context, "min"));
-                                                                    addGroup(config.worlds[getIndex(context.getSource().getServer().getSaveProperties().getLevelName()).get()].world, arg.asString(context.getSource().getWorld().getRegistryManager()), chance, min, max);
+                                                                    double chance = Math.max(0.0D, Math.min(DoubleArgumentType.getDouble(context, "chances"), 1.0D));
+                                                                    int min = Math.min(Math.min(IntegerArgumentType.getInteger(context, "mins"), itemStack.getMaxCount()), IntegerArgumentType.getInteger(context, "maxes"));
+                                                                    int max = Math.max(Math.min(IntegerArgumentType.getInteger(context, "maxes"), itemStack.getMaxCount()), IntegerArgumentType.getInteger(context, "mins"));
+                                                                    CompostUtil.addItem(CompostUtil.getLevel(context.getSource().getServer().getSaveProperties().getLevelName()).name, new Config.Level.Item(arg.asString(context.getSource().getWorld().getRegistryManager()), chance, min, max));
                                                                     for (ServerPlayerEntity player : context.getSource().getServer().getPlayerManager().getPlayerList()) {
-                                                                        sendGroups(context.getSource().getWorld(), player);
+                                                                        NetworkUtil.sendItems(context.getSource().getWorld(), player);
                                                                     }
-                                                                    context.getSource().sendFeedback(() -> Text.translatable("commands.compost.groups.add", new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), (min != max ? min + "-" + max : String.valueOf(max)), itemStack.toHoverableText()), true);
+                                                                    context.getSource().sendFeedback(() -> Text.translatable("commands.compost.items.add", new DecimalFormat("0.###############").format(BigDecimal.valueOf(chance).multiply(BigDecimal.valueOf(100))), (min != max ? min + "-" + max : String.valueOf(max)), itemStack.toHoverableText()), true);
                                                                     return 1;
                                                                 })
                                                         )
@@ -91,22 +90,20 @@ public class CompostCommand {
                                 )
                         )
                         .then(literal("remove")
-                                .then(argument("group", IntegerArgumentType.integer(1))
+                                .then(argument("index", IntegerArgumentType.integer(1))
                                         .executes(context -> {
-                                            AtomicInteger index = getIndex(context.getSource().getServer().getSaveProperties().getLevelName());
-                                            Config.World world = config.worlds[index.get()];
-                                            int range = IntegerArgumentType.getInteger(context, "group");
-                                            if (range > config.worlds[index.get()].items.length) {
-                                                context.getSource().sendError(Text.translatable("commands.compost.groups.remove.failed", range, world.items.length));
+                                            Config.Level level = CompostUtil.getLevel(context.getSource().getServer().getSaveProperties().getLevelName());
+                                            int index = IntegerArgumentType.getInteger(context, "index");
+                                            if (index > level.items.length) {
+                                                context.getSource().sendError(Text.translatable("commands.compost.items.remove.failed", index, level.items.length));
                                                 return 0;
                                             } else {
-                                                int number = IntegerArgumentType.getInteger(context, "group") - 1;
-                                                Text item = createItemStack(getGroup(world.world, number)).toHoverableText();
-                                                removeGroup(world.world, number);
+                                                Text item = CompostUtil.createItemStack(CompostUtil.getLevel(level.name).items[index - 1]).toHoverableText();
+                                                CompostUtil.removeItem(level.name, index - 1);
                                                 for (ServerPlayerEntity player : context.getSource().getServer().getPlayerManager().getPlayerList()) {
-                                                    sendGroups(context.getSource().getWorld(), player);
+                                                    NetworkUtil.sendItems(context.getSource().getWorld(), player);
                                                 }
-                                                context.getSource().sendFeedback(() -> Text.translatable("commands.compost.groups.remove", item), true);
+                                                context.getSource().sendFeedback(() -> Text.translatable("commands.compost.items.remove", item), true);
                                                 return 1;
                                             }
                                         })

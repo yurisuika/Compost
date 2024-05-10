@@ -7,10 +7,10 @@ import net.minecraft.network.packet.CustomPayload;
 
 import java.util.List;
 
-public record CompostPayload(List<String> item, List<Double> chance, List<Integer> min, List<Integer> max) implements CustomPayload {
+public record CompostPayload(List<String> names, List<Double> chances, List<Integer> mins, List<Integer> maxes) implements CustomPayload {
 
-    public static final Id<CompostPayload> ID = CustomPayload.id("compost:groups");
-    public static final PacketCodec<PacketByteBuf, CompostPayload> CODEC = PacketCodec.tuple(PacketCodecs.STRING.collect(PacketCodecs.toList()), CompostPayload::item, PacketCodecs.DOUBLE.collect(PacketCodecs.toList()), CompostPayload::chance, PacketCodecs.INTEGER.collect(PacketCodecs.toList()), CompostPayload::min, PacketCodecs.INTEGER.collect(PacketCodecs.toList()), CompostPayload::max, CompostPayload::new);
+    public static final Id<CompostPayload> ID = CustomPayload.id("compost:items");
+    public static final PacketCodec<PacketByteBuf, CompostPayload> CODEC = PacketCodec.tuple(PacketCodecs.STRING.collect(PacketCodecs.toList()), CompostPayload::names, PacketCodecs.DOUBLE.collect(PacketCodecs.toList()), CompostPayload::chances, PacketCodecs.INTEGER.collect(PacketCodecs.toList()), CompostPayload::mins, PacketCodecs.INTEGER.collect(PacketCodecs.toList()), CompostPayload::maxes, CompostPayload::new);
 
     @Override
     public Id<CompostPayload> getId() {
