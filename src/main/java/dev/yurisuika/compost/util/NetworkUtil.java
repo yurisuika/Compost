@@ -6,7 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,7 +31,7 @@ public class NetworkUtil {
                     });
                 }
             });
-            CompostHandler.CHANNEL.send(new CompostS2CPacket(stacks), PacketDistributor.PLAYER.with((ServerPlayerEntity)player));
+            CompostHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() ->(ServerPlayerEntity)player), new CompostS2CPacket(stacks));
         }
     }
 

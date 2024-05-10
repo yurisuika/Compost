@@ -4,30 +4,29 @@ import dev.yurisuika.compost.block.entity.ComposterBlockEntity;
 import dev.yurisuika.compost.network.handler.CompostHandler;
 import dev.yurisuika.compost.server.command.CompostCommand;
 import dev.yurisuika.compost.util.ConfigUtil;
-import dev.yurisuika.compost.util.NetworkUtil;
 import dev.yurisuika.compost.util.CompostUtil;
+import dev.yurisuika.compost.util.NetworkUtil;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.server.ServerStartedEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraft.registry.Registries;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.Objects;
 
 @Mod("compost")
 public class Compost {
 
-    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, "compost");
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, "compost");
 
-    public static final RegistryObject<BlockEntityType<ComposterBlockEntity>> COMPOSTER = BLOCK_ENTITIES.register("composter", () -> BlockEntityType.Builder.create(ComposterBlockEntity::new, Blocks.COMPOSTER).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ComposterBlockEntity>> COMPOSTER = BLOCK_ENTITIES.register("composter", () -> BlockEntityType.Builder.create(ComposterBlockEntity::new, Blocks.COMPOSTER).build(null));
 
     @Mod.EventBusSubscriber(modid = "compost")
     public static class CommonForgeEvents {
@@ -62,9 +61,7 @@ public class Compost {
     public Compost() {
         ConfigUtil.loadConfig();
 
-        MinecraftForge.EVENT_BUS.register(this);
-
-        BLOCK_ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
+        BLOCK_ENTITIES.register(ModLoadingContext.get().getActiveContainer().getEventBus());
     }
 
 }
