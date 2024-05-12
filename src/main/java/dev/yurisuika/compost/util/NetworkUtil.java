@@ -1,6 +1,6 @@
 package dev.yurisuika.compost.util;
 
-import dev.yurisuika.compost.network.packet.s2c.custom.CompostPayload;
+import dev.yurisuika.compost.network.packet.s2c.CompostPayload;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;

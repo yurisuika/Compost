@@ -1,6 +1,6 @@
 package dev.yurisuika.compost;
 
-import dev.yurisuika.compost.network.packet.s2c.custom.CompostPayload;
+import dev.yurisuika.compost.network.packet.s2c.CompostPayload;
 import dev.yurisuika.compost.config.CompostConfig;
 import dev.yurisuika.compost.util.CompostUtil;
 import dev.yurisuika.compost.util.NetworkUtil;

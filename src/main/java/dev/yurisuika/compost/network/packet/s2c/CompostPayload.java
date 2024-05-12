@@ -1,4 +1,4 @@
-package dev.yurisuika.compost.network.packet.s2c.custom;
+package dev.yurisuika.compost.network.packet.s2c;
 
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
