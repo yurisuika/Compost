@@ -33,7 +33,7 @@ public class ComposterBlockEntity extends LootableContainerBlockEntity implement
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
         inventory = DefaultedList.ofSize(size(), ItemStack.EMPTY);
-        if (!deserializeLootTable(nbt)) {
+        if (!writeLootTable(nbt)) {
             Inventories.readNbt(nbt, inventory);
         }
     }
@@ -41,7 +41,7 @@ public class ComposterBlockEntity extends LootableContainerBlockEntity implement
     @Override
     public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
-        if (!serializeLootTable(nbt)) {
+        if (!readLootTable(nbt)) {
             Inventories.writeNbt(nbt, inventory, false);
         }
     }
@@ -84,7 +84,7 @@ public class ComposterBlockEntity extends LootableContainerBlockEntity implement
     }
 
     @Override
-    public DefaultedList<ItemStack> getInvStackList() {
+    public DefaultedList<ItemStack> method_11282() {
         return inventory;
     }
 
