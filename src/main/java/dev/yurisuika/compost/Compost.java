@@ -11,11 +11,12 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.registry.Registries;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -28,7 +29,7 @@ public class Compost {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ComposterBlockEntity>> COMPOSTER = BLOCK_ENTITIES.register("composter", () -> BlockEntityType.Builder.create(ComposterBlockEntity::new, Blocks.COMPOSTER).build(null));
 
-    @Mod.EventBusSubscriber(modid = "compost")
+    @EventBusSubscriber(modid = "compost")
     public static class CommonForgeEvents {
 
         @SubscribeEvent
@@ -48,11 +49,11 @@ public class Compost {
 
     }
 
-    @Mod.EventBusSubscriber(modid = "compost", bus = Mod.EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(modid = "compost", bus = EventBusSubscriber.Bus.MOD)
     public static class CommonModBusEvents {
 
         @SubscribeEvent
-        public static void registerPayloadHandlerEvents(RegisterPayloadHandlerEvent event) {
+        public static void registerPayloadHandlerEvents(RegisterPayloadHandlersEvent event) {
             CompostHandler.register(event);
         }
 

@@ -1,6 +1,6 @@
 package dev.yurisuika.compost.util;
 
-import dev.yurisuika.compost.network.packet.s2c.CompostS2CPacket;
+import dev.yurisuika.compost.network.packet.s2c.CompostPayload;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -34,7 +34,7 @@ public class NetworkUtil {
                     });
                 }
             });
-            PacketDistributor.PLAYER.with((ServerPlayerEntity)player).send(new CompostS2CPacket(names, chances, mins, maxes));
+            PacketDistributor.sendToPlayer((ServerPlayerEntity)player, new CompostPayload(names, chances, mins, maxes));
         }
     }
 
