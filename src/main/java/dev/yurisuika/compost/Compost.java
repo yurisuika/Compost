@@ -1,13 +1,17 @@
 package dev.yurisuika.compost;
 
-import dev.yurisuika.compost.block.entity.ComposterBlockEntity;
-import dev.yurisuika.compost.network.handler.CompostHandler;
-import dev.yurisuika.compost.server.command.CompostCommand;
-import dev.yurisuika.compost.util.CompostUtil;
-import dev.yurisuika.compost.util.ConfigUtil;
-import dev.yurisuika.compost.util.NetworkUtil;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntityType;
+import dev.yurisuika.compost.commands.arguments.ProduceArgument;
+import dev.yurisuika.compost.network.handler.ProduceHandler;
+import dev.yurisuika.compost.network.handler.ResetHandler;
+import dev.yurisuika.compost.server.commands.CompostCommand;
+import dev.yurisuika.compost.util.Network;
+import dev.yurisuika.compost.util.Validate;
+import dev.yurisuika.compost.util.config.Config;
+import dev.yurisuika.compost.world.level.block.entity.ContainerComposterBlockEntity;
+import net.minecraft.commands.synchronization.ArgumentTypes;
+import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -27,7 +31,7 @@ public class Compost {
 
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, "compost");
 
-    public static final RegistryObject<BlockEntityType<ComposterBlockEntity>> COMPOSTER = BLOCK_ENTITIES.register("composter", () -> BlockEntityType.Builder.create(ComposterBlockEntity::new, Blocks.COMPOSTER).build(null));
+    public static final RegistryObject<BlockEntityType<ContainerComposterBlockEntity>> COMPOSTER = BLOCK_ENTITIES.register("composter", () -> BlockEntityType.Builder.of(ContainerComposterBlockEntity::new, Blocks.COMPOSTER).build(null));
 
     @Mod.EventBusSubscriber(modid = "compost")
     public static class CommonForgeEvents {
@@ -39,12 +43,12 @@ public class Compost {
 
         @SubscribeEvent
         public static void serverStartedEvents(ServerStartedEvent event) {
-            CompostUtil.checkLevels(Objects.requireNonNull(event.getServer()));
+            Validate.checkLevels(Objects.requireNonNull(event.getServer()));
         }
 
         @SubscribeEvent
         public static void playerLoggedInEvents(PlayerEvent.PlayerLoggedInEvent event) {
-            NetworkUtil.sendItems(event.getPlayer().getWorld(), event.getPlayer());
+            Network.sendProduce(event.getPlayer().getLevel(), event.getPlayer());
         }
 
     }
@@ -54,13 +58,16 @@ public class Compost {
 
         @SubscribeEvent
         public static void commonSetup(FMLCommonSetupEvent event) {
-            CompostHandler.register();
+            ProduceHandler.register();
+            ResetHandler.register();
+
+            ArgumentTypes.register("compost:produce", ProduceArgument.class, new EmptyArgumentSerializer<>(ProduceArgument::produce));
         }
 
     }
 
     public Compost() {
-        ConfigUtil.loadConfig();
+        Config.loadConfig();
 
         MinecraftForge.EVENT_BUS.register(this);
 
