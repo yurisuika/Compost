@@ -24,12 +24,12 @@ dependencies {
     }
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    modCompileOnly "dev.emi:emi-fabric:1.1.6+1.20.6:api"
-    modCompileOnly "dev.emi:emi-fabric:1.1.6+1.20.6"
+    modCompileOnly "dev.emi:emi-fabric:1.1.10+1.21:api"
+    modCompileOnly "dev.emi:emi-fabric:1.1.10+1.21"
 
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:15.0.728"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:15.0.728"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-fabric:15.0.728"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:16.0.744"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:16.0.744"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-fabric:16.0.744"
 }
 
 processResources {
