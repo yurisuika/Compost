@@ -1,9 +1,9 @@
 package dev.yurisuika.compost.mixin.mods;
 
-import dev.yurisuika.compost.util.NetworkUtil;
+import dev.yurisuika.compost.util.Network;
 import me.shedaniel.rei.plugin.DefaultPlugin;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,10 +20,10 @@ public abstract class RoughlyEnoughItemsMixin {
     @Mixin(DefaultPlugin.class)
     public abstract static class DefaultPluginMixin {
 
-        @ModifyArg(method = "registerRecipeDisplays", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;<init>(Lnet/minecraft/item/ItemConvertible;)V"), index = 0, slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/block/ComposterBlock;registerDefaultCompostableItems()V"), to = @At(value = "INVOKE", target = "Lme/shedaniel/rei/plugin/stripping/DummyAxeItem;getStrippedBlocksMap()Ljava/util/Map;")))
-        private ItemConvertible redirectCompostingOutput(ItemConvertible item) {
+        @ModifyArg(method = "registerRecipeDisplays", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;<init>(Lnet/minecraft/world/level/ItemLike;)V"), index = 0, slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/ComposterBlock;bootStrap()V"), to = @At(value = "INVOKE", target = "Lme/shedaniel/rei/plugin/stripping/DummyAxeItem;getStrippedBlocksMap()Ljava/util/Map;")))
+        private ItemLike redirectCompostingOutput(ItemLike item) {
             List<ItemStack> output = new ArrayList<>();
-            NetworkUtil.stacks.forEach(stack -> output.add(stack));
+            Network.getStacks().forEach(stack -> output.add(stack));
             return output.get(ThreadLocalRandom.current().nextInt(output.size())).getItem();
         }
 
