@@ -5,15 +5,12 @@
   "refmap": "compost.refmap.json",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "block.BlocksMixin",
-    "block.ComposterBlockInvoker"
+    "world.level.block.BlocksMixin",
+    "world.level.block.ComposterBlockInvoker"
   ],
   "client": [
-    "mods.EMIMixin$EmiCompostingRecipeMixin",
-    "mods.RoughlyEnoughItemsMixin$DefaultClientPluginMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "plugin": "dev.yurisuika.compost.mixin.CompostMixinPlugin"
+  }
 }
