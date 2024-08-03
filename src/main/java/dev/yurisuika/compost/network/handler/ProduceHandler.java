@@ -1,21 +1,21 @@
 package dev.yurisuika.compost.network.handler;
 
-import dev.yurisuika.compost.network.packet.s2c.CompostS2CPacket;
-import net.minecraft.util.Identifier;
+import dev.yurisuika.compost.network.protocol.common.ClientboundProducePacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fmllegacy.network.NetworkRegistry;
 import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
 
-public class CompostHandler {
+public class ProduceHandler {
 
     public static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
-            .named(new Identifier("compost", "items"))
+            .named(ResourceLocation.tryParse("compost:produce"))
             .networkProtocolVersion(() -> "1")
             .clientAcceptedVersions(s -> true)
             .serverAcceptedVersions(s -> true)
             .simpleChannel();
 
     public static void register() {
-        CHANNEL.registerMessage(1, CompostS2CPacket.class, CompostS2CPacket::encode, CompostS2CPacket::decode, CompostS2CPacket::handle);
+        CHANNEL.registerMessage(1, ClientboundProducePacket.class, ClientboundProducePacket::encode, ClientboundProducePacket::decode, ClientboundProducePacket::handle);
     }
 
 }
