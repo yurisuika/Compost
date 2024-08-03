@@ -1,14 +1,19 @@
 package dev.yurisuika.compost;
 
-import dev.yurisuika.compost.block.entity.ComposterBlockEntity;
-import dev.yurisuika.compost.network.handler.CompostHandler;
-import dev.yurisuika.compost.server.command.CompostCommand;
-import dev.yurisuika.compost.util.CompostUtil;
-import dev.yurisuika.compost.util.ConfigUtil;
-import dev.yurisuika.compost.util.NetworkUtil;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.registry.Registries;
+import dev.yurisuika.compost.commands.arguments.ProduceArgument;
+import dev.yurisuika.compost.network.handler.ProduceHandler;
+import dev.yurisuika.compost.network.handler.ResetHandler;
+import dev.yurisuika.compost.server.commands.CompostCommand;
+import dev.yurisuika.compost.util.Network;
+import dev.yurisuika.compost.util.Validate;
+import dev.yurisuika.compost.util.config.Config;
+import dev.yurisuika.compost.world.level.block.entity.ContainerComposterBlockEntity;
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
+import net.minecraft.commands.synchronization.SingletonArgumentInfo;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -19,6 +24,7 @@ import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.RegisterEvent;
 
 import java.util.Objects;
 
@@ -27,7 +33,7 @@ public class Compost {
 
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, "compost");
 
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ComposterBlockEntity>> COMPOSTER = BLOCK_ENTITIES.register("composter", () -> BlockEntityType.Builder.create(ComposterBlockEntity::new, Blocks.COMPOSTER).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ContainerComposterBlockEntity>> COMPOSTER = BLOCK_ENTITIES.register("composter", () -> BlockEntityType.Builder.of(ContainerComposterBlockEntity::new, Blocks.COMPOSTER).build(null));
 
     @EventBusSubscriber(modid = "compost")
     public static class CommonForgeEvents {
@@ -39,12 +45,12 @@ public class Compost {
 
         @SubscribeEvent
         public static void serverStartedEvents(ServerStartedEvent event) {
-            CompostUtil.checkLevels(Objects.requireNonNull(event.getServer()));
+            Validate.checkLevels(Objects.requireNonNull(event.getServer()));
         }
 
         @SubscribeEvent
         public static void playerLoggedInEvents(PlayerEvent.PlayerLoggedInEvent event) {
-            NetworkUtil.sendItems(event.getEntity().getWorld(), event.getEntity());
+            Network.sendProduce(event.getEntity().level(), event.getEntity());
         }
 
     }
@@ -54,13 +60,19 @@ public class Compost {
 
         @SubscribeEvent
         public static void registerPayloadHandlerEvents(RegisterPayloadHandlersEvent event) {
-            CompostHandler.register(event);
+            ProduceHandler.register(event);
+            ResetHandler.register(event);
+        }
+
+        @SubscribeEvent
+        public static void registerCommandArgumentTypes(RegisterEvent event) {
+            event.register(Registries.COMMAND_ARGUMENT_TYPE, ResourceLocation.tryParse("compost:produce"), () -> ArgumentTypeInfos.registerByClass(ProduceArgument.class, SingletonArgumentInfo.contextFree(ProduceArgument::produce)));
         }
 
     }
 
     public Compost() {
-        ConfigUtil.loadConfig();
+        Config.loadConfig();
 
         BLOCK_ENTITIES.register(ModLoadingContext.get().getActiveContainer().getEventBus());
     }
