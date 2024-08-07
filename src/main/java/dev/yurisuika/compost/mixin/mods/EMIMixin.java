@@ -29,10 +29,10 @@ public abstract class EMIMixin {
 
         @Unique
         private EmiStack getStacks(Random random) {
-            if (Network.stacks.isEmpty()) {
+            if (Network.getStacks().isEmpty()) {
                 return EmiStack.of(ItemStack.EMPTY);
             } else {
-                ItemStack stack = Network.getStacks().get(random.nextInt(Network.stacks.size()));
+                ItemStack stack = Network.getStacks().get(random.nextInt(Network.getStacks().size()));
                 return EmiStack.of(stack).setAmount(stack.getCount());
             }
         }
