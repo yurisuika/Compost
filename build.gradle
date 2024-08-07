@@ -1,5 +1,5 @@
 plugins {
-    id "dev.architectury.loom" version "1.7-SNAPSHOT"
+    id "dev.architectury.loom" version "1.7.9999"
     id "maven-publish"
 }
 
@@ -23,6 +23,13 @@ dependencies {
         parchment("org.parchmentmc.data:parchment-${project.minecraft_version}:${project.parchment_version}@zip")
     }
     forge "net.minecraftforge:forge:${project.forge_version}"
+
+    modCompileOnly "dev.emi:emi-forge:1.1.10+1.20.2:api"
+    modCompileOnly "dev.emi:emi-forge:1.1.10+1.20.2"
+
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-forge:14.1.742"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-forge:14.1.742"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-forge:14.1.742"
 }
 
 processResources {

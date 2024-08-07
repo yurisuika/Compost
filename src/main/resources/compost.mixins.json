@@ -9,6 +9,8 @@
     "world.level.block.ComposterBlockInvoker"
   ],
   "client": [
+    "mods.EMIMixin$EmiCompostingRecipeMixin",
+    "mods.RoughlyEnoughItemsMixin$DefaultClientPluginMixin"
   ],
   "injectors": {
     "defaultRequire": 1
