@@ -43,7 +43,7 @@ public class ProduceArgument implements ArgumentType<Produce> {
     }
 
     public Collection<String> getExamples() {
-        return Arrays.asList("minecraft:apple", "minecraft:enchanted_golden_apple", "minecraft:bread[minecraft:enchantments={levels:{\"minecraft:knockback\":2}}]");
+        return Arrays.asList("minecraft:apple", "minecraft:enchanted_golden_apple", "minecraft:bread{Enchantments:[{id:\"knockback\",lvl:2}]}");
     }
 
 }
