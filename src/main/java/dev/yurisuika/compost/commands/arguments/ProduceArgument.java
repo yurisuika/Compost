@@ -30,11 +30,11 @@ public class ProduceArgument implements ArgumentType<Produce> {
     }
 
     public Produce parse(StringReader reader) throws CommandSyntaxException {
-        String string = reader.readUnquotedString();
+        String string = Parse.readWhile(reader, c -> c != ' ');
         try {
             return Option.getProduce(Validate.getLevelName()).get(Parse.listItems().indexOf(string));
         } catch (Exception e) {
-            throw new DynamicCommandExceptionType(object -> Component.translatableEscape("commands.compost.produce.unknown", object)).createWithContext(reader, string);
+            throw new DynamicCommandExceptionType(object -> Component.translatable("commands.compost.produce.unknown", object)).createWithContext(reader, string);
         }
     }
 
@@ -43,7 +43,7 @@ public class ProduceArgument implements ArgumentType<Produce> {
     }
 
     public Collection<String> getExamples() {
-        return List.of("minecraft:apple", "minecraft:enchanted_golden_apple", "minecraft:bread[minecraft:enchantments={levels:{\"minecraft:knockback\":2}}]");
+        return List.of("minecraft:apple", "minecraft:enchanted_golden_apple", "minecraft:bread{Enchantments:[{id:\"knockback\",lvl:2}]}");
     }
 
 }
