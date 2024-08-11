@@ -21,7 +21,7 @@ public record ClientboundProducePacket(String item, Double chance, Integer min, 
 
     public static void handle(final ClientboundProducePacket message, CustomPayloadEvent.Context context) {
         context.enqueueWork(() -> {
-            Network.getStacks().add(Parse.createItemStack(new Produce(message.item(), message.chance(), message.min(), message.max())));
+            Network.getStacks().add(Parse.createItemStack(context.getSender().getServer().registryAccess(), new Produce(message.item(), message.chance(), message.min(), message.max())));
         });
         context.setPacketHandled(true);
     }

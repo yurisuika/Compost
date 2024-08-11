@@ -112,7 +112,7 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
             List<ItemStack> list = new ArrayList<>();
             Option.getWorld(level.getServer().getWorldData().getLevelName()).getProduce().forEach(produce -> {
                 if (ThreadLocalRandom.current().nextDouble() < produce.getChance()) {
-                    list.add(Parse.createItemStack(produce));
+                    list.add(Parse.createItemStack(level.getServer().registryAccess(), produce));
                 }
             });
             Collections.shuffle(list);
