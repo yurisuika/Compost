@@ -17,12 +17,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.Objects;
 import java.util.stream.IntStream;
 
 public class ContainerComposterBlockEntity extends RandomizableContainerBlockEntity implements WorldlyContainer {
 
-    public NonNullList<ItemStack> inventory = NonNullList.withSize(27 + 1, ItemStack.EMPTY);
+    public NonNullList<ItemStack> items = NonNullList.withSize(27 + 1, ItemStack.EMPTY);
 
     public ContainerComposterBlockEntity() {
         super(Compost.COMPOSTER.get());
@@ -32,7 +31,7 @@ public class ContainerComposterBlockEntity extends RandomizableContainerBlockEnt
     public void load(BlockState state, CompoundTag tag) {
         super.load(state, tag);
         if (!trySaveLootTable(tag)) {
-            ContainerHelper.loadAllItems(tag, inventory);
+            ContainerHelper.loadAllItems(tag, items);
         }
     }
 
@@ -40,29 +39,29 @@ public class ContainerComposterBlockEntity extends RandomizableContainerBlockEnt
     public CompoundTag save(CompoundTag tag) {
         super.save(tag);
         if (!tryLoadLootTable(tag)) {
-            ContainerHelper.saveAllItems(tag, inventory);
+            ContainerHelper.saveAllItems(tag, items);
         }
         return tag;
     }
 
     @Override
     public ItemStack getItem(int index) {
-        return inventory.get(index);
+        return items.get(index);
     }
 
     @Override
     public ItemStack removeItem(int slot, int amount) {
-        return ContainerHelper.removeItem(inventory, slot, amount);
+        return ContainerHelper.removeItem(items, slot, amount);
     }
 
     @Override
     public ItemStack removeItemNoUpdate(int slot) {
-        return ContainerHelper.takeItem(inventory, slot);
+        return ContainerHelper.takeItem(items, slot);
     }
 
     @Override
     public void setItem(int slot, ItemStack stack) {
-        inventory.set(slot, stack);
+        items.set(slot, stack);
         if (stack.getCount() > getMaxStackSize()) {
             if (slot == 27) {
                 stack.setCount(1);
@@ -74,22 +73,22 @@ public class ContainerComposterBlockEntity extends RandomizableContainerBlockEnt
 
     @Override
     public void clearContent() {
-        inventory.clear();
+        items.clear();
     }
 
     @Override
     public int getContainerSize() {
-        return inventory.size();
+        return items.size();
     }
 
     @Override
     public NonNullList<ItemStack> getItems() {
-        return inventory;
+        return items;
     }
 
     @Override
     public void setItems(NonNullList<ItemStack> list) {
-        inventory = list;
+        items = list;
     }
 
     @Override
@@ -129,15 +128,15 @@ public class ContainerComposterBlockEntity extends RandomizableContainerBlockEnt
 
     @Override
     public void setChanged() {
-        BlockState state = Objects.requireNonNull(getBlockState());
+        BlockState state = getBlockState();
         ItemStack input = getItem(27);
         if (!input.isEmpty() && state.getValue(ContainerComposterBlock.LEVEL) < 7) {
-            state = ComposterBlockInvoker.invokeAddItem(state, level, getBlockPos(), input);
-            level.levelEvent(1500, getBlockPos(), state != getBlockState() ? 1 : 0);
+            state = ComposterBlockInvoker.invokeAddItem(getBlockState(), getLevel(), getBlockPos(), input);
+            getLevel().levelEvent(1500, getBlockPos(), state != getBlockState() ? 1 : 0);
             removeItemNoUpdate(27);
         }
         if (state.getValue(ContainerComposterBlock.LEVEL) == 8 && isEmpty()) {
-            ContainerComposterBlock.empty(null, state, Objects.requireNonNull(level), getBlockPos());
+            ContainerComposterBlock.empty(null, getBlockState(), getLevel(), getBlockPos());
         }
         super.setChanged();
     }
