@@ -1,8 +1,8 @@
 package dev.yurisuika.compost;
 
 import dev.yurisuika.compost.commands.arguments.ProduceArgument;
-import dev.yurisuika.compost.network.handler.ProduceHandler;
-import dev.yurisuika.compost.network.handler.ResetHandler;
+import dev.yurisuika.compost.network.protocol.common.custom.ProducePayload;
+import dev.yurisuika.compost.network.protocol.common.custom.ResetPayload;
 import dev.yurisuika.compost.server.commands.CompostCommand;
 import dev.yurisuika.compost.util.Network;
 import dev.yurisuika.compost.util.Validate;
@@ -60,8 +60,8 @@ public class Compost {
 
         @SubscribeEvent
         public static void registerPayloadHandlerEvents(RegisterPayloadHandlersEvent event) {
-            ProduceHandler.register(event);
-            ResetHandler.register(event);
+            event.registrar("compost").versioned("1").optional().playToClient(ProducePayload.TYPE, ProducePayload.STREAM_CODEC, ProducePayload::handle);
+            event.registrar("compost").versioned("1").optional().playToClient(ResetPayload.TYPE, ResetPayload.STREAM_CODEC, ResetPayload::handle);
         }
 
         @SubscribeEvent
