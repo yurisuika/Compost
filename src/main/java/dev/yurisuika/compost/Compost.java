@@ -71,7 +71,7 @@ public class Compost implements ModInitializer {
         }
 
         public static void registerGlobalReceivers() {
-            ClientPlayNetworking.registerGlobalReceiver(ProducePayload.TYPE, (payload, context) -> context.client().execute(() -> Network.getStacks().add(Parse.createItemStack(new Produce(payload.item(), payload.chance(), payload.min(), payload.max())))));
+            ClientPlayNetworking.registerGlobalReceiver(ProducePayload.TYPE, (payload, context) -> context.client().execute(() -> Network.getStacks().add(Parse.createItemStack(context.player().registryAccess(), new Produce(payload.item(), payload.chance(), payload.min(), payload.max())))));
             ClientPlayNetworking.registerGlobalReceiver(ResetPayload.TYPE, (payload, context) -> context.client().execute(() -> Network.setStacks(new ArrayList<>())));
         }
 

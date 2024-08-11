@@ -64,7 +64,7 @@ public class CompostCommand {
                                         int index = world.getProduce().indexOf(produce) + 1;
                                         String percentage = new DecimalFormat("0.###############").format(BigDecimal.valueOf(produce.getChance()).multiply(BigDecimal.valueOf(100)));
                                         String count = produce.getMin() != produce.getMax() ? produce.getMin() + "-" + produce.getMax() : String.valueOf(produce.getMax());
-                                        Component displayName = Parse.createItemStack(produce).getDisplayName();
+                                        Component displayName = Parse.createItemStack(commandContext.getSource().registryAccess(), produce).getDisplayName();
 
                                         commandContext.getSource().sendSuccess(() -> Component.translatable("commands.compost.produce.query", index, percentage, count, displayName), false);
                                     }
@@ -110,7 +110,7 @@ public class CompostCommand {
                                             String name = Option.getWorld(commandContext.getSource().getServer().getWorldData().getLevelName()).getName();
                                             Produce produce = ProduceArgument.getProduce(commandContext, "produce");
 
-                                            Component displayName = Parse.createItemStack(produce).getDisplayName();
+                                            Component displayName = Parse.createItemStack(commandContext.getSource().registryAccess(), produce).getDisplayName();
 
                                             Option.removeProduce(name, produce);
                                             for (ServerPlayer player : commandContext.getSource().getServer().getPlayerList().getPlayers()) {
