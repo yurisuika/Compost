@@ -4,6 +4,7 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.yurisuika.compost.util.config.Option;
 import dev.yurisuika.compost.util.config.options.Produce;
+import net.minecraft.CharPredicate;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.core.RegistryAccess;
@@ -29,6 +30,14 @@ public class Parse {
         } catch (CommandSyntaxException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String readWhile(StringReader reader, CharPredicate predicate) {
+        int i = reader.getCursor();
+        while(reader.canRead() && predicate.test(reader.peek())) {
+            reader.skip();
+        }
+        return reader.getString().substring(i, reader.getCursor());
     }
 
 }
