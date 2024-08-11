@@ -23,7 +23,6 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.ArrayList;
@@ -83,7 +82,7 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
                 double x = (double) (level.getRandom().nextFloat() * 0.7F) + 0.15000000596046448D;
                 double y = (double) (level.getRandom().nextFloat() * 0.7F) + 0.06000000238418579D + 0.6D;
                 double z = (double) (level.getRandom().nextFloat() * 0.7F) + 0.15000000596046448D;
-                ItemEntity itemEntity = new ItemEntity(level, x, y, z, blockEntity.removeItemNoUpdate(i));
+                ItemEntity itemEntity = new ItemEntity(level, pos.getX() + x, pos.getY() + y, pos.getZ() + z, blockEntity.removeItemNoUpdate(i));
                 itemEntity.setDefaultPickUpDelay();
                 level.addFreshEntity(itemEntity);
             }
@@ -96,7 +95,6 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
     public static BlockState empty(Entity user, BlockState state, LevelAccessor level, BlockPos pos) {
         BlockState blockState = state.setValue(LEVEL, 0);
         level.setBlock(pos, blockState, Block.UPDATE_ALL);
-        level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(user, blockState));
         return blockState;
     }
 
