@@ -2,22 +2,26 @@ package dev.yurisuika.compost.network.protocol.common;
 
 import dev.yurisuika.compost.util.Network;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.NetworkRegistry;
+import net.neoforged.neoforge.network.simple.SimpleChannel;
 
 import java.util.ArrayList;
 
 public record ClientboundResetPacket() {
 
-    public static void encode(ClientboundResetPacket packet, FriendlyByteBuf buffer) {}
+    public static final ResourceLocation ID = ResourceLocation.tryParse("compost:reset");
+    public static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder.named(ID).networkProtocolVersion(() -> "1").clientAcceptedVersions(status -> true).serverAcceptedVersions(status -> true).simpleChannel();
 
-    public static ClientboundResetPacket decode(FriendlyByteBuf buffer) {
-        return new ClientboundResetPacket();
+    public ClientboundResetPacket(FriendlyByteBuf buffer) {
+        this();
     }
 
-    public static void handle(final ClientboundResetPacket message, NetworkEvent.ClientCustomPayloadEvent.Context context) {
-        context.enqueueWork(() -> {
-            Network.setStacks(new ArrayList<>());
-        });
+    public static void write(ClientboundResetPacket packet, FriendlyByteBuf buffer) {}
+
+    public static void handle(ClientboundResetPacket packet, NetworkEvent.ClientCustomPayloadEvent.Context context) {
+        context.enqueueWork(() -> Network.setStacks(new ArrayList<>()));
         context.setPacketHandled(true);
     }
 
