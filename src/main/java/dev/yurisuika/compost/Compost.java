@@ -1,12 +1,12 @@
 package dev.yurisuika.compost;
 
 import dev.yurisuika.compost.commands.arguments.ProduceArgument;
+import dev.yurisuika.compost.network.protocol.common.ClientboundProducePacket;
+import dev.yurisuika.compost.network.protocol.common.ClientboundResetPacket;
 import dev.yurisuika.compost.server.commands.CompostCommand;
 import dev.yurisuika.compost.util.Network;
-import dev.yurisuika.compost.util.Parse;
 import dev.yurisuika.compost.util.Validate;
 import dev.yurisuika.compost.util.config.Config;
-import dev.yurisuika.compost.util.config.options.Produce;
 import dev.yurisuika.compost.world.level.block.entity.ContainerComposterBlockEntity;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
@@ -21,18 +21,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
-import java.util.ArrayList;
-
 public class Compost implements ModInitializer {
 
     public static BlockEntityType<ContainerComposterBlockEntity> COMPOSTER;
 
     public static void registerBlockEntityTypes() {
-        COMPOSTER = Registry.register(
-                Registry.BLOCK_ENTITY_TYPE,
-                ResourceLocation.tryParse("compost:composter"),
-                BlockEntityType.Builder.of(ContainerComposterBlockEntity::new, Blocks.COMPOSTER).build(null)
-        );
+        COMPOSTER = Registry.register(Registry.BLOCK_ENTITY_TYPE, ResourceLocation.tryParse("compost:composter"), BlockEntityType.Builder.of(ContainerComposterBlockEntity::new, Blocks.COMPOSTER).build(null));
     }
 
     public static void registerServerEvents() {
@@ -60,8 +54,8 @@ public class Compost implements ModInitializer {
         }
 
         public static void registerGlobalReceivers() {
-            ClientPlayNetworking.registerGlobalReceiver(ResourceLocation.tryParse("compost:produce"), (minecraft, listener, buffer, sender) -> Network.getStacks().add(Parse.createItemStack(new Produce(buffer.readUtf(), buffer.readDouble(), buffer.readInt(), buffer.readInt()))));
-            ClientPlayNetworking.registerGlobalReceiver(ResourceLocation.tryParse("compost:reset"), (minecraft, listener, buffer, sender) -> Network.setStacks(new ArrayList<>()));
+            ClientPlayNetworking.registerGlobalReceiver(ClientboundProducePacket.ID, ClientboundProducePacket::handle);
+            ClientPlayNetworking.registerGlobalReceiver(ClientboundResetPacket.ID, ClientboundResetPacket::handle);
         }
 
         @Override
@@ -71,4 +65,5 @@ public class Compost implements ModInitializer {
         }
 
     }
+
 }
