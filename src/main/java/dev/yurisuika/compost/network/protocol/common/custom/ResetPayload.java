@@ -11,18 +11,17 @@ import java.util.ArrayList;
 
 public record ResetPayload() implements CustomPacketPayload {
 
+    public static final ResourceLocation ID = ResourceLocation.tryParse("compost:reset");
     public static final StreamCodec<FriendlyByteBuf, ResetPayload> STREAM_CODEC = StreamCodec.unit(new ResetPayload());
-    public static final Type<ResetPayload> TYPE = new Type<>(ResourceLocation.tryParse("compost:reset"));
+    public static final Type<ResetPayload> TYPE = new Type<>(ID);
 
     @Override
     public Type<ResetPayload> type() {
         return TYPE;
     }
 
-    public static void handle(final ResetPayload message, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            Network.setStacks(new ArrayList<>());
-        });
+    public static void handle(ResetPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> Network.setStacks(new ArrayList<>()));
     }
 
 }
