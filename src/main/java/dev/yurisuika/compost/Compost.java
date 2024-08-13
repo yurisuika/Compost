@@ -1,8 +1,8 @@
 package dev.yurisuika.compost;
 
 import dev.yurisuika.compost.commands.arguments.ProduceArgument;
-import dev.yurisuika.compost.network.handler.ProduceHandler;
-import dev.yurisuika.compost.network.handler.ResetHandler;
+import dev.yurisuika.compost.network.protocol.common.ClientboundProducePacket;
+import dev.yurisuika.compost.network.protocol.common.ClientboundResetPacket;
 import dev.yurisuika.compost.server.commands.CompostCommand;
 import dev.yurisuika.compost.util.Network;
 import dev.yurisuika.compost.util.Validate;
@@ -27,8 +27,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.Objects;
-
 @Mod("compost")
 public class Compost {
 
@@ -46,7 +44,7 @@ public class Compost {
 
         @SubscribeEvent
         public static void serverStartedEvents(ServerStartedEvent event) {
-            Validate.checkLevels(Objects.requireNonNull(event.getServer()));
+            Validate.checkLevels(event.getServer());
         }
 
         @SubscribeEvent
@@ -61,8 +59,8 @@ public class Compost {
 
         @SubscribeEvent
         public static void commonSetup(FMLCommonSetupEvent event) {
-            ProduceHandler.register();
-            ResetHandler.register();
+            ClientboundProducePacket.CHANNEL.registerMessage(1, ClientboundProducePacket.class, ClientboundProducePacket::write, ClientboundProducePacket::new, ClientboundProducePacket::handle);
+            ClientboundResetPacket.CHANNEL.registerMessage(1, ClientboundResetPacket.class, ClientboundResetPacket::write, ClientboundResetPacket::new, ClientboundResetPacket::handle);
         }
 
         @SubscribeEvent
