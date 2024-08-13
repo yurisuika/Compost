@@ -1,8 +1,8 @@
 package dev.yurisuika.compost;
 
 import dev.yurisuika.compost.commands.arguments.ProduceArgument;
-import dev.yurisuika.compost.network.handler.ProduceHandler;
-import dev.yurisuika.compost.network.handler.ResetHandler;
+import dev.yurisuika.compost.network.protocol.common.ClientboundProducePacket;
+import dev.yurisuika.compost.network.protocol.common.ClientboundResetPacket;
 import dev.yurisuika.compost.server.commands.CompostCommand;
 import dev.yurisuika.compost.util.Network;
 import dev.yurisuika.compost.util.Validate;
@@ -22,12 +22,11 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryObject;
-
-import java.util.Objects;
 
 @Mod("compost")
 public class Compost {
@@ -46,7 +45,7 @@ public class Compost {
 
         @SubscribeEvent
         public static void serverStartedEvents(ServerStartedEvent event) {
-            Validate.checkLevels(Objects.requireNonNull(event.getServer()));
+            Validate.checkLevels(event.getServer());
         }
 
         @SubscribeEvent
@@ -61,8 +60,8 @@ public class Compost {
 
         @SubscribeEvent
         public static void commonSetup(FMLCommonSetupEvent event) {
-            ProduceHandler.register();
-            ResetHandler.register();
+            ClientboundProducePacket.CHANNEL.messageBuilder(ClientboundProducePacket.class, NetworkDirection.PLAY_TO_CLIENT).encoder(ClientboundProducePacket::write).decoder(ClientboundProducePacket::new).consumerMainThread(ClientboundProducePacket::handle).add();
+            ClientboundResetPacket.CHANNEL.messageBuilder(ClientboundResetPacket.class, NetworkDirection.PLAY_TO_CLIENT).encoder(ClientboundResetPacket::write).decoder(ClientboundResetPacket::new).consumerMainThread(ClientboundResetPacket::handle).add();
         }
 
         @SubscribeEvent
