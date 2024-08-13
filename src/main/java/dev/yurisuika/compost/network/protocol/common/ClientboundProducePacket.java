@@ -1,0 +1,40 @@
+package dev.yurisuika.compost.network.protocol.common;
+
+import dev.yurisuika.compost.util.Network;
+import dev.yurisuika.compost.util.Parse;
+import dev.yurisuika.compost.util.config.options.Produce;
+import net.fabricmc.fabric.api.networking.v1.FabricPacket;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.fabricmc.fabric.api.networking.v1.PacketType;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+
+public record ClientboundProducePacket(String item, Double chance, Integer min, Integer max) implements FabricPacket {
+
+    public static final ResourceLocation ID = ResourceLocation.tryParse("compost:produce");
+    public static final PacketType<ClientboundProducePacket> TYPE = PacketType.create(ID, ClientboundProducePacket::new);
+
+    public ClientboundProducePacket(FriendlyByteBuf buffer) {
+        this(buffer.readUtf(), buffer.readDouble(), buffer.readInt(), buffer.readInt());
+    }
+
+    @Override
+    public void write(FriendlyByteBuf buffer) {
+        buffer.writeUtf(item());
+        buffer.writeDouble(chance());
+        buffer.writeInt(min());
+        buffer.writeInt(max());
+    }
+
+    public static void handle(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buffer, PacketSender sender) {
+        Network.getStacks().add(Parse.createItemStack(new Produce(buffer.readUtf(), buffer.readDouble(), buffer.readInt(), buffer.readInt())));
+    }
+
+    @Override
+    public PacketType<ClientboundProducePacket> getType() {
+        return TYPE;
+    }
+
+}
