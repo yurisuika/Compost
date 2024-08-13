@@ -2,7 +2,7 @@
 
 **Compost** is a Fabric/Forge mod for Minecraft that makes composters turn your food waste into whatever you want! Have you ever thought that bone meal wasn't quite the right product that a composter should bring to the game? Well, now you can change the composter to produce dirt, apples, or even diamonds! Bring out the true essence of a composter and get dirty!
 
-Compost 2.x brings configurability to another level, literally! You can now have different configurations based on the world name. The default configuration has entries for both dirt and bone meal, but you can make it whatever you want! Simply set the item name, the chance, and the min/max range for the number of items to be dropped! You can have as many entries as you desire!
+Compost 1.4.x brings configurability to another level, literally! You can now have different configurations based on the world name. The default configuration has entries for both dirt and bone meal, but you can make it whatever you want! Simply set the item name, the chance, and the min/max range for the number of items to be dropped! You can have as many entries as you desire!
 
 #### Compiling
 
