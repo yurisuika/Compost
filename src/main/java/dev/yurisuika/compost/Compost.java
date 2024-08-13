@@ -26,8 +26,6 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
-import java.util.Objects;
-
 @Mod("compost")
 public class Compost {
 
@@ -45,7 +43,7 @@ public class Compost {
 
         @SubscribeEvent
         public static void serverStartedEvents(ServerStartedEvent event) {
-            Validate.checkLevels(Objects.requireNonNull(event.getServer()));
+            Validate.checkLevels(event.getServer());
         }
 
         @SubscribeEvent
