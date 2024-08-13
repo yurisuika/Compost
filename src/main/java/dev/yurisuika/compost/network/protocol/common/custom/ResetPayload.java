@@ -24,10 +24,8 @@ public record ResetPayload() implements CustomPacketPayload {
         return ID;
     }
 
-    public static void handle(final ResetPayload message, IPayloadContext context) {
-        context.workHandler().submitAsync(() -> {
-            Network.setStacks(new ArrayList<>());
-        });
+    public static void handle(ResetPayload payload, IPayloadContext context) {
+        context.workHandler().submitAsync(() -> Network.setStacks(new ArrayList<>()));
     }
 
 }

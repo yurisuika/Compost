@@ -29,10 +29,8 @@ public record ProducePayload(String item, Double chance, Integer min, Integer ma
         return ID;
     }
 
-    public static void handle(final ProducePayload message, IPayloadContext context) {
-        context.workHandler().submitAsync(() -> {
-            Network.getStacks().add(Parse.createItemStack(new Produce(message.item(), message.chance(), message.min(), message.max())));
-        });
+    public static void handle(ProducePayload payload, IPayloadContext context) {
+        context.workHandler().submitAsync(() -> Network.getStacks().add(Parse.createItemStack(new Produce(payload.item(), payload.chance(), payload.min(), payload.max()))));
     }
 
 }

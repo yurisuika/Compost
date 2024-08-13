@@ -29,10 +29,8 @@ public class Network {
         if (!level.isClientSide()) {
             PacketDistributor.PLAYER.with((ServerPlayer) player).send(new ResetPayload());
             Option.getWorlds().forEach(world -> {
-                if (Objects.equals(world.getName(), Objects.requireNonNull(level.getServer()).getWorldData().getLevelName())) {
-                    world.getProduce().forEach(produce -> {
-                        PacketDistributor.PLAYER.with((ServerPlayer) player).send(new ProducePayload(produce.getItem(), produce.getChance(), produce.getMin(), produce.getMax()));
-                    });
+                if (Objects.equals(world.getName(), level.getServer().getWorldData().getLevelName())) {
+                    world.getProduce().forEach(produce -> PacketDistributor.PLAYER.with((ServerPlayer) player).send(new ProducePayload(produce.getItem(), produce.getChance(), produce.getMin(), produce.getMax())));
                 }
             });
         }
