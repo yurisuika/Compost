@@ -1,7 +1,5 @@
 package dev.yurisuika.compost.util;
 
-import dev.yurisuika.compost.network.handler.ProduceHandler;
-import dev.yurisuika.compost.network.handler.ResetHandler;
 import dev.yurisuika.compost.network.protocol.common.ClientboundProducePacket;
 import dev.yurisuika.compost.network.protocol.common.ClientboundResetPacket;
 import dev.yurisuika.compost.util.config.Option;
@@ -29,12 +27,10 @@ public class Network {
 
     public static void sendProduce(Level level, Player player) {
         if (!level.isClientSide()) {
-            ResetHandler.CHANNEL.send(new ClientboundResetPacket(), PacketDistributor.PLAYER.with((ServerPlayer) player));
+            ClientboundResetPacket.CHANNEL.send(new ClientboundResetPacket(), PacketDistributor.PLAYER.with((ServerPlayer) player));
             Option.getWorlds().forEach(world -> {
-                if (Objects.equals(world.getName(), Objects.requireNonNull(level.getServer()).getWorldData().getLevelName())) {
-                    world.getProduce().forEach(produce -> {
-                        ProduceHandler.CHANNEL.send(new ClientboundProducePacket(produce.getItem(), produce.getChance(), produce.getMin(), produce.getMax()), PacketDistributor.PLAYER.with((ServerPlayer) player));
-                    });
+                if (Objects.equals(world.getName(), level.getServer().getWorldData().getLevelName())) {
+                    world.getProduce().forEach(produce -> ClientboundProducePacket.CHANNEL.send(new ClientboundProducePacket(produce.getItem(), produce.getChance(), produce.getMin(), produce.getMax()), PacketDistributor.PLAYER.with((ServerPlayer) player)));
                 }
             });
         }

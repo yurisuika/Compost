@@ -14,12 +14,15 @@ import dev.yurisuika.compost.util.config.options.Produce;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class ProduceArgument implements ArgumentType<Produce> {
+
+    public static final ResourceLocation ID = ResourceLocation.tryParse("compost:produce");
 
     public static ProduceArgument produce() {
         return new ProduceArgument();
