@@ -30,7 +30,6 @@ import net.minecraft.world.phys.Vec3;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ContainerComposterBlock extends ComposterBlock implements EntityBlock {
@@ -85,7 +84,7 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
 
     public static BlockState extractProduce(Entity user, BlockState state, Level level, BlockPos pos) {
         if (!level.isClientSide) {
-            ContainerComposterBlockEntity blockEntity = (ContainerComposterBlockEntity) Objects.requireNonNull(level.getBlockEntity(pos));
+            ContainerComposterBlockEntity blockEntity = (ContainerComposterBlockEntity) level.getBlockEntity(pos);
             for (int i = 0; i < 27; i++) {
                 Vec3 vec3 = Vec3.atLowerCornerWithOffset(pos, 0.5D, 1.01D, 0.5D).offsetRandom(level.random, 0.7F);
                 ItemEntity itemEntity = new ItemEntity(level, vec3.x(), vec3.y(), vec3.z(), blockEntity.removeItemNoUpdate(i));
@@ -108,7 +107,7 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
     @Override
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (state.getValue(LEVEL) == 7) {
-            ContainerComposterBlockEntity blockEntity = (ContainerComposterBlockEntity) Objects.requireNonNull(level.getBlockEntity(pos));
+            ContainerComposterBlockEntity blockEntity = (ContainerComposterBlockEntity) level.getBlockEntity(pos);
             List<ItemStack> list = new ArrayList<>();
             Option.getWorld(level.getServer().getWorldData().getLevelName()).getProduce().forEach(produce -> {
                 if (ThreadLocalRandom.current().nextDouble() < produce.getChance()) {

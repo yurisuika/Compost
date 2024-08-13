@@ -5,10 +5,8 @@ import dev.yurisuika.compost.network.protocol.common.custom.ProducePayload;
 import dev.yurisuika.compost.network.protocol.common.custom.ResetPayload;
 import dev.yurisuika.compost.server.commands.CompostCommand;
 import dev.yurisuika.compost.util.Network;
-import dev.yurisuika.compost.util.Parse;
 import dev.yurisuika.compost.util.Validate;
 import dev.yurisuika.compost.util.config.Config;
-import dev.yurisuika.compost.util.config.options.Produce;
 import dev.yurisuika.compost.world.level.block.entity.ContainerComposterBlockEntity;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
@@ -26,18 +24,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
-import java.util.ArrayList;
-
 public class Compost implements ModInitializer {
 
     public static BlockEntityType<ContainerComposterBlockEntity> COMPOSTER;
 
     public static void registerBlockEntityTypes() {
-        COMPOSTER = Registry.register(
-                BuiltInRegistries.BLOCK_ENTITY_TYPE,
-                ResourceLocation.tryParse("compost:composter"),
-                FabricBlockEntityTypeBuilder.create(ContainerComposterBlockEntity::new, Blocks.COMPOSTER).build()
-        );
+        COMPOSTER = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, ResourceLocation.tryParse("compost:composter"), FabricBlockEntityTypeBuilder.create(ContainerComposterBlockEntity::new, Blocks.COMPOSTER).build());
     }
 
     public static void registerServerEvents() {
@@ -71,8 +63,8 @@ public class Compost implements ModInitializer {
         }
 
         public static void registerGlobalReceivers() {
-            ClientPlayNetworking.registerGlobalReceiver(ProducePayload.TYPE, (payload, context) -> context.client().execute(() -> Network.getStacks().add(Parse.createItemStack(context.player().registryAccess(), new Produce(payload.item(), payload.chance(), payload.min(), payload.max())))));
-            ClientPlayNetworking.registerGlobalReceiver(ResetPayload.TYPE, (payload, context) -> context.client().execute(() -> Network.setStacks(new ArrayList<>())));
+            ClientPlayNetworking.registerGlobalReceiver(ProducePayload.TYPE, ProducePayload::handle);
+            ClientPlayNetworking.registerGlobalReceiver(ResetPayload.TYPE, ResetPayload::handle);
         }
 
         @Override
@@ -82,4 +74,5 @@ public class Compost implements ModInitializer {
         }
 
     }
+
 }
