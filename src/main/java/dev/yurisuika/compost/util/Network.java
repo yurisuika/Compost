@@ -3,6 +3,7 @@ package dev.yurisuika.compost.util;
 import dev.yurisuika.compost.network.protocol.common.ClientboundProducePacket;
 import dev.yurisuika.compost.network.protocol.common.ClientboundResetPacket;
 import dev.yurisuika.compost.util.config.Option;
+import dev.yurisuika.compost.util.config.options.Produce;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
@@ -18,13 +19,22 @@ import java.util.Objects;
 public class Network {
 
     public static List<ItemStack> stacks = new ArrayList<>();
+    public static List<Produce> produce = new ArrayList<>();
 
     public static List<ItemStack> getStacks() {
         return stacks;
     }
 
+    public static List<Produce> getProduce() {
+        return produce;
+    }
+
     public static void setStacks(List<ItemStack> stacks) {
         Network.stacks = stacks;
+    }
+
+    public static void setProduce(List<Produce> produce) {
+        Network.produce = produce;
     }
 
     public static void sendProduce(Level level, Player player) {
