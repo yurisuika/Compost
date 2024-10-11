@@ -46,7 +46,11 @@ public final class ClientboundProducePacket {
     }
 
     public static void handle(ClientboundProducePacket packet, Supplier<NetworkEvent.Context> context) {
-        context.get().enqueueWork(() -> Network.getStacks().add(Parse.createItemStack(new Produce(packet.item(), packet.chance(), packet.min(), packet.max()))));
+        context.get().enqueueWork(() -> {
+            Produce produce = new Produce(packet.item(), packet.chance(), packet.min(), packet.max());
+            Network.getStacks().add(Parse.createItemStack(produce));
+            Network.getProduce().add(produce);
+        });
         context.get().setPacketHandled(true);
     }
 
