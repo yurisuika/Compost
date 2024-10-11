@@ -22,7 +22,10 @@ public record ClientboundResetPacket() {
     public static void write(ClientboundResetPacket packet, FriendlyByteBuf buffer) {}
 
     public static void handle(ClientboundResetPacket packet, Supplier<NetworkEvent.Context> context) {
-        context.get().enqueueWork(() -> Network.setStacks(new ArrayList<>()));
+        context.get().enqueueWork(() -> {
+            Network.setStacks(new ArrayList<>());
+            Network.setProduce(new ArrayList<>());
+        });
         context.get().setPacketHandled(true);
     }
 
