@@ -7,9 +7,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import dev.yurisuika.compost.util.Network;
 import dev.yurisuika.compost.util.Parse;
-import dev.yurisuika.compost.util.Validate;
-import dev.yurisuika.compost.util.config.Option;
 import dev.yurisuika.compost.util.config.options.Produce;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.ParserUtils;
@@ -33,7 +32,7 @@ public class ProduceArgument implements ArgumentType<Produce> {
     public Produce parse(StringReader reader) throws CommandSyntaxException {
         String string = ParserUtils.readWhile(reader, c -> c != ' ');
         try {
-            return Option.getProduce(Validate.getLevelName()).get(Parse.listItems().indexOf(string));
+            return Network.getProduce().get(Parse.listItems().indexOf(string));
         } catch (Exception e) {
             throw new DynamicCommandExceptionType(object -> Component.translatableEscape("commands.compost.produce.unknown", object)).createWithContext(reader, string);
         }
