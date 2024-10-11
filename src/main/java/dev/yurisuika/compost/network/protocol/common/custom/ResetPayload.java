@@ -21,7 +21,10 @@ public record ResetPayload() implements CustomPacketPayload {
     }
 
     public static void handle(ResetPayload payload, ClientPlayNetworking.Context context) {
-        context.client().execute(() -> Network.setStacks(new ArrayList<>()));
+        context.client().execute(() -> {
+            Network.setStacks(new ArrayList<>());
+            Network.setProduce(new ArrayList<>());
+        });
     }
 
 }
