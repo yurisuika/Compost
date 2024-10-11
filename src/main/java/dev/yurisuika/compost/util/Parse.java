@@ -2,7 +2,6 @@ package dev.yurisuika.compost.util;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.yurisuika.compost.util.config.Option;
 import dev.yurisuika.compost.util.config.options.Produce;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.item.ItemArgument;
@@ -17,7 +16,7 @@ public class Parse {
 
     public static List<String> listItems() {
         List<String> items = new ArrayList<>();
-        for (Produce produce : Option.getProduce(Validate.getLevelName())) {
+        for (Produce produce : Network.getProduce()) {
             items.add(produce.getItem());
         }
         return items;
