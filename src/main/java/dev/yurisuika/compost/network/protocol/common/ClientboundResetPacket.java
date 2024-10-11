@@ -25,6 +25,7 @@ public record ClientboundResetPacket() implements FabricPacket {
 
     public static void handle(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buffer, PacketSender sender) {
         Network.setStacks(new ArrayList<>());
+        Network.setProduce(new ArrayList<>());
     }
 
     @Override
