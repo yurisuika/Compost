@@ -18,7 +18,7 @@ Make composters turn your food waste into whatever you want!
 [[dependencies.compost]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.21,1.22)"
+versionRange = "[1.21,1.21.1]"
 ordering = "NONE"
 side = "BOTH"
 
@@ -28,3 +28,17 @@ mandatory = true
 versionRange = "[51,)"
 ordering = "NONE"
 side = "BOTH"
+
+[[dependencies.compost]]
+modId = "emi"
+type = "optional"
+versionRange = "[1,)"
+ordering = "NONE"
+side = "CLIENT"
+
+[[dependencies.compost]]
+modId = "roughlyenoughitems"
+type = "optional"
+versionRange = "[16,)"
+ordering = "NONE"
+side = "CLIENT"
