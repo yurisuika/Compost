@@ -34,6 +34,10 @@ public class Compost implements ModInitializer {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> Network.sendProduce(handler.player.getLevel(), handler.player));
     }
 
+    public static void registerArgumentTypes() {
+        ArgumentTypes.register("compost:produce", ProduceArgument.class, new EmptyArgumentSerializer<>(ProduceArgument::produce));
+    }
+
     public static void registerCommands() {
         CommandRegistrationCallback.EVENT.register(CompostCommand::register);
     }
@@ -44,14 +48,11 @@ public class Compost implements ModInitializer {
 
         registerBlockEntityTypes();
         registerServerEvents();
+        registerArgumentTypes();
         registerCommands();
     }
 
     public static class Client implements ClientModInitializer {
-
-        public static void registerArgumentTypes() {
-            ArgumentTypes.register("compost:produce", ProduceArgument.class, new EmptyArgumentSerializer<>(ProduceArgument::produce));
-        }
 
         public static void registerGlobalReceivers() {
             ClientPlayNetworking.registerGlobalReceiver(ClientboundProducePacket.ID, ClientboundProducePacket::handle);
@@ -60,7 +61,6 @@ public class Compost implements ModInitializer {
 
         @Override
         public void onInitializeClient() {
-            registerArgumentTypes();
             registerGlobalReceivers();
         }
 
