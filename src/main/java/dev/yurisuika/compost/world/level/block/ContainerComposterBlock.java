@@ -56,7 +56,7 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
     }
 
     @Override
-    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    public InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         int i = state.getValue(LEVEL);
         if (i < 8 && COMPOSTABLES.containsKey(stack.getItem())) {
             if (i < 7 && !level.isClientSide) {
@@ -66,9 +66,9 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
                     stack.shrink(1);
                 }
             }
-            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         } else {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
     }
 
@@ -76,7 +76,7 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
     public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (state.getValue(LEVEL) == 8) {
             extractProduce(player, state, level, pos);
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         } else {
             return InteractionResult.PASS;
         }
