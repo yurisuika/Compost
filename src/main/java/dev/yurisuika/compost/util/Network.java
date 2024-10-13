@@ -38,10 +38,14 @@ public class Network {
     public static void sendProduce(Level level, Player player) {
         if (!level.isClientSide()) {
             ClientboundResetPacket.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new ClientboundResetPacket());
+            setStacks(new ArrayList<>());
+            setProduce(new ArrayList<>());
             Option.getWorlds().forEach(world -> {
                 if (Objects.equals(world.getName(), level.getServer().getWorldData().getLevelName())) {
                     world.getProduce().forEach(produce -> {
                         ClientboundProducePacket.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new ClientboundProducePacket(produce.getItem(), produce.getChance(), produce.getMin(), produce.getMax()));
+                        getStacks().add(Parse.createItemStack(produce));
+                        getProduce().add(produce);
                     });
                 }
             });
