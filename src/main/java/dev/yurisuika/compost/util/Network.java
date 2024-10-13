@@ -38,9 +38,15 @@ public class Network {
     public static void sendProduce(Level level, Player player) {
         if (!level.isClientSide()) {
             ServerPlayNetworking.send((ServerPlayer) player, new ResetPayload());
+            setStacks(new ArrayList<>());
+            setProduce(new ArrayList<>());
             Option.getWorlds().forEach(world -> {
                 if (Objects.equals(world.getName(), level.getServer().getWorldData().getLevelName())) {
-                    world.getProduce().forEach(produce -> ServerPlayNetworking.send((ServerPlayer) player, new ProducePayload(produce.getItem(), produce.getChance(), produce.getMin(), produce.getMax())));
+                    world.getProduce().forEach(produce -> {
+                        ServerPlayNetworking.send((ServerPlayer) player, new ProducePayload(produce.getItem(), produce.getChance(), produce.getMin(), produce.getMax()));
+                        getStacks().add(Parse.createItemStack(level.getServer().registryAccess(), produce));
+                        getProduce().add(produce);
+                    });
                 }
             });
         }
