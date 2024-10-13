@@ -5,9 +5,9 @@
   "refmap": "compost.refmap.json",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "mods.FabricMixin$ItemStorageMixin",
     "world.level.block.BlocksMixin",
-    "world.level.block.ComposterBlockInvoker",
-    "mods.FabricMixin$ItemStorageMixin"
+    "world.level.block.ComposterBlockInvoker"
   ],
   "client": [
     "mods.EMIMixin$EmiCompostingRecipeMixin",
