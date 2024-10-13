@@ -40,6 +40,8 @@ public class Network {
     public static void sendProduce(Level level, Player player) {
         if (!level.isClientSide()) {
             ServerPlayNetworking.send((ServerPlayer) player, ClientboundResetPacket.ID, PacketByteBufs.empty());
+            setStacks(new ArrayList<>());
+            setProduce(new ArrayList<>());
             Option.getWorlds().forEach(world -> {
                 if (Objects.equals(world.getName(), level.getServer().getWorldData().getLevelName())) {
                     world.getProduce().forEach(produce -> {
@@ -49,6 +51,8 @@ public class Network {
                         buffer.writeInt(produce.getMin());
                         buffer.writeInt(produce.getMax());
                         ServerPlayNetworking.send((ServerPlayer) player, ClientboundProducePacket.ID, buffer);
+                        getStacks().add(Parse.createItemStack(produce));
+                        getProduce().add(produce);
                     });
                 }
             });
