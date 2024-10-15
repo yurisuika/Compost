@@ -82,8 +82,8 @@ public class CompostCommand {
                                                                     ItemInput itemInput = ItemArgument.getItem(commandContext, "item");
                                                                     ItemStack itemStack = itemInput.createItemStack(1, false);
                                                                     StringBuilder stringBuilder = new StringBuilder(itemInput.getItem().getDescriptionId().replace("item.", "").replace("block.", "").replace(".", ":"));
-                                                                    if (!Objects.isNull(((ItemInputAccessor)itemInput).getTag())) {
-                                                                        stringBuilder.append(((ItemInputAccessor)itemInput).getTag());
+                                                                    if (Objects.nonNull(((ItemInputAccessor) itemInput).getTag())) {
+                                                                        stringBuilder.append(((ItemInputAccessor) itemInput).getTag());
                                                                     }
 
                                                                     String item = stringBuilder.toString();
