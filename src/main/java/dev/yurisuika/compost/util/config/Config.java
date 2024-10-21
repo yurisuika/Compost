@@ -27,7 +27,7 @@ public class Config {
 
     public static void saveConfig() {
         try {
-            FileWriter fileWriter = new FileWriter(file);
+            FileWriter fileWriter = new FileWriter(file, StandardCharsets.UTF_8);
             fileWriter.write(gson.toJson(getOptions()));
             fileWriter.close();
         } catch (Exception e) {
