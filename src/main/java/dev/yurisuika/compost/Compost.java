@@ -31,7 +31,7 @@ public class Compost {
 
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, "compost");
 
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ContainerComposterBlockEntity>> COMPOSTER = BLOCK_ENTITIES.register("composter", () -> BlockEntityType.Builder.of(ContainerComposterBlockEntity::new, Blocks.COMPOSTER).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ContainerComposterBlockEntity>> COMPOSTER = BLOCK_ENTITIES.register("composter", () -> new BlockEntityType(ContainerComposterBlockEntity::new, Blocks.COMPOSTER));
 
     @EventBusSubscriber(modid = "compost")
     public static class CommonForgeEvents {

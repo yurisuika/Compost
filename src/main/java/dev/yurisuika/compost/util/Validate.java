@@ -26,7 +26,7 @@ public class Validate {
     }
 
     public static void checkBounds(Produce produce) {
-        int maxStackSize = BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(produce.getItem().contains("[") ? produce.getItem().substring(0, produce.getItem().indexOf("[")) : produce.getItem())).getDefaultMaxStackSize();
+        int maxStackSize = BuiltInRegistries.ITEM.getValue(ResourceLocation.tryParse(produce.getItem().contains("[") ? produce.getItem().substring(0, produce.getItem().indexOf("[")) : produce.getItem())).getDefaultMaxStackSize();
         int min = Math.max(Math.min(Math.min(produce.getMin(), maxStackSize), produce.getMax()), 0);
         int max = Math.max(Math.max(Math.min(produce.getMax(), maxStackSize), produce.getMin()), 1);
         produce.setChance(Math.max(0.0D, Math.min(produce.getChance(), 1.0D)));
