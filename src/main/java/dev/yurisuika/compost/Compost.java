@@ -71,12 +71,12 @@ public class Compost {
 
     }
 
-    public Compost() {
+    public Compost(FMLJavaModLoadingContext context) {
         Config.loadConfig();
 
         MinecraftForge.EVENT_BUS.register(this);
 
-        BLOCK_ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
+        BLOCK_ENTITIES.register(context.getModEventBus());
     }
 
 }
