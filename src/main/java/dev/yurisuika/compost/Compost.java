@@ -28,12 +28,14 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Set;
+
 @Mod("compost")
 public class Compost {
 
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, "compost");
 
-    public static final RegistryObject<BlockEntityType<ContainerComposterBlockEntity>> COMPOSTER = BLOCK_ENTITIES.register("composter", () -> BlockEntityType.Builder.of(ContainerComposterBlockEntity::new, Blocks.COMPOSTER).build(null));
+    public static final RegistryObject<BlockEntityType<ContainerComposterBlockEntity>> COMPOSTER = BLOCK_ENTITIES.register("composter", () -> new BlockEntityType(ContainerComposterBlockEntity::new, Set.of(Blocks.COMPOSTER)));
 
     @Mod.EventBusSubscriber(modid = "compost")
     public static class CommonForgeEvents {
