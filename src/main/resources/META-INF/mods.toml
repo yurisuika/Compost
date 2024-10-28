@@ -25,7 +25,7 @@ side = "BOTH"
 [[dependencies.compost]]
 modId = "forge"
 mandatory = true
-versionRange = "[53,)"
+versionRange = "[53.0.5,)"
 ordering = "NONE"
 side = "BOTH"
 
