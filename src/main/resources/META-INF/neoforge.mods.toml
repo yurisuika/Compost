@@ -42,6 +42,6 @@ side = "CLIENT"
 [[dependencies.compost]]
 modId = "roughlyenoughitems"
 type = "optional"
-versionRange = "[16,)"
+versionRange = "[17,)"
 ordering = "NONE"
 side = "CLIENT"

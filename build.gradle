@@ -25,12 +25,12 @@ dependencies {
     }
     neoForge "net.neoforged:neoforge:${project.neo_version}"
 
-    modCompileOnly "dev.emi:emi-neoforge:1.1.10+1.21:api"
-    modCompileOnly "dev.emi:emi-neoforge:1.1.10+1.21"
+    modCompileOnly "dev.emi:emi-neoforge:1.1.18+1.21.1:api"
+    modCompileOnly "dev.emi:emi-neoforge:1.1.18+1.21.1"
 
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:16.0.744"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:16.0.744"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-neoforge:16.0.744"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:17.0.789"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:17.0.789"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-neoforge:17.0.789"
 }
 
 processResources {
