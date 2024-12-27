@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.Slice;
 public abstract class BlocksMixin {
 
     @Redirect(method = "<clinit>", slice = @Slice(from = @At(value = "CONSTANT", args = "stringValue=composter")), at = @At(value = "NEW", target = "net/minecraft/world/level/block/ComposterBlock", ordinal = 0))
-    private static ComposterBlock redirectComposter(Properties properties) {
+    private static ComposterBlock replaceComposter(Properties properties) {
         return new ContainerComposterBlock(Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(0.6F).sound(SoundType.WOOD).ignitedByLava());
     }
 
