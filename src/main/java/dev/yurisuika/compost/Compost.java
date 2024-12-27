@@ -7,7 +7,7 @@ import dev.yurisuika.compost.server.commands.CompostCommand;
 import dev.yurisuika.compost.util.Network;
 import dev.yurisuika.compost.util.Validate;
 import dev.yurisuika.compost.util.config.Config;
-import dev.yurisuika.compost.world.level.block.entity.ContainerComposterBlockEntity;
+import dev.yurisuika.compost.world.level.block.entity.CompostBlockEntityType;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -18,20 +18,11 @@ import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public class Compost implements ModInitializer {
 
-    public static BlockEntityType<ContainerComposterBlockEntity> COMPOSTER;
-
     public static void registerBlockEntityTypes() {
-        COMPOSTER = Registry.register(Registry.BLOCK_ENTITY_TYPE, ResourceLocation.tryParse("compost:composter"), BlockEntityType.Builder.of(ContainerComposterBlockEntity::new, Blocks.COMPOSTER).build(null));
-    }
-
-    public static void registerServerEvents() {
-        ServerLifecycleEvents.SERVER_STARTED.register(Validate::checkLevels);
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> Network.sendProduce(handler.player.getLevel(), handler.player));
+        Registry.register(Registry.BLOCK_ENTITY_TYPE, ResourceLocation.tryParse("compost:composter"), CompostBlockEntityType.COMPOSTER);
     }
 
     public static void registerArgumentTypes() {
@@ -42,26 +33,35 @@ public class Compost implements ModInitializer {
         CommandRegistrationCallback.EVENT.register(CompostCommand::register);
     }
 
+    public static void registerLevelValidation() {
+        ServerLifecycleEvents.SERVER_STARTED.register(Validate::checkLevels);
+    }
+
+    public static void registerJoinPacket() {
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> Network.sendProduce(handler.player.getLevel(), handler.player));
+    }
+
     @Override
     public void onInitialize() {
         Config.loadConfig();
 
         registerBlockEntityTypes();
-        registerServerEvents();
         registerArgumentTypes();
         registerCommands();
+        registerLevelValidation();
+        registerJoinPacket();
     }
 
     public static class Client implements ClientModInitializer {
 
-        public static void registerGlobalReceivers() {
+        public static void registerClientReceivers() {
             ClientPlayNetworking.registerGlobalReceiver(ClientboundProducePacket.ID, ClientboundProducePacket::handle);
             ClientPlayNetworking.registerGlobalReceiver(ClientboundResetPacket.ID, ClientboundResetPacket::handle);
         }
 
         @Override
         public void onInitializeClient() {
-            registerGlobalReceivers();
+            registerClientReceivers();
         }
 
     }
