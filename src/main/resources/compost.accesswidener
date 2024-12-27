@@ -1,1 +1,2 @@
-accessWidener v1 named
+accessWidener v2 named
+transitive-accessible method net/minecraft/world/level/block/entity/BlockEntityType <init> (Lnet/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier;Ljava/util/Set;)V

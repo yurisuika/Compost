@@ -1,6 +1,5 @@
 package dev.yurisuika.compost.world.level.block.entity;
 
-import dev.yurisuika.compost.Compost;
 import dev.yurisuika.compost.mixin.world.level.block.ComposterBlockInvoker;
 import dev.yurisuika.compost.world.level.block.ContainerComposterBlock;
 import net.minecraft.core.BlockPos;
@@ -26,7 +25,7 @@ public class ContainerComposterBlockEntity extends RandomizableContainerBlockEnt
     public NonNullList<ItemStack> items = NonNullList.withSize(27 + 1, ItemStack.EMPTY);
 
     public ContainerComposterBlockEntity(BlockPos pos, BlockState state) {
-        super(Compost.COMPOSTER, pos, state);
+        super(CompostBlockEntityType.COMPOSTER, pos, state);
     }
 
     @Override

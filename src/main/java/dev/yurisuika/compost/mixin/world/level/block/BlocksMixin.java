@@ -15,7 +15,7 @@ import java.util.function.Function;
 public abstract class BlocksMixin {
 
     @ModifyArg(method = "<clinit>", slice = @Slice(from = @At(value = "CONSTANT", args = "stringValue=composter")), at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Blocks;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;)Lnet/minecraft/world/level/block/Block;", ordinal = 0), index = 1)
-    private static Function<Properties, Block> mod(Function<Properties, Block> function) {
+    private static Function<Properties, Block> replaceComposter(Function<Properties, Block> function) {
         return ContainerComposterBlock::new;
     }
 
