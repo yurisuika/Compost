@@ -6,8 +6,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "world.level.block.BlocksMixin",
-    "world.level.block.ComposterBlockInvoker",
-    "world.level.block.entity.HopperBlockEntityMixin"
+    "world.level.block.ComposterBlockInvoker"
   ],
   "client": [
     "mods.EMIMixin$EmiCompostingRecipeMixin",

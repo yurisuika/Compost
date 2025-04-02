@@ -1,5 +1,5 @@
 plugins {
-    id "dev.architectury.loom" version "1.7-SNAPSHOT"
+    id "dev.architectury.loom" version "1.10-SNAPSHOT"
     id "maven-publish"
 }
 
@@ -21,16 +21,16 @@ dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings loom.layered() {
         officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-1.21:${project.parchment_version}@zip")
+        parchment("org.parchmentmc.data:parchment-1.21.4:${project.parchment_version}@zip")
     }
     neoForge "net.neoforged:neoforge:${project.neo_version}"
 
     modCompileOnly "dev.emi:emi-neoforge:1.1.18+1.21.1:api"
     modCompileOnly "dev.emi:emi-neoforge:1.1.18+1.21.1"
 
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:17.0.789"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:17.0.789"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-neoforge:17.0.789"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:18.0.800"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:18.0.800"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-neoforge:18.0.800"
 }
 
 processResources {
