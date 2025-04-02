@@ -44,14 +44,13 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
     }
 
     @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moved) {
-        if (!state.is(newState.getBlock())) {
+    public void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean moved) {
+        if (!moved) {
             BlockEntity blockentity = level.getBlockEntity(pos);
             if (blockentity instanceof Container) {
                 Containers.dropContents(level, pos, (Container) blockentity);
                 level.updateNeighbourForOutputSignal(pos, this);
             }
-            super.onRemove(state, level, pos, newState, moved);
         }
     }
 
