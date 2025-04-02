@@ -21,14 +21,14 @@ config = "compost.mixins.json"
 [[dependencies.compost]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.2,)"
+versionRange = "[1.21.2,1.21.4]"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.compost]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.2,)"
+versionRange = "[21.2,21.4]"
 ordering = "NONE"
 side = "BOTH"
 
