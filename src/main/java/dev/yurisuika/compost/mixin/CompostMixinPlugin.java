@@ -17,13 +17,17 @@ public class CompostMixinPlugin implements IMixinConfigPlugin {
             "dev.yurisuika.compost.mixin.mods.EMIMixin$EmiCompostingRecipeMixin", () -> FMLLoader.getLoadingModList().getModFileById("emi") != null
     );
 
+    public static final Map<String, Supplier<Boolean>> NEOFORGE = ImmutableMap.of(
+            "dev.yurisuika.compost.mixin.mods.NeoForgeMixin$VanillaInventoryCodeHooksMixin", () -> FMLLoader.versionInfo().neoForgeVersion().charAt(3) < 4 || Integer.parseInt(FMLLoader.versionInfo().neoForgeVersion().replace("21.4.", "").replace("-beta", "")) < 49
+    );
+
     public static final Map<String, Supplier<Boolean>> ROUGHLYENOUGHITEMS = ImmutableMap.of(
             "dev.yurisuika.compost.mixin.mods.RoughlyEnoughItemsMixin$DefaultClientPluginMixin", () -> FMLLoader.getLoadingModList().getModFileById("roughlyenoughitems") != null
     );
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        return EMI.getOrDefault(mixinClassName, () -> true).get() && ROUGHLYENOUGHITEMS.getOrDefault(mixinClassName, () -> true).get();
+        return EMI.getOrDefault(mixinClassName, () -> true).get() && NEOFORGE.getOrDefault(mixinClassName, () -> true).get() && ROUGHLYENOUGHITEMS.getOrDefault(mixinClassName, () -> true).get();
     }
 
     @Override

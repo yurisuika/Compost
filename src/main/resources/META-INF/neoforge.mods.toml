@@ -28,7 +28,7 @@ side = "BOTH"
 [[dependencies.compost]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.2,21.4]"
+versionRange = "[21.2,)"
 ordering = "NONE"
 side = "BOTH"
 

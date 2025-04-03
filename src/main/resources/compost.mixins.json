@@ -5,6 +5,7 @@
   "refmap": "compost.refmap.json",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "mods.NeoForgeMixin$VanillaInventoryCodeHooksMixin",
     "world.level.block.BlocksMixin",
     "world.level.block.ComposterBlockInvoker"
   ],
