@@ -24,7 +24,7 @@ public record ProducePayload(String item, Double chance, Integer min, Integer ma
     public static void handle(ProducePayload payload, IPayloadContext context) {
         context.enqueueWork(() -> {
             Produce produce = new Produce(payload.item(), payload.chance(), payload.min(), payload.max());
-            Network.getStacks().add(Parse.createItemStack(produce));
+            Network.getStacks().add(Parse.createItemStack(context.player().registryAccess(), produce));
             Network.getProduce().add(produce);
         });
     }
