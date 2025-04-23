@@ -51,7 +51,7 @@ public class Network {
                         buffer.writeInt(produce.getMin());
                         buffer.writeInt(produce.getMax());
                         ServerPlayNetworking.send((ServerPlayer) player, ClientboundProducePacket.ID, buffer);
-                        getStacks().add(Parse.createItemStack(produce));
+                        getStacks().add(Parse.createItemStack(level.getServer().registryAccess(), produce));
                         getProduce().add(produce);
                     });
                 }
