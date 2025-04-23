@@ -44,7 +44,7 @@ public class Network {
                 if (Objects.equals(world.getName(), level.getServer().getWorldData().getLevelName())) {
                     world.getProduce().forEach(produce -> {
                         ServerPlayNetworking.send((ServerPlayer) player, new ClientboundProducePacket(produce.getItem(), produce.getChance(), produce.getMin(), produce.getMax()));
-                        getStacks().add(Parse.createItemStack(produce));
+                        getStacks().add(Parse.createItemStack(level.getServer().registryAccess(), produce));
                         getProduce().add(produce);
                     });
                 }
