@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
@@ -30,7 +31,7 @@ public record ClientboundProducePacket(String item, Double chance, Integer min, 
 
     public static void handle(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buffer, PacketSender sender) {
         Produce produce = new Produce(buffer.readUtf(), buffer.readDouble(), buffer.readInt(), buffer.readInt());
-        Network.getStacks().add(Parse.createItemStack(listener.getLevel().registryAccess(), produce));
+        Network.getStacks().add(Parse.createItemStack(VanillaRegistries.createLookup(), produce));
         Network.getProduce().add(produce);
     }
 
