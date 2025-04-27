@@ -24,7 +24,6 @@ public final class ClientboundResetPacket {
     public static void write(ClientboundResetPacket packet, FriendlyByteBuf buffer) {}
 
     public static void handle(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buffer, PacketSender sender) {
-        Network.setStacks(new ArrayList<>());
         Network.setProduce(new ArrayList<>());
     }
 

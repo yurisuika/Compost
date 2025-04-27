@@ -1,7 +1,6 @@
 package dev.yurisuika.compost.network.protocol.common;
 
 import dev.yurisuika.compost.util.Network;
-import dev.yurisuika.compost.util.Parse;
 import dev.yurisuika.compost.util.config.options.Produce;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
@@ -43,9 +42,7 @@ public final class ClientboundProducePacket {
     }
 
     public static void handle(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buffer, PacketSender sender) {
-        Produce produce = new Produce(buffer.readUtf(), buffer.readDouble(), buffer.readInt(), buffer.readInt());
-        Network.getStacks().add(Parse.createItemStack(produce));
-        Network.getProduce().add(produce);
+        Network.getProduce().add(new Produce(buffer.readUtf(), buffer.readDouble(), buffer.readInt(), buffer.readInt()));
     }
 
     public String item() {

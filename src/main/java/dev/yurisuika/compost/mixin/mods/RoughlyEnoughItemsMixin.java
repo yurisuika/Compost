@@ -1,6 +1,7 @@
 package dev.yurisuika.compost.mixin.mods;
 
 import dev.yurisuika.compost.util.Network;
+import dev.yurisuika.compost.util.Parse;
 import me.shedaniel.rei.plugin.DefaultPlugin;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -23,7 +24,7 @@ public abstract class RoughlyEnoughItemsMixin {
         @ModifyArg(method = "registerRecipeDisplays", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;<init>(Lnet/minecraft/world/level/ItemLike;)V"), index = 0, slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/ComposterBlock;bootStrap()V"), to = @At(value = "INVOKE", target = "Lme/shedaniel/rei/plugin/stripping/DummyAxeItem;getStrippedBlocksMap()Ljava/util/Map;")))
         private ItemLike redirectCompostingOutput(ItemLike item) {
             List<ItemStack> output = new ArrayList<>();
-            Network.getStacks().forEach(stack -> output.add(stack));
+            Network.getProduce().forEach(produce -> output.add(Parse.createItemStack(produce)));
             return output.get(ThreadLocalRandom.current().nextInt(output.size())).getItem();
         }
 
