@@ -30,7 +30,7 @@ public class Network {
             ClientboundResetPacket.CHANNEL.send(new ClientboundResetPacket(), PacketDistributor.PLAYER.with((ServerPlayer) player));
             setProduce(new ArrayList<>());
             Option.getWorlds().forEach(world -> {
-                if (Objects.equals(world.getName(),level.getServer().getWorldData().getLevelName())) {
+                if (Objects.equals(world.getName(), level.getServer().getWorldData().getLevelName())) {
                     world.getProduce().forEach(produce -> {
                         ClientboundProducePacket.CHANNEL.send(new ClientboundProducePacket(produce.getItem(), produce.getChance(), produce.getMin(), produce.getMax()), PacketDistributor.PLAYER.with((ServerPlayer) player));
                         getProduce().add(produce);
