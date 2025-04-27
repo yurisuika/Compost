@@ -1,7 +1,6 @@
 package dev.yurisuika.compost.network.protocol.common;
 
 import dev.yurisuika.compost.util.Network;
-import dev.yurisuika.compost.util.Parse;
 import dev.yurisuika.compost.util.config.options.Produce;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -28,11 +27,7 @@ public record ClientboundProducePacket(String item, Double chance, Integer min, 
     }
 
     public static void handle(ClientboundProducePacket packet, Supplier<NetworkEvent.Context> context) {
-        context.get().enqueueWork(() -> {
-            Produce produce = new Produce(packet.item(), packet.chance(), packet.min(), packet.max());
-            Network.getStacks().add(Parse.createItemStack(context.get().getSender().level().registryAccess(), produce));
-            Network.getProduce().add(produce);
-        });
+        context.get().enqueueWork(() -> Network.getProduce().add(new Produce(packet.item(), packet.chance(), packet.min(), packet.max())));
         context.get().setPacketHandled(true);
     }
 
