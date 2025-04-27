@@ -108,11 +108,13 @@ public class CompostCommand {
                                 .then(Commands.argument("produce", ProduceArgument.produce())
                                         .executes(commandContext -> {
                                             String name = Option.getWorld(commandContext.getSource().getServer().getWorldData().getLevelName()).getName();
-                                            Produce produce = ProduceArgument.getProduce(commandContext, "produce");
+                                            Produce produce = Option.getProduce(name).get(Parse.listItems().indexOf(ProduceArgument.getProduce(commandContext, "produce").getItem()));
 
                                             Component displayName = Parse.createItemStack(commandContext.getSource().registryAccess(), produce).getDisplayName();
 
-                                            Option.removeProduce(name, produce);
+                                            Produce produceToRemove = Option.getProduce(name).get(Parse.listItems().indexOf(produce.getItem()));
+                                            Option.removeProduce(name, produceToRemove);
+//                                            Option.removeProduce(name, produce);
                                             for (ServerPlayer player : commandContext.getSource().getServer().getPlayerList().getPlayers()) {
                                                 Network.sendProduce(commandContext.getSource().getLevel(), player);
                                             }
