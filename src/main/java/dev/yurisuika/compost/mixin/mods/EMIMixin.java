@@ -5,6 +5,8 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import dev.emi.emi.recipe.EmiCompostingRecipe;
 import dev.yurisuika.compost.util.Network;
+import dev.yurisuika.compost.util.Parse;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
@@ -13,6 +15,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public abstract class EMIMixin {
@@ -29,10 +33,12 @@ public abstract class EMIMixin {
 
         @Unique
         private EmiStack getStacks(Random random) {
-            if (Network.getStacks().isEmpty()) {
+            if (Network.getProduce().isEmpty()) {
                 return EmiStack.of(ItemStack.EMPTY);
             } else {
-                ItemStack stack = Network.getStacks().get(random.nextInt(Network.getStacks().size()));
+                List<ItemStack> stacks = new ArrayList<>();
+                Network.getProduce().forEach(produce -> stacks.add(Parse.createItemStack(Minecraft.getInstance().level.registryAccess(), produce)));
+                ItemStack stack = stacks.get(random.nextInt(stacks.size()));
                 return EmiStack.of(stack).setAmount(stack.getCount());
             }
         }

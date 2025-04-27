@@ -16,8 +16,7 @@ public abstract class FabricMixin {
     public abstract static class ItemStorageMixin {
 
         @Redirect(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/fabricmc/fabric/api/lookup/v1/block/BlockApiLookup;registerForBlocks(Lnet/fabricmc/fabric/api/lookup/v1/block/BlockApiLookup$BlockApiProvider;[Lnet/minecraft/world/level/block/Block;)V", ordinal = 0))
-        private static void redirectRegisterForBlocks(BlockApiLookup instance, BlockApiLookup.BlockApiProvider<?, ?> acBlockApiProvider, Block[] blocks) {
-        }
+        private static void redirectRegisterForBlocks(BlockApiLookup instance, BlockApiLookup.BlockApiProvider<?, ?> acBlockApiProvider, Block[] blocks) {}
 
     }
 
