@@ -115,7 +115,7 @@ public class CompostCommand {
                                 .then(Commands.argument("produce", ProduceArgument.produce())
                                         .executes(commandContext -> {
                                             String name = Option.getWorld(commandContext.getSource().getServer().getWorldData().getLevelName()).getName();
-                                            Produce produce = ProduceArgument.getProduce(commandContext, "produce");
+                                            Produce produce = Option.getProduce(name).get(Parse.listItems().indexOf(ProduceArgument.getProduce(commandContext, "produce").getItem()));
 
                                             Component displayName = Parse.createItemStack(produce).getDisplayName();
 
