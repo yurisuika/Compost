@@ -20,7 +20,6 @@ public record ClientboundResetPacket() {
     public void write(FriendlyByteBuf buffer) {}
 
     public static void handle(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buffer, PacketSender sender) {
-        Network.setStacks(new ArrayList<>());
         Network.setProduce(new ArrayList<>());
     }
 
