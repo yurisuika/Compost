@@ -1,7 +1,6 @@
 package dev.yurisuika.compost.network.protocol.common.custom;
 
 import dev.yurisuika.compost.util.Network;
-import dev.yurisuika.compost.util.Parse;
 import dev.yurisuika.compost.util.config.options.Produce;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
@@ -22,11 +21,7 @@ public record ProducePayload(String item, Double chance, Integer min, Integer ma
     }
 
     public static void handle(ProducePayload payload, ClientPlayNetworking.Context context) {
-        context.client().execute(() -> {
-            Produce produce = new Produce(payload.item(), payload.chance(), payload.min(), payload.max());
-            Network.getStacks().add(Parse.createItemStack(context.player().registryAccess(), produce));
-            Network.getProduce().add(produce);
-        });
+        context.client().execute(() -> Network.getProduce().add(new Produce(payload.item(), payload.chance(), payload.min(), payload.max())));
     }
 
 }
