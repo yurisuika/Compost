@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class RoughlyEnoughItemsMixin {
@@ -23,9 +23,13 @@ public abstract class RoughlyEnoughItemsMixin {
 
         @Redirect(method = "registerDisplays", at = @At(value = "INVOKE", target = "Ljava/util/Collections;singletonList(Ljava/lang/Object;)Ljava/util/List;"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/ComposterBlock;bootStrap()V"), to = @At(value = "INVOKE", target = "Lme/shedaniel/rei/plugin/client/DefaultClientPlugin$DummyAxeItem;getStrippedBlocksMap()Ljava/util/Map;")))
         private <T> List<EntryIngredient> redirectCompostingOutput(T o) {
-            EntryIngredient.Builder output = EntryIngredient.builder();
-            Network.getProduce().forEach(produce -> output.add(EntryStacks.of(Parse.createItemStack(produce))));
-            return Collections.singletonList(output.build());
+            List<EntryIngredient> ingredients = new ArrayList<>();
+            Parse.createNetworkCompostOutput(Network.getLevelName()).forEach(compost -> {
+                EntryIngredient.Builder output = EntryIngredient.builder();
+                output.add(EntryStacks.of(compost));
+                ingredients.add(output.build());
+            });
+            return ingredients;
         }
 
     }

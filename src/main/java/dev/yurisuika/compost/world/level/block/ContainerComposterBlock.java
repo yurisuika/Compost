@@ -2,7 +2,6 @@ package dev.yurisuika.compost.world.level.block;
 
 import dev.yurisuika.compost.mixin.world.level.block.ComposterBlockInvoker;
 import dev.yurisuika.compost.util.Parse;
-import dev.yurisuika.compost.util.config.Option;
 import dev.yurisuika.compost.world.level.block.entity.ContainerComposterBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -22,11 +21,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class ContainerComposterBlock extends ComposterBlock implements EntityBlock {
 
@@ -34,12 +31,10 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
         super(properties);
     }
 
-    @Override
     public BlockEntity newBlockEntity(BlockGetter getter) {
         return new ContainerComposterBlockEntity();
     }
 
-    @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moved) {
         if (!state.is(newState.getBlock())) {
             BlockEntity blockentity = level.getBlockEntity(pos);
@@ -51,7 +46,6 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
         }
     }
 
-    @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         int i = state.getValue(LEVEL);
         ItemStack itemStack = player.getItemInHand(hand);
@@ -94,19 +88,13 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
         return blockState;
     }
 
-    @Override
     public void tick(BlockState state, ServerLevel level, BlockPos pos, Random random) {
         if (state.getValue(LEVEL) == 7) {
             ContainerComposterBlockEntity blockEntity = (ContainerComposterBlockEntity) level.getBlockEntity(pos);
-            List<ItemStack> list = new ArrayList<>();
-            Option.getWorld(level.getServer().getWorldData().getLevelName()).getProduce().forEach(produce -> {
-                if (ThreadLocalRandom.current().nextDouble() < produce.getChance()) {
-                    list.add(Parse.createItemStack(produce));
-                }
-            });
-            Collections.shuffle(list);
-            for (ItemStack itemStack : list) {
-                blockEntity.setItem(list.indexOf(itemStack), itemStack);
+            List<ItemStack> compost = Parse.createLocalCompostOutput(level.getServer().getWorldData().getLevelName());
+            Collections.shuffle(compost);
+            for (ItemStack itemStack : compost) {
+                blockEntity.setItem(compost.indexOf(itemStack), itemStack);
             }
             level.setBlock(pos, state.cycle(LEVEL), 3);
             level.playSound(null, pos, SoundEvents.COMPOSTER_READY, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -114,7 +102,6 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
         }
     }
 
-    @Override
     public WorldlyContainer getContainer(BlockState state, LevelAccessor level, BlockPos pos) {
         return (WorldlyContainer) level.getBlockEntity(pos);
     }
