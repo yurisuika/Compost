@@ -9,8 +9,6 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.ArrayList;
-
 public record ClientboundResetPacket() implements FabricPacket {
 
     public static final ResourceLocation ID = ResourceLocation.tryParse("compost:reset");
@@ -20,14 +18,12 @@ public record ClientboundResetPacket() implements FabricPacket {
         this();
     }
 
-    @Override
     public void write(FriendlyByteBuf buffer) {}
 
     public static void handle(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buffer, PacketSender sender) {
-        Network.setProduce(new ArrayList<>());
+        Network.getNetworkCompositions().clear();
     }
 
-    @Override
     public PacketType<ClientboundResetPacket> getType() {
         return TYPE;
     }
