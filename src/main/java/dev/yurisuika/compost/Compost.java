@@ -1,8 +1,11 @@
 package dev.yurisuika.compost;
 
-import dev.yurisuika.compost.commands.arguments.ProduceArgument;
-import dev.yurisuika.compost.network.protocol.common.custom.ProducePayload;
+import dev.yurisuika.compost.commands.arguments.CompositionArgument;
+import dev.yurisuika.compost.commands.arguments.CompositionWorldArgument;
+import dev.yurisuika.compost.commands.arguments.LoadedWorldArgument;
+import dev.yurisuika.compost.network.protocol.common.custom.CompostPayload;
 import dev.yurisuika.compost.network.protocol.common.custom.ResetPayload;
+import dev.yurisuika.compost.network.protocol.common.custom.WorldPayload;
 import dev.yurisuika.compost.server.commands.CompostCommand;
 import dev.yurisuika.compost.util.Network;
 import dev.yurisuika.compost.util.Validate;
@@ -34,13 +37,14 @@ public class Compost {
         }
 
         @SubscribeEvent
-        public static void registerLevelValidation(ServerStartedEvent event) {
-            Validate.checkLevels(event.getServer());
+        public static void registerCompositionValidation(ServerStartedEvent event) {
+            Validate.validateCompositions();
         }
 
         @SubscribeEvent
         public static void registerJoinPacket(PlayerEvent.PlayerLoggedInEvent event) {
-            Network.sendProduce(event.getEntity().level(), event.getEntity());
+            Network.sendCompositions(event.getEntity().level(), event.getEntity());
+            Network.setLevelName(event.getEntity().level().getServer().getWorldData().getLevelName());
         }
 
     }
@@ -55,13 +59,16 @@ public class Compost {
 
         @SubscribeEvent
         public static void registerArgumentTypes(RegisterEvent event) {
-            event.register(Registries.COMMAND_ARGUMENT_TYPE, ResourceLocation.tryParse("compost:produce"), () -> ArgumentTypeInfos.registerByClass(ProduceArgument.class, SingletonArgumentInfo.contextFree(ProduceArgument::produce)));
+            event.register(Registries.COMMAND_ARGUMENT_TYPE, ResourceLocation.tryParse("compost:composition"), () -> ArgumentTypeInfos.registerByClass(CompositionArgument.class, SingletonArgumentInfo.contextFree(CompositionArgument::composition)));
+            event.register(Registries.COMMAND_ARGUMENT_TYPE, ResourceLocation.tryParse("compost:composition_world"), () -> ArgumentTypeInfos.registerByClass(CompositionWorldArgument.class, SingletonArgumentInfo.contextFree(CompositionWorldArgument::compositionWorld)));
+            event.register(Registries.COMMAND_ARGUMENT_TYPE, ResourceLocation.tryParse("compost:loaded_world"), () -> ArgumentTypeInfos.registerByClass(LoadedWorldArgument.class, SingletonArgumentInfo.contextFree(LoadedWorldArgument::loadedWorld)));
         }
 
         @SubscribeEvent
         public static void registerPayloads(RegisterPayloadHandlersEvent event) {
-            event.registrar("1").optional().playToClient(ProducePayload.TYPE, ProducePayload.STREAM_CODEC, ProducePayload::handle);
-            event.registrar("1").optional().playToClient(ResetPayload.TYPE, ResetPayload.STREAM_CODEC, ResetPayload::handle);
+            event.registrar("compost").versioned("1").optional().playToClient(CompostPayload.TYPE, CompostPayload.STREAM_CODEC, CompostPayload::handle);
+            event.registrar("compost").versioned("1").optional().playToClient(WorldPayload.TYPE, WorldPayload.STREAM_CODEC, WorldPayload::handle);
+            event.registrar("compost").versioned("1").optional().playToClient(ResetPayload.TYPE, ResetPayload.STREAM_CODEC, ResetPayload::handle);
         }
 
     }
