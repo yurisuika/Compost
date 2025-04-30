@@ -1,10 +1,14 @@
 {
   "commands.compost.config.reload": "Compost config reloaded",
   "commands.compost.config.reset": "Compost config reset to defaults",
-  "commands.compost.produce.query": "%d: %d%% chance of %s %s",
-  "commands.compost.produce.add": "Added %d%% chance of %s %s",
-  "commands.compost.produce.remove": "Removed %s",
-  "commands.compost.produce.unknown": "Unknown produce '%s'",
+
+  "commands.compost.composition.query": "%s: %d%% chance of %s %s",
+  "commands.compost.composition.add": "Added %s: %d%% chance of %s %s",
+  "commands.compost.composition.remove": "Removed %s: %d%% chance of %s %s",
+  "commands.compost.composition.modify": "Modified %s: %d%% chance of %s %s",
+  "commands.compost.composition.tooltip": "Limited to worlds: %s\nUsed globally if empty!",
+  "commands.compost.composition.unknown": "Unknown composition '%s'",
+  "commands.compost.composition.world.unknown": "Unknown world '%s'",
 
   "container.compost.composter": "Composter"
 }
