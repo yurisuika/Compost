@@ -1,20 +1,21 @@
 package dev.yurisuika.compost.config;
 
-import dev.yurisuika.compost.util.config.options.World;
+import dev.yurisuika.compost.util.config.options.Composition;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 public class Options {
 
-    public List<World> worlds = new ArrayList<>();
+    public Map<String, Composition> compositions = new HashMap<>(1) {{ put("vanilla", new Composition(new Composition.Compost("minecraft:bone_meal", 1.0D, new Composition.Compost.Count(1, 1)), new HashSet<>())); }};
 
-    public List<World> getWorlds() {
-        return worlds;
+    public Map<String, Composition> getCompositions() {
+        return compositions;
     }
 
-    public void setWorlds(List<World> worlds) {
-        this.worlds = worlds;
+    public void setCompositions(Map<String, Composition> compositions) {
+        this.compositions = compositions;
     }
 
 }

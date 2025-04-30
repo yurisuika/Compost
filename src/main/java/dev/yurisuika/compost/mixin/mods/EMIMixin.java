@@ -15,7 +15,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -33,13 +32,12 @@ public abstract class EMIMixin {
 
         @Unique
         private EmiStack getStacks(Random random) {
-            if (Network.getProduce().isEmpty()) {
+            if (Network.getNetworkCompositions().isEmpty()) {
                 return EmiStack.of(ItemStack.EMPTY);
             } else {
-                List<ItemStack> stacks = new ArrayList<>();
-                Network.getProduce().forEach(produce -> stacks.add(Parse.createItemStack(Minecraft.getInstance().level.registryAccess(), produce)));
-                ItemStack stack = stacks.get(random.nextInt(stacks.size()));
-                return EmiStack.of(stack).setAmount(stack.getCount());
+                List<ItemStack> compost = Parse.createNetworkCompostOutput(Minecraft.getInstance().level.registryAccess(), Network.getLevelName());
+                ItemStack itemStack = compost.get(random.nextInt(compost.size()));
+                return EmiStack.of(itemStack).setAmount(itemStack.getCount());
             }
         }
 

@@ -1,49 +1,57 @@
 package dev.yurisuika.compost.api;
 
 import dev.yurisuika.compost.util.config.Option;
-import dev.yurisuika.compost.util.config.options.Produce;
+import dev.yurisuika.compost.util.config.options.Composition;
 
-import java.util.List;
+import java.util.Map;
 
 public class CompostApi {
 
     /**
-     * <p>Retrieves a produce list for the given level name.
+     * <p>Retrieves a map of compositions.
      *
-     * <p>The produce configured for the loaded level is saved as a list that is paired with the name of the respective
-     * level. This level name is matched against the contextual level name upon loading the config. If no match is
-     * found, a new entry is created.
+     * <p>Compost stores its configuration in a map. Each composition is a value to a key, so that the user may easily
+     * identify it. A composition contains both a compost object and a world set. As such, pretty much everything can
+     * be done from this one method.
      *
-     * @param name the given level name {@link String}
-     *
-     * @return a {@link Produce} {@link List} for the given level name
+     * @return a {@link Map} of {@link String} keys and {@link Composition} value
      */
-    public static List<Produce> getProduce(String name) {
-        return Option.getProduce(name);
+    public static Map<String, Composition> getCompositions() {
+        return Option.getCompositions();
     }
 
     /**
-     * <p>Adds a produce to the list for the given level name.
+     * <p>Retrieves a composition.
      *
-     * @param name the given level name {@link String}
-     * @param produce a produce to add {@link Produce}
+     * @param name a key to a named composition {@link String}
      *
-     * @see #getProduce(String)
+     * @return a {@link Composition}
      */
-    public static void addProduce(String name, Produce produce) {
-        Option.addProduce(name, produce);
+    public static Composition getComposition(String name) {
+        return Option.getComposition(name);
     }
 
     /**
-     *<p> Removes a produce from the list for the given level name.
+     * <p>Adds a composition.
      *
-     * @param name the given level name {@link String}
-     * @param produce a produce to add {@link Produce}
+     * @param name a key to a named composition {@link String}
+     * @param composition a composition value {@link Composition}
      *
-     * @see #getProduce(String)
+     * @see #getComposition(String)
      */
-    public static void removeProduce(String name, Produce produce) {
-        Option.removeProduce(name, produce);
+    public static void addComposition(String name, Composition composition) {
+        Option.addComposition(name, composition);
+    }
+
+    /**
+     *<p>Removes a composition.
+     *
+     * @param name a key to a named composition {@link String}
+     *
+     * @see #getComposition(String)
+     */
+    public static void removeComposition(String name) {
+        Option.removeComposition(name);
     }
 
 }
