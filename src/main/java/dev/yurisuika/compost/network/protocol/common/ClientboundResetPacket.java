@@ -7,8 +7,6 @@ import net.neoforged.neoforge.network.NetworkEvent;
 import net.neoforged.neoforge.network.NetworkRegistry;
 import net.neoforged.neoforge.network.simple.SimpleChannel;
 
-import java.util.ArrayList;
-
 public record ClientboundResetPacket() {
 
     public static final ResourceLocation ID = ResourceLocation.tryParse("compost:reset");
@@ -21,7 +19,7 @@ public record ClientboundResetPacket() {
     public static void write(ClientboundResetPacket packet, FriendlyByteBuf buffer) {}
 
     public static void handle(ClientboundResetPacket packet, NetworkEvent.ClientCustomPayloadEvent.Context context) {
-        context.enqueueWork(() -> Network.setProduce(new ArrayList<>()));
+        context.enqueueWork(() -> Network.getNetworkCompositions().clear());
         context.setPacketHandled(true);
     }
 
