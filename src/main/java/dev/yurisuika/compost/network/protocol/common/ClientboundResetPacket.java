@@ -7,7 +7,6 @@ import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 
-import java.util.ArrayList;
 import java.util.function.Supplier;
 
 public record ClientboundResetPacket() {
@@ -22,7 +21,7 @@ public record ClientboundResetPacket() {
     public static void write(ClientboundResetPacket packet, FriendlyByteBuf buffer) {}
 
     public static void handle(ClientboundResetPacket packet, Supplier<NetworkEvent.Context> context) {
-        context.get().enqueueWork(() -> Network.setProduce(new ArrayList<>()));
+        context.get().enqueueWork(() -> Network.getNetworkCompositions().clear());
         context.get().setPacketHandled(true);
     }
 
