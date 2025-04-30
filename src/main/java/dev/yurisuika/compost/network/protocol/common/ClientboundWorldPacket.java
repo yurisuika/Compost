@@ -7,18 +7,21 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-public record ClientboundResetPacket() {
+public record ClientboundWorldPacket(String name, String world) {
 
-    public static final ResourceLocation ID = ResourceLocation.tryParse("compost:reset");
+    public static final ResourceLocation ID = ResourceLocation.tryParse("compost:world");
 
-    public ClientboundResetPacket(FriendlyByteBuf buffer) {
-        this();
+    public ClientboundWorldPacket(FriendlyByteBuf buffer) {
+        this(buffer.readUtf(), buffer.readUtf());
     }
 
-    public void write(FriendlyByteBuf buffer) {}
+    public void write(FriendlyByteBuf buffer) {
+        buffer.writeUtf(name());
+        buffer.writeUtf(world());
+    }
 
     public static void handle(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buffer, PacketSender sender) {
-        Network.getNetworkCompositions().clear();
+        Network.getNetworkCompositions().get(buffer.readUtf()).getWorlds().add(buffer.readUtf());
     }
 
 }
