@@ -1,8 +1,11 @@
 package dev.yurisuika.compost;
 
-import dev.yurisuika.compost.commands.arguments.ProduceArgument;
-import dev.yurisuika.compost.network.protocol.common.ClientboundProducePacket;
+import dev.yurisuika.compost.commands.arguments.CompositionArgument;
+import dev.yurisuika.compost.commands.arguments.CompositionWorldArgument;
+import dev.yurisuika.compost.commands.arguments.LoadedWorldArgument;
+import dev.yurisuika.compost.network.protocol.common.ClientboundCompostPacket;
 import dev.yurisuika.compost.network.protocol.common.ClientboundResetPacket;
+import dev.yurisuika.compost.network.protocol.common.ClientboundWorldPacket;
 import dev.yurisuika.compost.server.commands.CompostCommand;
 import dev.yurisuika.compost.util.Network;
 import dev.yurisuika.compost.util.Validate;
@@ -27,19 +30,22 @@ public class Compost implements ModInitializer {
     }
 
     public static void registerArgumentTypes() {
-        ArgumentTypeRegistry.registerArgumentType(ResourceLocation.tryParse("compost:produce"), ProduceArgument.class, SingletonArgumentInfo.contextFree(ProduceArgument::produce));
+        ArgumentTypeRegistry.registerArgumentType(ResourceLocation.tryParse("compost:composition"), CompositionArgument.class, SingletonArgumentInfo.contextFree(CompositionArgument::composition));
+        ArgumentTypeRegistry.registerArgumentType(ResourceLocation.tryParse("compost:composition_world"), CompositionWorldArgument.class, SingletonArgumentInfo.contextFree(CompositionWorldArgument::compositionWorld));
+        ArgumentTypeRegistry.registerArgumentType(ResourceLocation.tryParse("compost:loaded_world"), LoadedWorldArgument.class, SingletonArgumentInfo.contextFree(LoadedWorldArgument::loadedWorld));
     }
 
     public static void registerCommands() {
         CommandRegistrationCallback.EVENT.register(CompostCommand::register);
     }
 
-    public static void registerLevelValidation() {
-        ServerLifecycleEvents.SERVER_STARTED.register(Validate::checkLevels);
+    public static void registerCompositionValidation() {
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> Validate.validateCompositions());
     }
 
     public static void registerJoinPacket() {
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> Network.sendProduce(handler.getPlayer().level(), handler.getPlayer()));
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> Network.sendCompositions(handler.getPlayer().level(), handler.getPlayer()));
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> Network.setLevelName(server.getWorldData().getLevelName()));
     }
 
     @Override
@@ -49,14 +55,15 @@ public class Compost implements ModInitializer {
         registerBlockEntityTypes();
         registerArgumentTypes();
         registerCommands();
-        registerLevelValidation();
+        registerCompositionValidation();
         registerJoinPacket();
     }
 
     public static class Client implements ClientModInitializer {
 
         public static void registerClientReceivers() {
-            ClientPlayNetworking.registerGlobalReceiver(ClientboundProducePacket.ID, ClientboundProducePacket::handle);
+            ClientPlayNetworking.registerGlobalReceiver(ClientboundCompostPacket.ID, ClientboundCompostPacket::handle);
+            ClientPlayNetworking.registerGlobalReceiver(ClientboundWorldPacket.ID, ClientboundWorldPacket::handle);
             ClientPlayNetworking.registerGlobalReceiver(ClientboundResetPacket.ID, ClientboundResetPacket::handle);
         }
 
