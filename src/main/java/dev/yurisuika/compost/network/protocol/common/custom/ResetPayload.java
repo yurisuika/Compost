@@ -7,8 +7,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.ArrayList;
-
 public record ResetPayload() implements CustomPacketPayload {
 
     public static final ResourceLocation ID = ResourceLocation.tryParse("compost:reset");
@@ -21,7 +19,7 @@ public record ResetPayload() implements CustomPacketPayload {
     }
 
     public static void handle(ResetPayload payload, ClientPlayNetworking.Context context) {
-        context.client().execute(() -> Network.setProduce(new ArrayList<>()));
+        context.client().execute(() -> Network.getNetworkCompositions().clear());
     }
 
 }
