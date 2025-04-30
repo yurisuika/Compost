@@ -7,11 +7,9 @@ import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.network.ChannelBuilder;
 import net.minecraftforge.network.SimpleChannel;
 
-import java.util.ArrayList;
-
 public record ClientboundResetPacket() {
 
-    public static final ResourceLocation ID = ResourceLocation.tryParse("compost:reset");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath("compost", "reset");
     public static final SimpleChannel CHANNEL = ChannelBuilder.named(ID).optional().networkProtocolVersion(1).acceptedVersions((status, version) -> true).simpleChannel();
 
     public ClientboundResetPacket(FriendlyByteBuf buffer) {
@@ -21,7 +19,7 @@ public record ClientboundResetPacket() {
     public static void write(ClientboundResetPacket packet, FriendlyByteBuf buffer) {}
 
     public static void handle(ClientboundResetPacket packet, CustomPayloadEvent.Context context) {
-        context.enqueueWork(() -> Network.setProduce(new ArrayList<>()));
+        context.enqueueWork(() -> Network.getNetworkCompositions().clear());
         context.setPacketHandled(true);
     }
 
