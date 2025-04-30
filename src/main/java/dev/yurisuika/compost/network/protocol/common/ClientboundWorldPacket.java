@@ -9,19 +9,22 @@ import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
 
 import java.util.function.Supplier;
 
-public record ClientboundResetPacket() {
+public record ClientboundWorldPacket(String name, String world) {
 
-    public static final ResourceLocation ID = ResourceLocation.tryParse("compost:reset");
+    public static final ResourceLocation ID = ResourceLocation.tryParse("compost:world");
     public static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder.named(ID).networkProtocolVersion(() -> "1").clientAcceptedVersions(s -> true).serverAcceptedVersions(s -> true).simpleChannel();
 
-    public ClientboundResetPacket(FriendlyByteBuf buffer) {
-        this();
+    public ClientboundWorldPacket(FriendlyByteBuf buffer) {
+        this(buffer.readUtf(), buffer.readUtf());
     }
 
-    public static void write(ClientboundResetPacket packet, FriendlyByteBuf buffer) {}
+    public static void write(ClientboundWorldPacket packet, FriendlyByteBuf buffer) {
+        buffer.writeUtf(packet.name());
+        buffer.writeUtf(packet.world());
+    }
 
-    public static void handle(ClientboundResetPacket packet, Supplier<NetworkEvent.Context> context) {
-        context.get().enqueueWork(() -> Network.getNetworkCompositions().clear());
+    public static void handle(ClientboundWorldPacket packet, Supplier<NetworkEvent.Context> context) {
+        context.get().enqueueWork(() -> Network.getNetworkCompositions().get(packet.name()).getWorlds().add(packet.world()));
         context.get().setPacketHandled(true);
     }
 

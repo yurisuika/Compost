@@ -1,8 +1,11 @@
 package dev.yurisuika.compost;
 
-import dev.yurisuika.compost.commands.arguments.ProduceArgument;
-import dev.yurisuika.compost.network.protocol.common.ClientboundProducePacket;
+import dev.yurisuika.compost.commands.arguments.CompositionArgument;
+import dev.yurisuika.compost.commands.arguments.CompositionWorldArgument;
+import dev.yurisuika.compost.commands.arguments.LoadedWorldArgument;
+import dev.yurisuika.compost.network.protocol.common.ClientboundCompostPacket;
 import dev.yurisuika.compost.network.protocol.common.ClientboundResetPacket;
+import dev.yurisuika.compost.network.protocol.common.ClientboundWorldPacket;
 import dev.yurisuika.compost.server.commands.CompostCommand;
 import dev.yurisuika.compost.util.Network;
 import dev.yurisuika.compost.util.Validate;
@@ -32,13 +35,14 @@ public class Compost {
         }
 
         @SubscribeEvent
-        public static void registerLevelValidation(FMLServerStartedEvent event) {
-            Validate.checkLevels(event.getServer());
+        public static void registerCompositionValidation(FMLServerStartedEvent event) {
+            Validate.validateCompositions();
         }
 
         @SubscribeEvent
         public static void registerJoinPacket(PlayerEvent.PlayerLoggedInEvent event) {
-            Network.sendProduce(event.getPlayer().getCommandSenderWorld(), event.getPlayer());
+            Network.sendCompositions(event.getPlayer().getCommandSenderWorld(), event.getPlayer());
+            Network.setLevelName(event.getPlayer().getCommandSenderWorld().getServer().getWorldData().getLevelName());
         }
 
     }
@@ -53,12 +57,15 @@ public class Compost {
 
         @SubscribeEvent
         public static void registerArgumentTypes(FMLCommonSetupEvent event) {
-            ArgumentTypes.register("compost:produce", ProduceArgument.class, new EmptyArgumentSerializer<>(ProduceArgument::produce));
+            ArgumentTypes.register("compost:composition", CompositionArgument.class, new EmptyArgumentSerializer<>(CompositionArgument::composition));
+            ArgumentTypes.register("compost:composition_world", CompositionWorldArgument.class, new EmptyArgumentSerializer<>(CompositionWorldArgument::compositionWorld));
+            ArgumentTypes.register("compost:loaded_world", LoadedWorldArgument.class, new EmptyArgumentSerializer<>(LoadedWorldArgument::loadedWorld));
         }
 
         @SubscribeEvent
         public static void registerPackets(FMLCommonSetupEvent event) {
-            ClientboundProducePacket.CHANNEL.registerMessage(1, ClientboundProducePacket.class, ClientboundProducePacket::write, ClientboundProducePacket::new, ClientboundProducePacket::handle);
+            ClientboundCompostPacket.CHANNEL.registerMessage(1, ClientboundCompostPacket.class, ClientboundCompostPacket::write, ClientboundCompostPacket::new, ClientboundCompostPacket::handle);
+            ClientboundWorldPacket.CHANNEL.registerMessage(1, ClientboundWorldPacket.class, ClientboundWorldPacket::write, ClientboundWorldPacket::new, ClientboundWorldPacket::handle);
             ClientboundResetPacket.CHANNEL.registerMessage(1, ClientboundResetPacket.class, ClientboundResetPacket::write, ClientboundResetPacket::new, ClientboundResetPacket::handle);
         }
 
