@@ -7,8 +7,6 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.ArrayList;
-
 public final class ClientboundResetPacket {
 
     public static final ResourceLocation ID = ResourceLocation.tryParse("compost:reset");
@@ -24,7 +22,7 @@ public final class ClientboundResetPacket {
     public static void write(ClientboundResetPacket packet, FriendlyByteBuf buffer) {}
 
     public static void handle(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buffer, PacketSender sender) {
-        Network.setProduce(new ArrayList<>());
+        Network.getNetworkCompositions().clear();
     }
 
 }
