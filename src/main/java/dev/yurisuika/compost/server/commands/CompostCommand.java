@@ -212,6 +212,7 @@ public class CompostCommand {
     public static int resetConfig(CommandSourceStack source) {
         Option.getCompositions().clear();
         Option.getCompositions().put("vanilla", new Composition(new Composition.Compost("minecraft:bone_meal", 1.0D, new Composition.Compost.Count(1, 1)), new HashSet<>()));
+        Option.getCompositions().put("compost", new Composition(new Composition.Compost("minecraft:dirt", 1.0D, new Composition.Compost.Count(1, 1)), new HashSet<>()));
         Validate.validateCompositions();
 
         sendCompositions(source);
