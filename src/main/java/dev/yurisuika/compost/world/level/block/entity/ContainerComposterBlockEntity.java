@@ -59,8 +59,8 @@ public class ContainerComposterBlockEntity extends RandomizableContainerBlockEnt
         if (slot == 27) {
             stack.setCount(1);
             setChanged();
-        } else if (stack.getCount() > getMaxStackSize()) {
-            stack.setCount(getMaxStackSize());
+        } else if (stack.getCount() > 64) {
+            stack.setCount(64);
         }
     }
 
@@ -89,7 +89,7 @@ public class ContainerComposterBlockEntity extends RandomizableContainerBlockEnt
     }
 
     public int getMaxStackSize() {
-        return 64;
+        return 1;
     }
 
     public int[] getSlotsForFace(Direction side) {
