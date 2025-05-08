@@ -38,22 +38,24 @@ public class Parse {
         }
     }
 
-    public static List<ItemStack> createCompostOutput(HolderLookup.Provider provider, Map<String, Composition> compositions, String level) {
+    public static List<ItemStack> createCompostOutput(HolderLookup.Provider provider, Map<String, Composition> compositions, String level, boolean always) {
         List<ItemStack> compost = new ArrayList<>();
         compositions.forEach((name, composition) -> {
             if (composition.getWorlds().isEmpty() || composition.getWorlds().contains(level)) {
-                compost.add(createCompost(provider, composition));
+                if (always || ThreadLocalRandom.current().nextDouble() < composition.getCompost().getChance()) {
+                    compost.add(createCompost(provider, composition));
+                }
             }
         });
         return compost;
     }
 
     public static List<ItemStack> createLocalCompostOutput(HolderLookup.Provider provider, String level) {
-        return createCompostOutput(provider, Option.getCompositions(), level);
+        return createCompostOutput(provider, Option.getCompositions(), level, false);
     }
 
     public static List<ItemStack> createNetworkCompostOutput(HolderLookup.Provider provider, String level) {
-        return createCompostOutput(provider, Network.getNetworkCompositions(), level);
+        return createCompostOutput(provider, Network.getNetworkCompositions(), level, true);
     }
 
 }
