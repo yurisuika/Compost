@@ -7,6 +7,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import dev.yurisuika.compost.commands.arguments.CompositionArgument;
 import dev.yurisuika.compost.commands.arguments.CompositionWorldArgument;
 import dev.yurisuika.compost.commands.arguments.LoadedWorldArgument;
+import dev.yurisuika.compost.config.Options;
 import dev.yurisuika.compost.util.Network;
 import dev.yurisuika.compost.util.Parse;
 import dev.yurisuika.compost.util.Validate;
