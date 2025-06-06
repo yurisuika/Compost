@@ -28,6 +28,7 @@ public class CompositionWorldArgument implements ArgumentType<String> {
         return context.getArgument(id, String.class);
     }
 
+    @Override
     public String parse(StringReader reader) throws CommandSyntaxException {
         final String world = reader.getRemaining();
         reader.setCursor(reader.getTotalLength());
@@ -38,10 +39,12 @@ public class CompositionWorldArgument implements ArgumentType<String> {
         }
     }
 
+    @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandContext, SuggestionsBuilder suggestionsBuilder) {
         return SharedSuggestionProvider.suggest(Network.getNetworkCompositions().get(CompositionArgument.getName()).getWorlds(), suggestionsBuilder);
     }
 
+    @Override
     public Collection<String> getExamples() {
         return List.of("\"New World\"", "world", "404");
     }
