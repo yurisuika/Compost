@@ -35,10 +35,12 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
         super(properties);
     }
 
+    @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new ContainerComposterBlockEntity(pos, state);
     }
 
+    @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moved) {
         if (!state.is(newState.getBlock())) {
             BlockEntity blockentity = level.getBlockEntity(pos);
@@ -50,15 +52,14 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
         }
     }
 
+    @Override
     public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         int i = state.getValue(LEVEL);
         if (i < 8 && COMPOSTABLES.containsKey(stack.getItem())) {
             if (i < 7 && !level.isClientSide) {
                 level.levelEvent(LevelEvent.COMPOSTER_FILL, pos, state != ComposterBlockInvoker.invokeAddItem(player, state, level, pos, stack) ? 1 : 0);
                 player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
-                if (!player.getAbilities().instabuild) {
-                    stack.shrink(1);
-                }
+                stack.consume(1, player);
             }
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
         } else {
@@ -66,6 +67,7 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
         }
     }
 
+    @Override
     public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (state.getValue(LEVEL) == 8) {
             extractProduce(player, state, level, pos);
@@ -97,6 +99,7 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
         return blockState;
     }
 
+    @Override
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (state.getValue(LEVEL) == 7) {
             ContainerComposterBlockEntity blockEntity = (ContainerComposterBlockEntity) level.getBlockEntity(pos);
@@ -111,6 +114,7 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
         }
     }
 
+    @Override
     public WorldlyContainer getContainer(BlockState state, LevelAccessor level, BlockPos pos) {
         return (WorldlyContainer) level.getBlockEntity(pos);
     }
