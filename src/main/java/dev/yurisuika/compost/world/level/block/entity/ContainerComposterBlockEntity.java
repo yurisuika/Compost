@@ -28,6 +28,7 @@ public class ContainerComposterBlockEntity extends RandomizableContainerBlockEnt
         super(CompostBlockEntityType.COMPOSTER, pos, state);
     }
 
+    @Override
     public void loadAdditional(CompoundTag tag, HolderLookup.Provider holderProvider) {
         super.loadAdditional(tag, holderProvider);
         if (!trySaveLootTable(tag)) {
@@ -35,6 +36,7 @@ public class ContainerComposterBlockEntity extends RandomizableContainerBlockEnt
         }
     }
 
+    @Override
     public void saveAdditional(CompoundTag tag, HolderLookup.Provider holderProvider) {
         super.saveAdditional(tag, holderProvider);
         if (!tryLoadLootTable(tag)) {
@@ -42,18 +44,22 @@ public class ContainerComposterBlockEntity extends RandomizableContainerBlockEnt
         }
     }
 
+    @Override
     public ItemStack getItem(int index) {
         return items.get(index);
     }
 
+    @Override
     public ItemStack removeItem(int slot, int amount) {
         return ContainerHelper.removeItem(items, slot, amount);
     }
 
+    @Override
     public ItemStack removeItemNoUpdate(int slot) {
         return ContainerHelper.takeItem(items, slot);
     }
 
+    @Override
     public void setItem(int slot, ItemStack stack) {
         items.set(slot, stack);
         if (slot == 27) {
@@ -64,50 +70,62 @@ public class ContainerComposterBlockEntity extends RandomizableContainerBlockEnt
         }
     }
 
+    @Override
     public void clearContent() {
         items.clear();
     }
 
+    @Override
     public int getContainerSize() {
         return items.size();
     }
 
+    @Override
     public NonNullList<ItemStack> getItems() {
         return items;
     }
 
+    @Override
     public void setItems(NonNullList<ItemStack> list) {
         items = list;
     }
 
+    @Override
     public Component getDefaultName() {
         return Component.translatable("container.compost.composter");
     }
 
+    @Override
     public AbstractContainerMenu createMenu(int syncId, Inventory inventory) {
         return ChestMenu.threeRows(syncId, inventory, this);
     }
 
+    @Override
     public int getMaxStackSize() {
         return 1;
     }
 
+    @Override
     public int[] getSlotsForFace(Direction side) {
         return side == Direction.DOWN ? IntStream.range(0, 27).toArray() : new int[]{27};
     }
 
+    @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
         return getBlockState().getValue(ContainerComposterBlock.LEVEL) < 7 && slot == 27 && getItem(27).isEmpty() && ContainerComposterBlock.COMPOSTABLES.containsKey(stack.getItem());
     }
 
+    @Override
     public boolean canPlaceItemThroughFace(int slot, ItemStack stack, Direction dir) {
         return dir == Direction.UP && getBlockState().getValue(ContainerComposterBlock.LEVEL) < 7 && slot == 27 && getItem(27).isEmpty() && ContainerComposterBlock.COMPOSTABLES.containsKey(stack.getItem());
     }
 
+    @Override
     public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
         return dir == Direction.DOWN && slot < 27 && !stack.isEmpty();
     }
 
+    @Override
     public void setChanged() {
         BlockState state = getBlockState();
         ItemStack input = getItem(27);
