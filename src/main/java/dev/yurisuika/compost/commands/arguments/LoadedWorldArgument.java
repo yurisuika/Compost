@@ -26,16 +26,19 @@ public class LoadedWorldArgument implements ArgumentType<String> {
         return context.getArgument(id, String.class);
     }
 
+    @Override
     public String parse(StringReader reader) {
         final String world = reader.getRemaining();
         reader.setCursor(reader.getTotalLength());
         return world;
     }
 
+    @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandContext, SuggestionsBuilder suggestionsBuilder) {
         return SharedSuggestionProvider.suggest(new HashSet<>() {{ add(Network.getLevelName()); }}, suggestionsBuilder);
     }
 
+    @Override
     public Collection<String> getExamples() {
         return List.of("\"New World\"", "world", "404");
     }

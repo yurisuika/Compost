@@ -31,6 +31,7 @@ public class CompositionArgument implements ArgumentType<String> {
         return context.getArgument(id, String.class);
     }
 
+    @Override
     public String parse(StringReader reader) throws CommandSyntaxException {
         String name = reader.readString();
         if (Network.getNetworkCompositions().containsKey(name)) {
@@ -41,10 +42,12 @@ public class CompositionArgument implements ArgumentType<String> {
         }
     }
 
+    @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandContext, SuggestionsBuilder suggestionsBuilder) {
         return SharedSuggestionProvider.suggest(Parse.listNetworkNames(), suggestionsBuilder);
     }
 
+    @Override
     public Collection<String> getExamples() {
         return List.of("vanilla", "\"Just Dirt\"", "compost");
     }
