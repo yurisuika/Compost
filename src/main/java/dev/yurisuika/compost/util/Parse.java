@@ -16,20 +16,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Parse {
 
-    public static List<String> listNames(Map<String, Composition> compositions) {
-        List<String> names = new ArrayList<>();
-        compositions.forEach((name, composition) -> names.add(name));
-        return names;
-    }
-
-    public static List<String> listLocalNames() {
-        return listNames(Option.getCompositions());
-    }
-
-    public static List<String> listNetworkNames() {
-        return listNames(Network.getNetworkCompositions());
-    }
-
     public static ItemStack createCompost(HolderLookup.Provider provider, Composition composition) {
         try {
             return new ItemArgument(Commands.createValidationContext(provider)).parse(new StringReader(composition.getCompost().getItem())).createItemStack(ThreadLocalRandom.current().nextInt(composition.getCompost().getCount().getMin(), composition.getCompost().getCount().getMax() + 1), true);
