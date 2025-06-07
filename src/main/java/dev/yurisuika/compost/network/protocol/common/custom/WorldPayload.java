@@ -20,7 +20,7 @@ public record WorldPayload(String name, String world) implements CustomPacketPay
     }
 
     public static void handle(WorldPayload payload, ClientPlayNetworking.Context context) {
-        context.client().execute(() -> Network.getNetworkCompositions().get(payload.name()).getWorlds().add(payload.world()));
+        context.client().execute(() -> Network.COMPOSITIONS.get(payload.name()).getWorlds().add(payload.world()));
     }
 
 }

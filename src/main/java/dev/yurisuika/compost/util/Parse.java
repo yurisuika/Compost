@@ -16,7 +16,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Parse {
 
-    public static ItemStack createCompost(HolderLookup.Provider provider, Composition composition) {
+    public static ItemStack createItemStack(HolderLookup.Provider provider, Composition composition) {
         try {
             return new ItemArgument(Commands.createValidationContext(provider)).parse(new StringReader(composition.getCompost().getItem())).createItemStack(ThreadLocalRandom.current().nextInt(composition.getCompost().getCount().getMin(), composition.getCompost().getCount().getMax() + 1), true);
         } catch (CommandSyntaxException e) {
@@ -24,24 +24,24 @@ public class Parse {
         }
     }
 
-    public static List<ItemStack> createCompostOutput(HolderLookup.Provider provider, Map<String, Composition> compositions, String level, boolean always) {
+    public static List<ItemStack> createCompost(HolderLookup.Provider provider, Map<String, Composition> compositions, String level, boolean always) {
         List<ItemStack> compost = new ArrayList<>();
         compositions.forEach((name, composition) -> {
             if (composition.getWorlds().isEmpty() || composition.getWorlds().contains(level)) {
                 if (always || ThreadLocalRandom.current().nextDouble() < composition.getCompost().getChance()) {
-                    compost.add(createCompost(provider, composition));
+                    compost.add(createItemStack(provider, composition));
                 }
             }
         });
         return compost;
     }
 
-    public static List<ItemStack> createLocalCompostOutput(HolderLookup.Provider provider, String level) {
-        return createCompostOutput(provider, Option.getCompositions(), level, false);
+    public static List<ItemStack> createLocalCompost(HolderLookup.Provider provider, String level) {
+        return createCompost(provider, Option.getCompositions(), level, false);
     }
 
-    public static List<ItemStack> createNetworkCompostOutput(HolderLookup.Provider provider, String level) {
-        return createCompostOutput(provider, Network.getNetworkCompositions(), level, true);
+    public static List<ItemStack> createNetworkCompost(HolderLookup.Provider provider, String level) {
+        return createCompost(provider, Network.COMPOSITIONS, level, true);
     }
 
 }
