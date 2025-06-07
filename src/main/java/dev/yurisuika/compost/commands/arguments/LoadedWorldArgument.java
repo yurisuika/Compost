@@ -11,7 +11,7 @@ import net.minecraft.commands.SharedSuggestionProvider;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 
 public class LoadedWorldArgument implements ArgumentType<String> {
@@ -35,7 +35,7 @@ public class LoadedWorldArgument implements ArgumentType<String> {
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandContext, SuggestionsBuilder suggestionsBuilder) {
-        return SharedSuggestionProvider.suggest(new HashSet<String>() {{ add(Network.getLevelName()); }}, suggestionsBuilder);
+        return SharedSuggestionProvider.suggest(Collections.singletonList(Network.getLevelName()), suggestionsBuilder);
     }
 
     @Override
