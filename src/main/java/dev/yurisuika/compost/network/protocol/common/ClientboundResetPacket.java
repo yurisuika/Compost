@@ -18,7 +18,7 @@ public record ClientboundResetPacket() {
     public void write(FriendlyByteBuf buffer) {}
 
     public static void handle(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buffer, PacketSender sender) {
-        Network.getNetworkCompositions().clear();
+        Network.COMPOSITIONS.clear();
     }
 
 }
