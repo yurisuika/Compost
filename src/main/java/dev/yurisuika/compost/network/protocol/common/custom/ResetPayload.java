@@ -19,7 +19,7 @@ public record ResetPayload() implements CustomPacketPayload {
     }
 
     public static void handle(ResetPayload payload, ClientPlayNetworking.Context context) {
-        context.client().execute(() -> Network.getNetworkCompositions().clear());
+        context.client().execute(() -> Network.COMPOSITIONS.clear());
     }
 
 }
