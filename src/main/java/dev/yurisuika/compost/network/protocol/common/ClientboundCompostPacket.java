@@ -50,7 +50,7 @@ public final class ClientboundCompostPacket {
     }
 
     public static void handle(ClientboundCompostPacket packet, Supplier<NetworkEvent.Context> context) {
-        context.get().enqueueWork(() -> Network.getNetworkCompositions().put(packet.name(), new Composition(new Composition.Compost(packet.item(), packet.chance(), new Composition.Compost.Count(packet.min(), packet.max())), new HashSet<>())));
+        context.get().enqueueWork(() -> Network.COMPOSITIONS.put(packet.name(), new Composition(new Composition.Compost(packet.item(), packet.chance(), new Composition.Compost.Count(packet.min(), packet.max())), new HashSet<>())));
         context.get().setPacketHandled(true);
     }
 

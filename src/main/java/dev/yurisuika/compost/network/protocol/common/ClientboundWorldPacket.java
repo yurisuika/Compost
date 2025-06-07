@@ -36,7 +36,7 @@ public final class ClientboundWorldPacket {
     }
 
     public static void handle(ClientboundWorldPacket packet, Supplier<NetworkEvent.Context> context) {
-        context.get().enqueueWork(() -> Network.getNetworkCompositions().get(packet.name()).getWorlds().add(packet.world()));
+        context.get().enqueueWork(() -> Network.COMPOSITIONS.get(packet.name()).getWorlds().add(packet.world()));
         context.get().setPacketHandled(true);
     }
 

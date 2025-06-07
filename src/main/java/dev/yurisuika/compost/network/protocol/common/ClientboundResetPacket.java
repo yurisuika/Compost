@@ -25,7 +25,7 @@ public final class ClientboundResetPacket {
     public static void write(ClientboundResetPacket packet, FriendlyByteBuf buffer) {}
 
     public static void handle(ClientboundResetPacket packet, Supplier<NetworkEvent.Context> context) {
-        context.get().enqueueWork(() -> Network.getNetworkCompositions().clear());
+        context.get().enqueueWork(() -> Network.COMPOSITIONS.clear());
         context.get().setPacketHandled(true);
     }
 
