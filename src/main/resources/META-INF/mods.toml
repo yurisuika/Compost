@@ -28,17 +28,3 @@ mandatory = true
 versionRange = "[55,)"
 ordering = "NONE"
 side = "BOTH"
-
-[[dependencies.compost]]
-modId = "emi"
-mandatory = false
-versionRange = "[1,)"
-ordering = "NONE"
-side = "CLIENT"
-
-[[dependencies.compost]]
-modId = "roughlyenoughitems"
-mandatory = false
-versionRange = "[17,)"
-ordering = "NONE"
-side = "CLIENT"
