@@ -18,7 +18,7 @@ import java.util.Map;
 public class Network {
 
     public static String levelName;
-    public static Map<String, Composition> networkCompositions = new HashMap<>();
+    public final static Map<String, Composition> COMPOSITIONS = new HashMap<>();
 
     public static String getLevelName() {
         return levelName;
@@ -28,18 +28,10 @@ public class Network {
         Network.levelName = levelName;
     }
 
-    public static Map<String, Composition> getNetworkCompositions() {
-        return networkCompositions;
-    }
-
-    public static void setNetworkCompositions(Map<String, Composition> networkCompositions) {
-        Network.networkCompositions = networkCompositions;
-    }
-
     public static void sendCompositions(Level level, Player player) {
         if (!level.isClientSide()) {
             ServerPlayNetworking.send((ServerPlayer) player, ClientboundResetPacket.ID, PacketByteBufs.empty());
-            getNetworkCompositions().clear();
+            COMPOSITIONS.clear();
             Option.getCompositions().forEach((name, composition) -> {
                 FriendlyByteBuf compostBuffer = PacketByteBufs.create();
                 compostBuffer.writeUtf(name);
@@ -54,7 +46,7 @@ public class Network {
                     worldBuffer.writeUtf(composition.getCompost().getItem());
                     ServerPlayNetworking.send((ServerPlayer) player, ClientboundWorldPacket.ID, worldBuffer);
                 });
-                getNetworkCompositions().put(name, composition);
+                COMPOSITIONS.put(name, composition);
             });
         }
     }
