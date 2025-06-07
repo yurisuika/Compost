@@ -23,7 +23,7 @@ public record CompostPayload(String name, String item, Double chance, Integer mi
     }
 
     public static void handle(CompostPayload payload, IPayloadContext context) {
-        context.enqueueWork(() -> Network.getNetworkCompositions().put(payload.name(), new Composition(new Composition.Compost(payload.item(), payload.chance(), new Composition.Compost.Count(payload.min(), payload.max())), new HashSet<>())));
+        context.enqueueWork(() -> Network.COMPOSITIONS.put(payload.name(), new Composition(new Composition.Compost(payload.item(), payload.chance(), new Composition.Compost.Count(payload.min(), payload.max())), new HashSet<>())));
     }
 
 }
