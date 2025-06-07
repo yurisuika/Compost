@@ -32,10 +32,10 @@ public abstract class EMIMixin {
 
         @Unique
         private EmiStack getStacks(Random random) {
-            if (Network.getNetworkCompositions().isEmpty()) {
+            if (Network.COMPOSITIONS.isEmpty()) {
                 return EmiStack.of(ItemStack.EMPTY);
             } else {
-                List<ItemStack> compost = Parse.createNetworkCompostOutput(Minecraft.getInstance().level.registryAccess(), Network.getLevelName());
+                List<ItemStack> compost = Parse.createNetworkCompost(Minecraft.getInstance().level.registryAccess(), Network.getLevelName());
                 ItemStack itemStack = compost.get(random.nextInt(compost.size()));
                 return EmiStack.of(itemStack).setAmount(itemStack.getCount());
             }
