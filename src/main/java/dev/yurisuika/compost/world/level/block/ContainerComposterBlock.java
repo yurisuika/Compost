@@ -102,11 +102,9 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (state.getValue(LEVEL) == 7) {
             ContainerComposterBlockEntity blockEntity = (ContainerComposterBlockEntity) level.getBlockEntity(pos);
-            List<ItemStack> compost = Parse.createLocalCompostOutput(level.registryAccess(), level.getServer().getWorldData().getLevelName());
+            List<ItemStack> compost = Parse.createLocalCompost(level.registryAccess(), level.getServer().getWorldData().getLevelName());
             Collections.shuffle(compost);
-            for (ItemStack itemStack : compost) {
-                blockEntity.setItem(compost.indexOf(itemStack), itemStack);
-            }
+            compost.forEach(itemStack -> blockEntity.setItem(compost.indexOf(itemStack), itemStack));
             level.setBlock(pos, state.cycle(LEVEL), Block.UPDATE_ALL);
             level.playSound(null, pos, SoundEvents.COMPOSTER_READY, SoundSource.BLOCKS, 1.0F, 1.0F);
             blockEntity.setChanged();
