@@ -8,7 +8,6 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import dev.yurisuika.compost.util.Network;
-import dev.yurisuika.compost.util.Parse;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -16,6 +15,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 public class CompositionArgument implements ArgumentType<String> {
 
@@ -44,7 +44,7 @@ public class CompositionArgument implements ArgumentType<String> {
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandContext, SuggestionsBuilder suggestionsBuilder) {
-        return SharedSuggestionProvider.suggest(Parse.listNetworkNames(), suggestionsBuilder);
+        return SharedSuggestionProvider.suggest(Network.getNetworkCompositions().keySet().stream().collect(Collectors.toList()), suggestionsBuilder);
     }
 
     @Override
