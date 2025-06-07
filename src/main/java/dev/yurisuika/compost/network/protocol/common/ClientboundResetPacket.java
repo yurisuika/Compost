@@ -22,7 +22,7 @@ public final class ClientboundResetPacket {
     public static void write(ClientboundResetPacket packet, FriendlyByteBuf buffer) {}
 
     public static void handle(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buffer, PacketSender sender) {
-        Network.getNetworkCompositions().clear();
+        Network.COMPOSITIONS.clear();
     }
 
 }

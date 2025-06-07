@@ -23,7 +23,7 @@ public abstract class RoughlyEnoughItemsMixin {
 
         @ModifyArg(method = "registerRecipeDisplays", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;<init>(Lnet/minecraft/world/level/ItemLike;)V"), index = 0, slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/ComposterBlock;bootStrap()V"), to = @At(value = "INVOKE", target = "Lme/shedaniel/rei/plugin/stripping/DummyAxeItem;getStrippedBlocksMap()Ljava/util/Map;")))
         private ItemLike redirectCompostingOutput(ItemLike item) {
-            List<ItemStack> output = new ArrayList<>(Parse.createNetworkCompostOutput(Network.getLevelName()));
+            List<ItemStack> output = new ArrayList<>(Parse.createNetworkCompost(Network.getLevelName()));
             return output.get(ThreadLocalRandom.current().nextInt(output.size())).getItem();
         }
 

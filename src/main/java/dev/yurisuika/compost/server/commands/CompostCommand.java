@@ -313,7 +313,7 @@ public class CompostCommand {
         MutableComponent compositionName = ComponentUtils.wrapInSquareBrackets(new TextComponent(name)).withStyle(style -> style.withColor(composition.getWorlds().isEmpty() || composition.getWorlds().contains(source.getServer().getWorldData().getLevelName()) ? ChatFormatting.GREEN : ChatFormatting.RED).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableComponent("commands.compost.composition.tooltip", composition.getWorlds().toString()))));
         String percentage = new DecimalFormat("0.###############").format(BigDecimal.valueOf(composition.getCompost().getChance()).multiply(BigDecimal.valueOf(100)));
         String count = composition.getCompost().getCount().getMin() != composition.getCompost().getCount().getMax() ? composition.getCompost().getCount().getMin() + "-" + composition.getCompost().getCount().getMax() : String.valueOf(composition.getCompost().getCount().getMax());
-        Component displayName = Parse.createCompost(composition).getDisplayName();
+        Component displayName = Parse.createItemStack(composition).getDisplayName();
 
         source.sendSuccess(new TranslatableComponent(translation, compositionName, percentage, count, displayName), true);
     }

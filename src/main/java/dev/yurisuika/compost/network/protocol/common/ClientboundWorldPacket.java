@@ -33,7 +33,7 @@ public final class ClientboundWorldPacket {
     }
 
     public static void handle(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buffer, PacketSender sender) {
-        Network.getNetworkCompositions().get(buffer.readUtf()).getWorlds().add(buffer.readUtf());
+        Network.COMPOSITIONS.get(buffer.readUtf()).getWorlds().add(buffer.readUtf());
     }
 
     public String name() {
