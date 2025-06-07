@@ -52,6 +52,7 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
         }
     }
 
+    @Override
     public InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         int i = state.getValue(LEVEL);
         if (i < 8 && getValue(stack) > 0.0F) {
