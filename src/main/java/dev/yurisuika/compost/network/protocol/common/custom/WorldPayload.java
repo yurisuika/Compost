@@ -25,7 +25,7 @@ public record WorldPayload(String name, String world) implements CustomPacketPay
     }
 
     public static void handle(WorldPayload payload, IPayloadContext context) {
-        context.workHandler().submitAsync(() -> Network.getNetworkCompositions().get(payload.name()).getWorlds().add(payload.world()));
+        context.workHandler().submitAsync(() -> Network.COMPOSITIONS.get(payload.name()).getWorlds().add(payload.world()));
     }
 
 }

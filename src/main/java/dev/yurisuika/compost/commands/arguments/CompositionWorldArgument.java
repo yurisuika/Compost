@@ -32,7 +32,7 @@ public class CompositionWorldArgument implements ArgumentType<String> {
     public String parse(StringReader reader) throws CommandSyntaxException {
         final String world = reader.getRemaining();
         reader.setCursor(reader.getTotalLength());
-        if (Network.getNetworkCompositions().get(CompositionArgument.getName()).getWorlds().contains(world)) {
+        if (Network.COMPOSITIONS.get(CompositionArgument.getName()).getWorlds().contains(world)) {
             return world;
         } else {
             throw new DynamicCommandExceptionType(object -> Component.translatable("commands.compost.composition.world.unknown", object)).createWithContext(reader, world);
@@ -41,7 +41,7 @@ public class CompositionWorldArgument implements ArgumentType<String> {
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandContext, SuggestionsBuilder suggestionsBuilder) {
-        return SharedSuggestionProvider.suggest(Network.getNetworkCompositions().get(CompositionArgument.getName()).getWorlds(), suggestionsBuilder);
+        return SharedSuggestionProvider.suggest(Network.COMPOSITIONS.get(CompositionArgument.getName()).getWorlds(), suggestionsBuilder);
     }
 
     @Override

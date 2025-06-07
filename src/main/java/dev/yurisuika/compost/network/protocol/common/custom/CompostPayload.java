@@ -30,7 +30,7 @@ public record CompostPayload(String name, String item, Double chance, Integer mi
     }
 
     public static void handle(CompostPayload payload, IPayloadContext context) {
-        context.workHandler().submitAsync(() -> Network.getNetworkCompositions().put(payload.name(), new Composition(new Composition.Compost(payload.item(), payload.chance(), new Composition.Compost.Count(payload.min(), payload.max())), new HashSet<>())));
+        context.workHandler().submitAsync(() -> Network.COMPOSITIONS.put(payload.name(), new Composition(new Composition.Compost(payload.item(), payload.chance(), new Composition.Compost.Count(payload.min(), payload.max())), new HashSet<>())));
     }
 
 }
