@@ -22,7 +22,7 @@ public record ClientboundWorldPacket(String name, String world) {
     }
 
     public static void handle(ClientboundWorldPacket packet, NetworkEvent.ClientCustomPayloadEvent.Context context) {
-        context.enqueueWork(() -> Network.getNetworkCompositions().get(packet.name()).getWorlds().add(packet.world()));
+        context.enqueueWork(() -> Network.COMPOSITIONS.get(packet.name()).getWorlds().add(packet.world()));
         context.setPacketHandled(true);
     }
 

@@ -33,7 +33,7 @@ public class CompositionArgument implements ArgumentType<String> {
     @Override
     public String parse(StringReader reader) throws CommandSyntaxException {
         String name = reader.readString();
-        if (Network.getNetworkCompositions().containsKey(name)) {
+        if (Network.COMPOSITIONS.containsKey(name)) {
             setName(name);
             return name;
         } else {
@@ -43,7 +43,7 @@ public class CompositionArgument implements ArgumentType<String> {
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandContext, SuggestionsBuilder suggestionsBuilder) {
-        return SharedSuggestionProvider.suggest(Network.getNetworkCompositions().keySet().stream().toList(), suggestionsBuilder);
+        return SharedSuggestionProvider.suggest(Network.COMPOSITIONS.keySet().stream().toList(), suggestionsBuilder);
     }
 
     @Override

@@ -19,7 +19,7 @@ public record ClientboundResetPacket() {
     public static void write(ClientboundResetPacket packet, FriendlyByteBuf buffer) {}
 
     public static void handle(ClientboundResetPacket packet, NetworkEvent.ClientCustomPayloadEvent.Context context) {
-        context.enqueueWork(() -> Network.getNetworkCompositions().clear());
+        context.enqueueWork(() -> Network.COMPOSITIONS.clear());
         context.setPacketHandled(true);
     }
 
