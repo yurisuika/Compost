@@ -24,7 +24,7 @@ public record ClientboundWorldPacket(String name, String world) implements Fabri
     }
 
     public static void handle(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buffer, PacketSender sender) {
-        Network.getNetworkCompositions().get(buffer.readUtf()).getWorlds().add(buffer.readUtf());
+        Network.COMPOSITIONS.get(buffer.readUtf()).getWorlds().add(buffer.readUtf());
     }
 
     public PacketType<ClientboundWorldPacket> getType() {

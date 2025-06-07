@@ -30,7 +30,7 @@ public record ClientboundCompostPacket(String name, String item, Double chance, 
     }
 
     public static void handle(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buffer, PacketSender sender) {
-        Network.getNetworkCompositions().put(buffer.readUtf(), new Composition(new Composition.Compost(buffer.readUtf(), buffer.readDouble(), new Composition.Compost.Count(buffer.readInt(), buffer.readInt())), new HashSet<>()));
+        Network.COMPOSITIONS.put(buffer.readUtf(), new Composition(new Composition.Compost(buffer.readUtf(), buffer.readDouble(), new Composition.Compost.Count(buffer.readInt(), buffer.readInt())), new HashSet<>()));
     }
 
     public PacketType<ClientboundCompostPacket> getType() {
