@@ -14,7 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Parse {
 
-    public static ItemStack createCompost(Composition composition) {
+    public static ItemStack createItemStack(Composition composition) {
         try {
             return new ItemArgument().parse(new StringReader(composition.getCompost().getItem())).createItemStack(ThreadLocalRandom.current().nextInt(composition.getCompost().getCount().getMin(), composition.getCompost().getCount().getMax() + 1), true);
         } catch (CommandSyntaxException e) {
@@ -22,24 +22,24 @@ public class Parse {
         }
     }
 
-    public static List<ItemStack> createCompostOutput(Map<String, Composition> compositions, String level, boolean always) {
+    public static List<ItemStack> createCompost(Map<String, Composition> compositions, String level, boolean always) {
         List<ItemStack> compost = new ArrayList<>();
         compositions.forEach((name, composition) -> {
             if (composition.getWorlds().isEmpty() || composition.getWorlds().contains(level)) {
                 if (always || ThreadLocalRandom.current().nextDouble() < composition.getCompost().getChance()) {
-                    compost.add(createCompost(composition));
+                    compost.add(createItemStack(composition));
                 }
             }
         });
         return compost;
     }
 
-    public static List<ItemStack> createLocalCompostOutput(String level) {
-        return createCompostOutput(Option.getCompositions(), level, false);
+    public static List<ItemStack> createLocalCompost(String level) {
+        return createCompost(Option.getCompositions(), level, false);
     }
 
-    public static List<ItemStack> createNetworkCompostOutput(String level) {
-        return createCompostOutput(Network.getNetworkCompositions(), level, true);
+    public static List<ItemStack> createNetworkCompost(String level) {
+        return createCompost(Network.COMPOSITIONS, level, true);
     }
 
 }
