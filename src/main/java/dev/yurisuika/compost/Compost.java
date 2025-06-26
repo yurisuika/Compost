@@ -3,20 +3,20 @@ package dev.yurisuika.compost;
 import dev.yurisuika.compost.commands.arguments.CompositionArgument;
 import dev.yurisuika.compost.commands.arguments.CompositionWorldArgument;
 import dev.yurisuika.compost.commands.arguments.LoadedWorldArgument;
+import dev.yurisuika.compost.config.Config;
 import dev.yurisuika.compost.network.protocol.common.ClientboundCompostPacket;
 import dev.yurisuika.compost.network.protocol.common.ClientboundResetPacket;
 import dev.yurisuika.compost.network.protocol.common.ClientboundWorldPacket;
 import dev.yurisuika.compost.server.commands.CompostCommand;
+import dev.yurisuika.compost.server.event.ServerJoinEvent;
+import dev.yurisuika.compost.server.event.ServerStartedEvent;
 import dev.yurisuika.compost.util.Network;
 import dev.yurisuika.compost.util.Validate;
-import dev.yurisuika.compost.util.config.Config;
 import dev.yurisuika.compost.world.level.block.entity.CompostBlockEntityType;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
 import net.minecraft.core.Registry;
@@ -39,12 +39,12 @@ public class Compost implements ModInitializer {
     }
 
     public static void registerCompositionValidation() {
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> Validate.validateCompositions());
+        ServerStartedEvent.SERVER_STARTED.register(server -> Validate.validateCompositions());
     }
 
     public static void registerJoinListeners() {
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> Network.sendCompositions(handler.player.getLevel(), handler.player));
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> Network.setLevelName(server.getWorldData().getLevelName()));
+        ServerJoinEvent.JOIN.register(((listener, netManager, player) -> Network.sendCompositions(player.getLevel(), player)));
+        ServerJoinEvent.JOIN.register(((listener, netManager, player) -> Network.setLevelName(listener.getServer().getWorldData().getLevelName())));
     }
 
     @Override
@@ -61,9 +61,9 @@ public class Compost implements ModInitializer {
     public static class Client implements ClientModInitializer {
 
         public static void registerClientReceivers() {
-            ClientPlayNetworking.registerGlobalReceiver(ClientboundCompostPacket.ID, ClientboundCompostPacket::handle);
-            ClientPlayNetworking.registerGlobalReceiver(ClientboundWorldPacket.ID, ClientboundWorldPacket::handle);
-            ClientPlayNetworking.registerGlobalReceiver(ClientboundResetPacket.ID, ClientboundResetPacket::handle);
+            ServerSidePacketRegistry.INSTANCE.register(ClientboundCompostPacket.ID, ClientboundCompostPacket::handle);
+            ServerSidePacketRegistry.INSTANCE.register(ClientboundWorldPacket.ID, ClientboundWorldPacket::handle);
+            ServerSidePacketRegistry.INSTANCE.register(ClientboundResetPacket.ID, ClientboundResetPacket::handle);
         }
 
         @Override

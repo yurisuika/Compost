@@ -1,10 +1,8 @@
 package dev.yurisuika.compost.network.protocol.common;
 
 import dev.yurisuika.compost.util.Network;
-import dev.yurisuika.compost.util.config.options.Composition;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientPacketListener;
+import dev.yurisuika.compost.world.Composition;
+import net.fabricmc.fabric.api.network.PacketContext;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
@@ -47,7 +45,7 @@ public final class ClientboundCompostPacket {
         buffer.writeInt(packet.max());
     }
 
-    public static void handle(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buffer, PacketSender sender) {
+    public static void handle(PacketContext context, FriendlyByteBuf buffer) {
         Network.COMPOSITIONS.put(buffer.readUtf(), new Composition(new Composition.Compost(buffer.readUtf(), buffer.readDouble(), new Composition.Compost.Count(buffer.readInt(), buffer.readInt())), new HashSet<>()));
     }
 

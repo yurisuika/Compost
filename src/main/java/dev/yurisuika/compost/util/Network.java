@@ -3,13 +3,11 @@ package dev.yurisuika.compost.util;
 import dev.yurisuika.compost.network.protocol.common.ClientboundCompostPacket;
 import dev.yurisuika.compost.network.protocol.common.ClientboundResetPacket;
 import dev.yurisuika.compost.network.protocol.common.ClientboundWorldPacket;
-import dev.yurisuika.compost.util.config.Option;
-import dev.yurisuika.compost.util.config.options.Composition;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import dev.yurisuika.compost.world.Composition;
+import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 import java.util.HashMap;
@@ -28,23 +26,23 @@ public class Network {
         Network.levelName = levelName;
     }
 
-    public static void sendCompositions(Level level, Player player) {
+    public static void sendCompositions(Level level, ServerPlayer player) {
         if (!level.isClientSide()) {
-            ServerPlayNetworking.send((ServerPlayer) player, ClientboundResetPacket.ID, PacketByteBufs.empty());
+            player.connection.send(new ClientboundCustomPayloadPacket(ClientboundResetPacket.ID, new FriendlyByteBuf(Unpooled.EMPTY_BUFFER)));
             COMPOSITIONS.clear();
-            Option.getCompositions().forEach((name, composition) -> {
-                FriendlyByteBuf compostBuffer = PacketByteBufs.create();
+            Configure.getCompositions().forEach((name, composition) -> {
+                FriendlyByteBuf compostBuffer = new FriendlyByteBuf(Unpooled.buffer());
                 compostBuffer.writeUtf(name);
                 compostBuffer.writeUtf(composition.getCompost().getItem());
                 compostBuffer.writeDouble(composition.getCompost().getChance());
                 compostBuffer.writeInt(composition.getCompost().getCount().getMin());
                 compostBuffer.writeInt(composition.getCompost().getCount().getMax());
-                ServerPlayNetworking.send((ServerPlayer) player, ClientboundCompostPacket.ID, compostBuffer);
+                player.connection.send(new ClientboundCustomPayloadPacket(ClientboundCompostPacket.ID, compostBuffer));
                 composition.getWorlds().forEach(world -> {
-                    FriendlyByteBuf worldBuffer = PacketByteBufs.create();
+                    FriendlyByteBuf worldBuffer = new FriendlyByteBuf(Unpooled.buffer());
                     worldBuffer.writeUtf(name);
                     worldBuffer.writeUtf(composition.getCompost().getItem());
-                    ServerPlayNetworking.send((ServerPlayer) player, ClientboundWorldPacket.ID, worldBuffer);
+                    player.connection.send(new ClientboundCustomPayloadPacket(ClientboundWorldPacket.ID, worldBuffer));
                 });
                 COMPOSITIONS.put(name, composition);
             });
