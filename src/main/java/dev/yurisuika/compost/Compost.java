@@ -29,8 +29,20 @@ import net.neoforged.neoforge.registries.RegisterEvent;
 @Mod("compost")
 public class Compost {
 
-    @EventBusSubscriber(modid = "compost", bus = EventBusSubscriber.Bus.GAME)
-    public static class GameEvents {
+    @EventBusSubscriber(modid = "compost")
+    public static class Events {
+
+        @SubscribeEvent
+        public static void registerBlockEntityTypes(RegisterEvent event) {
+            event.register(BuiltInRegistries.BLOCK_ENTITY_TYPE.key(), helper -> helper.register(ResourceLocation.fromNamespaceAndPath("compost", "composter"), CompostBlockEntityType.COMPOSTER));
+        }
+
+        @SubscribeEvent
+        public static void registerArgumentTypes(RegisterEvent event) {
+            event.register(Registries.COMMAND_ARGUMENT_TYPE, ResourceLocation.fromNamespaceAndPath("compost", "composition"), () -> ArgumentTypeInfos.registerByClass(CompositionArgument.class, SingletonArgumentInfo.contextFree(CompositionArgument::composition)));
+            event.register(Registries.COMMAND_ARGUMENT_TYPE, ResourceLocation.fromNamespaceAndPath("compost", "composition_world"), () -> ArgumentTypeInfos.registerByClass(CompositionWorldArgument.class, SingletonArgumentInfo.contextFree(CompositionWorldArgument::compositionWorld)));
+            event.register(Registries.COMMAND_ARGUMENT_TYPE, ResourceLocation.fromNamespaceAndPath("compost", "loaded_world"), () -> ArgumentTypeInfos.registerByClass(LoadedWorldArgument.class, SingletonArgumentInfo.contextFree(LoadedWorldArgument::loadedWorld)));
+        }
 
         @SubscribeEvent
         public static void registerCommands(RegisterCommandsEvent event) {
@@ -46,23 +58,6 @@ public class Compost {
         public static void registerJoinListeners(PlayerEvent.PlayerLoggedInEvent event) {
             Network.sendCompositions(event.getEntity().level(), (ServerPlayer) event.getEntity());
             Network.setLevelName(event.getEntity().level().getServer().getWorldData().getLevelName());
-        }
-
-    }
-
-    @EventBusSubscriber(modid = "compost", bus = EventBusSubscriber.Bus.MOD)
-    public static class ModEvents {
-
-        @SubscribeEvent
-        public static void registerBlockEntityTypes(RegisterEvent event) {
-            event.register(BuiltInRegistries.BLOCK_ENTITY_TYPE.key(), helper -> helper.register(ResourceLocation.fromNamespaceAndPath("compost", "composter"), CompostBlockEntityType.COMPOSTER));
-        }
-
-        @SubscribeEvent
-        public static void registerArgumentTypes(RegisterEvent event) {
-            event.register(Registries.COMMAND_ARGUMENT_TYPE, ResourceLocation.fromNamespaceAndPath("compost", "composition"), () -> ArgumentTypeInfos.registerByClass(CompositionArgument.class, SingletonArgumentInfo.contextFree(CompositionArgument::composition)));
-            event.register(Registries.COMMAND_ARGUMENT_TYPE, ResourceLocation.fromNamespaceAndPath("compost", "composition_world"), () -> ArgumentTypeInfos.registerByClass(CompositionWorldArgument.class, SingletonArgumentInfo.contextFree(CompositionWorldArgument::compositionWorld)));
-            event.register(Registries.COMMAND_ARGUMENT_TYPE, ResourceLocation.fromNamespaceAndPath("compost", "loaded_world"), () -> ArgumentTypeInfos.registerByClass(LoadedWorldArgument.class, SingletonArgumentInfo.contextFree(LoadedWorldArgument::loadedWorld)));
         }
 
         @SubscribeEvent
