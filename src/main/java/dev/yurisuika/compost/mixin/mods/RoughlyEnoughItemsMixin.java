@@ -24,7 +24,7 @@ public abstract class RoughlyEnoughItemsMixin {
         @Redirect(method = "registerDisplays", at = @At(value = "INVOKE", target = "Ljava/util/Collections;singletonList(Ljava/lang/Object;)Ljava/util/List;"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/ComposterBlock;bootStrap()V"), to = @At(value = "INVOKE", target = "Lme/shedaniel/rei/plugin/client/DefaultClientPlugin$DummyAxeItem;getStrippedBlocksMap()Ljava/util/Map;")))
         private <T> List<EntryIngredient> redirectCompostingOutput(T o) {
             EntryIngredient.Builder output = EntryIngredient.builder();
-            Parse.createNetworkCompost(Minecraft.getInstance().level.registryAccess(), Network.getLevelName()).forEach(compost -> output.add(EntryStacks.of(compost)));
+            Parse.createNetworkCompost(Minecraft.getInstance().level.registryAccess(), Network.getLevelName()).forEach(compost -> output.add(EntryStacks.of(compost.copyWithCount(1))));
             return List.of(output.build());
         }
 
