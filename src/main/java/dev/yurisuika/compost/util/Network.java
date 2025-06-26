@@ -26,11 +26,11 @@ public class Network {
 
     public static void sendCompositions(Level level, ServerPlayer player) {
         if (!level.isClientSide()) {
-            PacketDistributor.sendToPlayer((ServerPlayer) player, new ResetPayload());
+            PacketDistributor.sendToPlayer(player, new ResetPayload());
             COMPOSITIONS.clear();
             Configure.getCompositions().forEach((name, composition) -> {
-                PacketDistributor.sendToPlayer((ServerPlayer) player, new CompostPayload(name, composition.getCompost().getItem(), composition.getCompost().getChance(), composition.getCompost().getCount().getMin(), composition.getCompost().getCount().getMax()));
-                composition.getWorlds().forEach(world -> PacketDistributor.sendToPlayer((ServerPlayer) player, new WorldPayload(name, world)));
+                PacketDistributor.sendToPlayer(player, new CompostPayload(name, composition.getCompost().getItem(), composition.getCompost().getChance(), composition.getCompost().getCount().getMin(), composition.getCompost().getCount().getMax()));
+                composition.getWorlds().forEach(world -> PacketDistributor.sendToPlayer(player, new WorldPayload(name, world)));
                 COMPOSITIONS.put(name, composition);
             });
         }
