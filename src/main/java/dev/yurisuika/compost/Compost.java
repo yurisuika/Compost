@@ -40,7 +40,7 @@ public class Compost {
         }
 
         @SubscribeEvent
-        public static void registerJoinPacket(PlayerEvent.PlayerLoggedInEvent event) {
+        public static void registerJoinListeners(PlayerEvent.PlayerLoggedInEvent event) {
             Network.sendCompositions(event.getPlayer().getLevel(), event.getPlayer());
             Network.setLevelName(event.getPlayer().getLevel().getServer().getWorldData().getLevelName());
         }

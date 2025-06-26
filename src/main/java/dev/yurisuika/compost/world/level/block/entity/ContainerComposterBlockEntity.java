@@ -15,12 +15,12 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.LevelEvent;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.stream.IntStream;
 
-public class ContainerComposterBlockEntity extends RandomizableContainerBlockEntity implements WorldlyContainer {
+public class ContainerComposterBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
 
     public NonNullList<ItemStack> items = NonNullList.withSize(27 + 1, ItemStack.EMPTY);
 
@@ -31,17 +31,13 @@ public class ContainerComposterBlockEntity extends RandomizableContainerBlockEnt
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
-        if (!trySaveLootTable(tag)) {
-            ContainerHelper.loadAllItems(tag, items);
-        }
+        ContainerHelper.loadAllItems(tag, items);
     }
 
     @Override
     public void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
-        if (!tryLoadLootTable(tag)) {
-            ContainerHelper.saveAllItems(tag, items);
-        }
+        ContainerHelper.saveAllItems(tag, items);
     }
 
     @Override
@@ -81,13 +77,12 @@ public class ContainerComposterBlockEntity extends RandomizableContainerBlockEnt
     }
 
     @Override
-    public NonNullList<ItemStack> getItems() {
-        return items;
-    }
-
-    @Override
-    public void setItems(NonNullList<ItemStack> list) {
-        items = list;
+    public boolean isEmpty() {
+        for (ItemStack itemStack : items) {
+            if (itemStack.isEmpty()) continue;
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -138,6 +133,11 @@ public class ContainerComposterBlockEntity extends RandomizableContainerBlockEnt
             ContainerComposterBlock.empty(null, getBlockState(), getLevel(), getBlockPos());
         }
         super.setChanged();
+    }
+
+    @Override
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
 }
