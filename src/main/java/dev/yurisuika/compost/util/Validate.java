@@ -1,13 +1,12 @@
 package dev.yurisuika.compost.util;
 
-import dev.yurisuika.compost.util.config.Config;
-import dev.yurisuika.compost.util.config.Option;
-import dev.yurisuika.compost.util.config.options.Composition;
+import dev.yurisuika.compost.config.Config;
+import dev.yurisuika.compost.world.Composition;
 
 public class Validate {
 
     public static void validateComposition(String name) {
-        validateComposition(Option.getComposition(name));
+        validateComposition(Configure.getComposition(name));
     }
 
     public static void validateComposition(Composition composition) {
@@ -21,7 +20,7 @@ public class Validate {
     }
 
     public static void validateCompositions() {
-        Option.getCompositions().forEach((name, composition) -> validateComposition(composition));
+        Configure.getCompositions().forEach((name, composition) -> validateComposition(composition));
     }
 
 }

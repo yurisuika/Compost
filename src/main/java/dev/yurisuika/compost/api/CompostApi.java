@@ -1,7 +1,7 @@
 package dev.yurisuika.compost.api;
 
-import dev.yurisuika.compost.util.config.Option;
-import dev.yurisuika.compost.util.config.options.Composition;
+import dev.yurisuika.compost.util.Configure;
+import dev.yurisuika.compost.world.Composition;
 
 import java.util.Map;
 
@@ -17,7 +17,7 @@ public class CompostApi {
      * @return a {@link Map} of {@link String} keys and {@link Composition} value
      */
     public static Map<String, Composition> getCompositions() {
-        return Option.getCompositions();
+        return Configure.getCompositions();
     }
 
     /**
@@ -28,7 +28,7 @@ public class CompostApi {
      * @return a {@link Composition}
      */
     public static Composition getComposition(String name) {
-        return Option.getComposition(name);
+        return Configure.getComposition(name);
     }
 
     /**
@@ -40,7 +40,7 @@ public class CompostApi {
      * @see #getComposition(String)
      */
     public static void addComposition(String name, Composition composition) {
-        Option.addComposition(name, composition);
+        Configure.addComposition(name, composition);
     }
 
     /**
@@ -51,7 +51,7 @@ public class CompostApi {
      * @see #getComposition(String)
      */
     public static void removeComposition(String name) {
-        Option.removeComposition(name);
+        Configure.removeComposition(name);
     }
 
 }

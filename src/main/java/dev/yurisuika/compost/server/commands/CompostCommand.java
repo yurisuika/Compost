@@ -7,13 +7,13 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import dev.yurisuika.compost.commands.arguments.CompositionArgument;
 import dev.yurisuika.compost.commands.arguments.CompositionWorldArgument;
 import dev.yurisuika.compost.commands.arguments.LoadedWorldArgument;
+import dev.yurisuika.compost.config.Config;
 import dev.yurisuika.compost.config.Options;
+import dev.yurisuika.compost.util.Configure;
 import dev.yurisuika.compost.util.Network;
 import dev.yurisuika.compost.util.Parse;
 import dev.yurisuika.compost.util.Validate;
-import dev.yurisuika.compost.util.config.Config;
-import dev.yurisuika.compost.util.config.Option;
-import dev.yurisuika.compost.util.config.options.Composition;
+import dev.yurisuika.compost.world.Composition;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -211,7 +211,7 @@ public class CompostCommand {
     }
 
     public static int resetConfig(CommandSourceStack source) {
-        Option.setCompositions(new Options().getCompositions());
+        Configure.setCompositions(new Options().getCompositions());
 
         sendCompositions(source);
         source.sendSuccess(() -> Component.translatable("commands.compost.config.reset"), true);
@@ -219,14 +219,14 @@ public class CompostCommand {
     }
 
     public static int queryComposition(CommandSourceStack source, String name) {
-        Composition composition = Option.getComposition(name);
+        Composition composition = Configure.getComposition(name);
 
         createCompositionMessage(source, name, composition, "commands.compost.composition.query");
         return 1;
     }
 
     public static int queryCompositions(CommandSourceStack source) {
-        Option.getCompositions().forEach((name, composition) -> createCompositionMessage(source, name, composition, "commands.compost.composition.query"));
+        Configure.getCompositions().forEach((name, composition) -> createCompositionMessage(source, name, composition, "commands.compost.composition.query"));
         return 1;
     }
 
@@ -234,23 +234,23 @@ public class CompostCommand {
         Composition composition = new Composition(new Composition.Compost(item.serialize(source.getLevel().registryAccess()), chance, new Composition.Compost.Count(min, max)), new HashSet<>() {{ if (world != null) add(world); }});
         Validate.validateComposition(composition);
 
-        Option.addComposition(name, composition);
+        Configure.addComposition(name, composition);
         sendCompositions(source);
         createCompositionMessage(source, name, composition, "commands.compost.composition.add");
         return 1;
     }
 
     public static int removeComposition(CommandSourceStack source, String name) {
-        Composition composition = Option.getComposition(name);
+        Composition composition = Configure.getComposition(name);
 
-        Option.removeComposition(name);
+        Configure.removeComposition(name);
         sendCompositions(source);
         createCompositionMessage(source, name, composition, "commands.compost.composition.remove");
         return 1;
     }
 
     public static int modifyComposition(CommandSourceStack source, String name) {
-        Composition composition = Option.getComposition(name);
+        Composition composition = Configure.getComposition(name);
 
         sendCompositions(source);
         createCompositionMessage(source, name, composition, "commands.compost.composition.modify");
@@ -258,42 +258,42 @@ public class CompostCommand {
     }
 
     public static int modifyCompositionCompostItem(CommandSourceStack source, String name, ItemInput item) {
-        Option.setItem(name, item.serialize(source.registryAccess()));
+        Configure.setItem(name, item.serialize(source.registryAccess()));
         Validate.validateComposition(name);
 
         return modifyComposition(source, name);
     }
 
     public static int modifyCompositionCompostChance(CommandSourceStack source, String name, double chance) {
-        Option.setChance(name, chance);
+        Configure.setChance(name, chance);
         Validate.validateComposition(name);
 
         return modifyComposition(source, name);
     }
 
     public static int modifyCompositionCompostCountMin(CommandSourceStack source, String name, int min) {
-        Option.setMin(name, min);
+        Configure.setMin(name, min);
         Validate.validateComposition(name);
 
         return modifyComposition(source, name);
     }
 
     public static int modifyCompositionCompostCountMax(CommandSourceStack source, String name, int max) {
-        Option.setMax(name, max);
+        Configure.setMax(name, max);
         Validate.validateComposition(name);
 
         return modifyComposition(source, name);
     }
 
     public static int modifyCompositionWorldAdd(CommandSourceStack source, String name, String world) {
-        Option.addWorld(name, world);
+        Configure.addWorld(name, world);
         Validate.validateComposition(name);
 
         return modifyComposition(source, name);
     }
 
     public static int modifyCompositionWorldRemove(CommandSourceStack source, String name, String world) {
-        Option.removeWorld(name, world);
+        Configure.removeWorld(name, world);
         Validate.validateComposition(name);
 
         return modifyComposition(source, name);
