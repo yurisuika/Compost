@@ -44,7 +44,7 @@ public class Compost implements ModInitializer {
         ServerLifecycleEvents.SERVER_STARTED.register(server -> Validate.validateCompositions());
     }
 
-    public static void registerJoinPacket() {
+    public static void registerJoinListeners() {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> Network.sendCompositions(handler.getPlayer().level(), handler.getPlayer()));
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> Network.setLevelName(server.getWorldData().getLevelName()));
     }
@@ -63,7 +63,7 @@ public class Compost implements ModInitializer {
         registerArgumentTypes();
         registerCommands();
         registerCompositionValidation();
-        registerJoinPacket();
+        registerJoinListeners();
         registerPayloads();
     }
 
