@@ -3,18 +3,19 @@ package dev.yurisuika.compost;
 import dev.yurisuika.compost.commands.arguments.CompositionArgument;
 import dev.yurisuika.compost.commands.arguments.CompositionWorldArgument;
 import dev.yurisuika.compost.commands.arguments.LoadedWorldArgument;
+import dev.yurisuika.compost.config.Config;
 import dev.yurisuika.compost.network.protocol.common.ClientboundCompostPacket;
 import dev.yurisuika.compost.network.protocol.common.ClientboundResetPacket;
 import dev.yurisuika.compost.network.protocol.common.ClientboundWorldPacket;
 import dev.yurisuika.compost.server.commands.CompostCommand;
 import dev.yurisuika.compost.util.Network;
 import dev.yurisuika.compost.util.Validate;
-import dev.yurisuika.compost.util.config.Config;
 import dev.yurisuika.compost.world.level.block.entity.CompostBlockEntityType;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
@@ -43,7 +44,7 @@ public class Compost {
 
         @SubscribeEvent
         public static void registerJoinListeners(PlayerEvent.PlayerLoggedInEvent event) {
-            Network.sendCompositions(event.getEntity().level(), event.getEntity());
+            Network.sendCompositions(event.getEntity().level(), (ServerPlayer) event.getEntity());
             Network.setLevelName(event.getEntity().level().getServer().getWorldData().getLevelName());
         }
 

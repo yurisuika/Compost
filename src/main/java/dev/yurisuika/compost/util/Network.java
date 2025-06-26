@@ -3,10 +3,8 @@ package dev.yurisuika.compost.util;
 import dev.yurisuika.compost.network.protocol.common.ClientboundCompostPacket;
 import dev.yurisuika.compost.network.protocol.common.ClientboundResetPacket;
 import dev.yurisuika.compost.network.protocol.common.ClientboundWorldPacket;
-import dev.yurisuika.compost.util.config.Option;
-import dev.yurisuika.compost.util.config.options.Composition;
+import dev.yurisuika.compost.world.Composition;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.PacketDistributor;
 
@@ -26,13 +24,13 @@ public class Network {
         Network.levelName = levelName;
     }
 
-    public static void sendCompositions(Level level, Player player) {
+    public static void sendCompositions(Level level, ServerPlayer player) {
         if (!level.isClientSide()) {
-            ClientboundResetPacket.CHANNEL.send(new ClientboundResetPacket(), PacketDistributor.PLAYER.with((ServerPlayer) player));
+            ClientboundResetPacket.CHANNEL.send(new ClientboundResetPacket(), PacketDistributor.PLAYER.with(player));
             COMPOSITIONS.clear();
-            Option.getCompositions().forEach((name, composition) -> {
-                ClientboundCompostPacket.CHANNEL.send(new ClientboundCompostPacket(name, composition.getCompost().getItem(), composition.getCompost().getChance(), composition.getCompost().getCount().getMin(), composition.getCompost().getCount().getMax()), PacketDistributor.PLAYER.with((ServerPlayer) player));
-                composition.getWorlds().forEach(world -> ClientboundWorldPacket.CHANNEL.send(new ClientboundWorldPacket(name, world), PacketDistributor.PLAYER.with((ServerPlayer) player)));
+            Configure.getCompositions().forEach((name, composition) -> {
+                ClientboundCompostPacket.CHANNEL.send(new ClientboundCompostPacket(name, composition.getCompost().getItem(), composition.getCompost().getChance(), composition.getCompost().getCount().getMin(), composition.getCompost().getCount().getMax()), PacketDistributor.PLAYER.with(player));
+                composition.getWorlds().forEach(world -> ClientboundWorldPacket.CHANNEL.send(new ClientboundWorldPacket(name, world), PacketDistributor.PLAYER.with(player)));
                 COMPOSITIONS.put(name, composition);
             });
         }
