@@ -28,9 +28,9 @@ dependencies {
     modCompileOnly "dev.emi:emi-neoforge:1.1.18+1.21.1:api"
     modCompileOnly "dev.emi:emi-neoforge:1.1.18+1.21.1"
 
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:18.0.800"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:18.0.800"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-neoforge:18.0.800"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:19.0.806"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:19.0.806"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-neoforge:19.0.806"
 }
 
 processResources {
