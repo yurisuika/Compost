@@ -10,6 +10,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
@@ -76,13 +77,12 @@ public class ContainerComposterBlockEntity extends BaseContainerBlockEntity impl
     }
 
     @Override
-    public NonNullList<ItemStack> getItems() {
-        return items;
-    }
-
-    @Override
-    public void setItems(NonNullList<ItemStack> items) {
-        this.items = items;
+    public boolean isEmpty() {
+        for (ItemStack itemStack : items) {
+            if (itemStack.isEmpty()) continue;
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -133,6 +133,15 @@ public class ContainerComposterBlockEntity extends BaseContainerBlockEntity impl
             ContainerComposterBlock.empty(null, getBlockState(), getLevel(), getBlockPos());
         }
         super.setChanged();
+    }
+
+    @Override
+    public boolean stillValid(Player player) {
+        if (level.getBlockEntity(worldPosition) != this) {
+            return false;
+        } else {
+            return player.distanceToSqr((double) worldPosition.getX() + 0.5D, (double) worldPosition.getY() + 0.5D, (double) worldPosition.getZ() + 0.5D) <= 64.0D;
+        }
     }
 
 }
