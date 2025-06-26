@@ -1,4 +1,4 @@
-package dev.yurisuika.compost.util.config.options;
+package dev.yurisuika.compost.world;
 
 import java.util.Set;
 
