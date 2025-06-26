@@ -1,6 +1,6 @@
 package dev.yurisuika.compost.config;
 
-import dev.yurisuika.compost.util.config.options.Composition;
+import dev.yurisuika.compost.world.Composition;
 
 import java.util.HashMap;
 import java.util.HashSet;
