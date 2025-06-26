@@ -4,9 +4,7 @@ import dev.yurisuika.compost.mixin.world.level.block.ComposterBlockInvoker;
 import dev.yurisuika.compost.world.level.block.ContainerComposterBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
@@ -17,6 +15,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import java.util.stream.IntStream;
 
@@ -29,15 +29,15 @@ public class ContainerComposterBlockEntity extends BaseContainerBlockEntity impl
     }
 
     @Override
-    public void loadAdditional(CompoundTag tag, HolderLookup.Provider holderProvider) {
-        super.loadAdditional(tag, holderProvider);
-        ContainerHelper.loadAllItems(tag, items, holderProvider);
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        ContainerHelper.loadAllItems(input, items);
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag, HolderLookup.Provider holderProvider) {
-        super.saveAdditional(tag, holderProvider);
-        ContainerHelper.saveAllItems(tag, items, holderProvider);
+    public void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+        ContainerHelper.saveAllItems(output, items);
     }
 
     @Override
