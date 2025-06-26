@@ -1,11 +1,12 @@
-package dev.yurisuika.compost.util.config;
+package dev.yurisuika.compost.util;
 
-import dev.yurisuika.compost.util.config.options.Composition;
+import dev.yurisuika.compost.config.Config;
+import dev.yurisuika.compost.world.Composition;
 
 import java.util.Map;
 import java.util.Set;
 
-public class Option {
+public class Configure {
 
     public static Map<String, Composition> getCompositions() {
         return Config.getOptions().getCompositions();

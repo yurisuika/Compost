@@ -1,8 +1,7 @@
-package dev.yurisuika.compost.util.config;
+package dev.yurisuika.compost.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dev.yurisuika.compost.config.Options;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.File;

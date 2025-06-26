@@ -1,7 +1,7 @@
 package dev.yurisuika.compost.network.protocol.common.custom;
 
 import dev.yurisuika.compost.util.Network;
-import dev.yurisuika.compost.util.config.options.Composition;
+import dev.yurisuika.compost.world.Composition;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
