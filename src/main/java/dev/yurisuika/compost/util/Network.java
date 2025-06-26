@@ -3,10 +3,8 @@ package dev.yurisuika.compost.util;
 import dev.yurisuika.compost.network.protocol.common.custom.CompostPayload;
 import dev.yurisuika.compost.network.protocol.common.custom.ResetPayload;
 import dev.yurisuika.compost.network.protocol.common.custom.WorldPayload;
-import dev.yurisuika.compost.util.config.Option;
-import dev.yurisuika.compost.util.config.options.Composition;
+import dev.yurisuika.compost.world.Composition;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -26,11 +24,11 @@ public class Network {
         Network.levelName = levelName;
     }
 
-    public static void sendCompositions(Level level, Player player) {
+    public static void sendCompositions(Level level, ServerPlayer player) {
         if (!level.isClientSide()) {
             PacketDistributor.sendToPlayer((ServerPlayer) player, new ResetPayload());
             COMPOSITIONS.clear();
-            Option.getCompositions().forEach((name, composition) -> {
+            Configure.getCompositions().forEach((name, composition) -> {
                 PacketDistributor.sendToPlayer((ServerPlayer) player, new CompostPayload(name, composition.getCompost().getItem(), composition.getCompost().getChance(), composition.getCompost().getCount().getMin(), composition.getCompost().getCount().getMax()));
                 composition.getWorlds().forEach(world -> PacketDistributor.sendToPlayer((ServerPlayer) player, new WorldPayload(name, world)));
                 COMPOSITIONS.put(name, composition);
