@@ -13,12 +13,12 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.stream.IntStream;
 
-public class ContainerComposterBlockEntity extends RandomizableContainerBlockEntity implements WorldlyContainer {
+public class ContainerComposterBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
 
     public NonNullList<ItemStack> items = NonNullList.withSize(27 + 1, ItemStack.EMPTY);
 
@@ -29,17 +29,13 @@ public class ContainerComposterBlockEntity extends RandomizableContainerBlockEnt
     @Override
     public void load(BlockState state, CompoundTag tag) {
         super.load(state, tag);
-        if (!trySaveLootTable(tag)) {
-            ContainerHelper.loadAllItems(tag, items);
-        }
+        ContainerHelper.loadAllItems(tag, items);
     }
 
     @Override
     public CompoundTag save(CompoundTag tag) {
         super.save(tag);
-        if (!tryLoadLootTable(tag)) {
-            ContainerHelper.saveAllItems(tag, items);
-        }
+        ContainerHelper.saveAllItems(tag, items);
         return tag;
     }
 
@@ -85,8 +81,8 @@ public class ContainerComposterBlockEntity extends RandomizableContainerBlockEnt
     }
 
     @Override
-    public void setItems(NonNullList<ItemStack> list) {
-        items = list;
+    public void setItems(NonNullList<ItemStack> items) {
+        this.items = items;
     }
 
     @Override
