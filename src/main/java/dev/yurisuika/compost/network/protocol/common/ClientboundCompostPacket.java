@@ -1,7 +1,7 @@
 package dev.yurisuika.compost.network.protocol.common;
 
 import dev.yurisuika.compost.util.Network;
-import dev.yurisuika.compost.util.config.options.Composition;
+import dev.yurisuika.compost.world.Composition;
 import net.fabricmc.fabric.api.networking.v1.FabricPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
