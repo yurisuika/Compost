@@ -4,7 +4,7 @@ import dev.yurisuika.compost.network.protocol.common.custom.CompostPayload;
 import dev.yurisuika.compost.network.protocol.common.custom.ResetPayload;
 import dev.yurisuika.compost.network.protocol.common.custom.WorldPayload;
 import dev.yurisuika.compost.world.Composition;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 
@@ -26,11 +26,11 @@ public class Network {
 
     public static void sendCompositions(Level level, ServerPlayer player) {
         if (!level.isClientSide()) {
-            ServerPlayNetworking.send(player, new ResetPayload());
+            player.connection.send(new ClientboundCustomPayloadPacket(new ResetPayload()));
             COMPOSITIONS.clear();
             Configure.getCompositions().forEach((name, composition) -> {
-                ServerPlayNetworking.send(player, new CompostPayload(name, composition.getCompost().getItem(), composition.getCompost().getChance(), composition.getCompost().getCount().getMin(), composition.getCompost().getCount().getMax()));
-                composition.getWorlds().forEach(world -> ServerPlayNetworking.send(player, new WorldPayload(name, world)));
+                player.connection.send(new ClientboundCustomPayloadPacket(new CompostPayload(name, composition.getCompost().getItem(), composition.getCompost().getChance(), composition.getCompost().getCount().getMin(), composition.getCompost().getCount().getMax())));
+                composition.getWorlds().forEach(world -> player.connection.send(new ClientboundCustomPayloadPacket(new WorldPayload(name, world))));
                 COMPOSITIONS.put(name, composition);
             });
         }
