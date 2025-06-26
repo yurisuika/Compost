@@ -14,9 +14,10 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public abstract class EMIMixin {
 
@@ -24,21 +25,26 @@ public abstract class EMIMixin {
     @Mixin(value = EmiCompostingRecipe.class, remap = false)
     public abstract static class EmiCompostingRecipeMixin {
 
+        @Inject(method = "getOutputs", at = @At("RETURN"), cancellable = true)
+        private void useCompostOutputs(CallbackInfoReturnable<List<EmiStack>> cir) {
+            cir.setReturnValue(getStacks());
+        }
+
         @Inject(method = "addWidgets", at = @At(value = "INVOKE", target = "Ldev/emi/emi/api/widget/WidgetHolder;addSlot(Ldev/emi/emi/api/stack/EmiIngredient;II)Ldev/emi/emi/api/widget/SlotWidget;", ordinal = 1), cancellable = true)
         private void injectWidgetAndCancel(WidgetHolder widgets, CallbackInfo ci) {
-            widgets.addGeneratedSlot(this::getStacks, EmiUtil.RANDOM.nextInt(), 90, 0).recipeContext((EmiCompostingRecipe) (Object) this);
+            widgets.addGeneratedSlot(random -> getStacks().get(random.nextInt(getStacks().size())), EmiUtil.RANDOM.nextInt(), 90, 0).recipeContext((EmiCompostingRecipe) (Object) this);
             ci.cancel();
         }
 
         @Unique
-        private EmiStack getStacks(Random random) {
+        private List<EmiStack> getStacks() {
+            List<EmiStack> emiStacks = new ArrayList<>();
             if (Network.COMPOSITIONS.isEmpty()) {
-                return EmiStack.of(ItemStack.EMPTY);
+                emiStacks.add(EmiStack.of(ItemStack.EMPTY));
             } else {
-                List<ItemStack> compost = Parse.createNetworkCompost(Minecraft.getInstance().level.registryAccess(), Network.getLevelName());
-                ItemStack itemStack = compost.get(random.nextInt(compost.size()));
-                return EmiStack.of(itemStack).setAmount(itemStack.getCount());
+                Parse.createNetworkCompost(Minecraft.getInstance().level.registryAccess(), Network.getLevelName()).forEach(compost -> emiStacks.add(EmiStack.of(compost)));
             }
+            return emiStacks;
         }
 
     }
