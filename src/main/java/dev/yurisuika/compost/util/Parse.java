@@ -2,8 +2,7 @@ package dev.yurisuika.compost.util;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.yurisuika.compost.util.config.Option;
-import dev.yurisuika.compost.util.config.options.Composition;
+import dev.yurisuika.compost.world.Composition;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.core.HolderLookup;
@@ -37,7 +36,7 @@ public class Parse {
     }
 
     public static List<ItemStack> createLocalCompost(HolderLookup.Provider provider, String level) {
-        return createCompost(provider, Option.getCompositions(), level, false);
+        return createCompost(provider, Configure.getCompositions(), level, false);
     }
 
     public static List<ItemStack> createNetworkCompost(HolderLookup.Provider provider, String level) {
