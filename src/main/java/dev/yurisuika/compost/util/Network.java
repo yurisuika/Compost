@@ -42,7 +42,7 @@ public class Network {
                 composition.getWorlds().forEach(world -> {
                     FriendlyByteBuf worldBuffer = new FriendlyByteBuf(Unpooled.buffer());
                     worldBuffer.writeUtf(name);
-                    worldBuffer.writeUtf(composition.getCompost().getItem());
+                    worldBuffer.writeUtf(world);
                     player.connection.send(new ClientboundCustomPayloadPacket(ClientboundWorldPacket.ID, worldBuffer));
                 });
                 COMPOSITIONS.put(name, composition);
