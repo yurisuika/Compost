@@ -28,7 +28,7 @@ public class Network {
 
     public static void sendCompositions(Level level, ServerPlayer player) {
         if (!level.isClientSide()) {
-            FriendlyByteBuf resetBuffer = new FriendlyByteBuf(Unpooled.EMPTY_BUFFER);
+            FriendlyByteBuf resetBuffer = new FriendlyByteBuf(Unpooled.buffer());
             resetBuffer.writeResourceLocation(ClientboundResetPacket.ID);
             player.connection.send(new ClientboundCustomPayloadPacket(resetBuffer));
             COMPOSITIONS.clear();
