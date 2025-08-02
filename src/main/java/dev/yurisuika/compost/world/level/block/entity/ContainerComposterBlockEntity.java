@@ -130,7 +130,7 @@ public class ContainerComposterBlockEntity extends BaseContainerBlockEntity impl
             getLevel().levelEvent(LevelEvent.COMPOSTER_FILL, getBlockPos(), state != getBlockState() ? 1 : 0);
             removeItemNoUpdate(27);
         }
-        if (state.getValue(ContainerComposterBlock.LEVEL) == 8 && isEmpty()) {
+        if (state.getValue(ContainerComposterBlock.LEVEL) == 8 && isEmpty() && getLevel() != null) {
             ContainerComposterBlock.empty(null, getBlockState(), getLevel(), getBlockPos());
         }
         super.setChanged();
