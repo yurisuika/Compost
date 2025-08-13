@@ -55,7 +55,7 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
     public InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         int i = state.getValue(LEVEL);
         if (i < 8 && COMPOSTABLES.containsKey(stack.getItem())) {
-            if (i < 7 && !level.isClientSide) {
+            if (i < 7 && !level.isClientSide()) {
                 level.levelEvent(LevelEvent.COMPOSTER_FILL, pos, state != ComposterBlockInvoker.invokeAddItem(player, state, level, pos, stack) ? 1 : 0);
                 player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
                 stack.consume(1, player);
@@ -77,7 +77,7 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
     }
 
     public static BlockState extractProduce(Entity user, BlockState state, Level level, BlockPos pos) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             ContainerComposterBlockEntity blockEntity = (ContainerComposterBlockEntity) level.getBlockEntity(pos);
             for (int i = 0; i < 27; i++) {
                 Vec3 vec3 = Vec3.atLowerCornerWithOffset(pos, 0.5D, 1.01D, 0.5D).offsetRandom(level.random, 0.7F);
