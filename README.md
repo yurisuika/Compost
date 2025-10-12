@@ -1,5 +1,3 @@
-<p align="center"><img src="https://github.com/yurisuika/Compost/blob/Fabric-1.18.2/src/main/resources/assets/compost/icon.png?raw=true" width="256" height="256"></p>
-
 **Compost** is a mod for Minecraft that makes composters turn your food waste into whatever you want! Have you ever thought that bone meal wasn't quite the right product that a composter should bring to the game? Well, now you can change the composter to produce dirt, apples, or even diamonds! Bring out the true essence of a composter and get dirty!
 
 Compost 2.x has reworked the configuration system! Compost now uses "compositions" that you configure, each with a unique name that you provide! Each composition contains both a compost entry (which contains the item to generate, the chance to generate, and the min/max count of the item) and a set of world names. If the worlds set is empty, the composition is used globally! This returns the ability to have a global configuration in Compost that you can adjust on the fly! Please see the wiki for details, as the commands have been equally improved!
