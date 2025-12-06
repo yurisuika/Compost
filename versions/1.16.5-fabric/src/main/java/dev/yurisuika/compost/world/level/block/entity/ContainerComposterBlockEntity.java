@@ -1,0 +1,193 @@
+package dev.yurisuika.compost.world.level.block.entity;
+
+import dev.yurisuika.compost.world.level.block.ContainerComposterBlock;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.IntStream;
+
+public class ContainerComposterBlockEntity extends RandomizableContainerBlockEntity implements WorldlyContainer {
+
+    public NonNullList<ItemStack> compost = NonNullList.withSize(27 + 1, ItemStack.EMPTY);
+    public List<ItemStack> compostables = new ArrayList<>();
+
+    public ContainerComposterBlockEntity() {
+        super(CompostBlockEntityType.COMPOSTER);
+    }
+
+    @Override
+    public void load(BlockState state, CompoundTag tag) {
+        super.load(state, tag);
+        this.compost = NonNullList.withSize(getContainerSize(), ItemStack.EMPTY);
+        if (!tryLoadLootTable(tag)) {
+            ContainerHelper.loadAllItems(tag, compost);
+        }
+
+        ListTag listTag = tag.getList("Compostables", 10);
+        for (int i = 0; i < listTag.size(); ++i) {
+            CompoundTag compoundTag = listTag.getCompound(i);
+            compostables.add(ItemStack.of(compoundTag));
+        }
+    }
+
+    @Override
+    public CompoundTag save(CompoundTag tag) {
+        super.save(tag);
+        if (!trySaveLootTable(tag)) {
+            ContainerHelper.saveAllItems(tag, compost);
+        }
+
+        ListTag listTag = new ListTag();
+        for (int i = 0; i < compostables.size(); ++i) {
+            ItemStack itemStack = compostables.get(i);
+            if (!itemStack.isEmpty()) {
+                CompoundTag compoundTag = new CompoundTag();
+                compoundTag.putByte("Compostables", (byte) i);
+                itemStack.save(compoundTag);
+                listTag.add(itemStack.save(compoundTag));
+            }
+        }
+
+        tag.put("Compostables", listTag);
+        return tag;
+    }
+
+    @Override
+    public ItemStack getItem(int slot) {
+        return compost.get(slot);
+    }
+
+    @Override
+    public ItemStack removeItem(int slot, int amount) {
+        return ContainerHelper.removeItem(compost, slot, amount);
+    }
+
+    @Override
+    public ItemStack removeItemNoUpdate(int slot) {
+        return ContainerHelper.takeItem(compost, slot);
+    }
+
+    @Override
+    public void setItem(int slot, ItemStack stack) {
+        compost.set(slot, stack);
+        if (slot == 27) {
+            stack.setCount(1);
+            setChanged();
+        } else if (stack.getCount() > 64) {
+            stack.setCount(64);
+        }
+    }
+
+    @Override
+    public NonNullList<ItemStack> getItems() {
+        return compost;
+    }
+
+    @Override
+    public void setItems(NonNullList<ItemStack> items) {
+        this.compost = items;
+    }
+
+    @Override
+    public void clearContent() {
+        compost.clear();
+    }
+
+    @Override
+    public int getContainerSize() {
+        return compost.size();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        for (ItemStack itemStack : compost) {
+            if (itemStack.isEmpty()) continue;
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public Component getDefaultName() {
+        return new TranslatableComponent("container.compost.composter");
+    }
+
+    @Override
+    public AbstractContainerMenu createMenu(int syncId, Inventory inventory) {
+        return ChestMenu.threeRows(syncId, inventory, this);
+    }
+
+    @Override
+    public int getMaxStackSize() {
+        return 1;
+    }
+
+    @Override
+    public int[] getSlotsForFace(Direction side) {
+        return side == Direction.DOWN ? IntStream.range(0, 27).toArray() : new int[]{27};
+    }
+
+    @Override
+    public boolean canPlaceItem(int slot, ItemStack stack) {
+        return getBlockState().getValue(ContainerComposterBlock.LEVEL) < 7 && slot == 27 && getItem(27).isEmpty() && ContainerComposterBlock.COMPOSTABLES.containsKey(stack.getItem());
+    }
+
+    @Override
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, Direction dir) {
+        return dir == Direction.UP && getBlockState().getValue(ContainerComposterBlock.LEVEL) < 7 && slot == 27 && getItem(27).isEmpty() && ContainerComposterBlock.COMPOSTABLES.containsKey(stack.getItem());
+    }
+
+    @Override
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
+        return dir == Direction.DOWN && slot < 27 && !stack.isEmpty();
+    }
+
+    @Override
+    public void setChanged() {
+        BlockState state = getBlockState();
+        ItemStack input = getItem(27);
+        if (!input.isEmpty() && state.getValue(ContainerComposterBlock.LEVEL) < 7) {
+            state = ContainerComposterBlock.addItem(getBlockState(), getLevel(), getBlockPos(), input);
+            getLevel().levelEvent(1500, getBlockPos(), state != getBlockState() ? 1 : 0);
+            removeItemNoUpdate(27);
+        }
+        if (state.getValue(ContainerComposterBlock.LEVEL) == 8 && isEmpty() && getLevel() != null) {
+            ContainerComposterBlock.empty(getBlockState(), getLevel(), getBlockPos());
+        }
+        super.setChanged();
+    }
+
+    @Override
+    public boolean stillValid(Player player) {
+        if (level.getBlockEntity(worldPosition) != this) {
+            return false;
+        } else {
+            return player.distanceToSqr((double) worldPosition.getX() + 0.5D, (double) worldPosition.getY() + 0.5D, (double) worldPosition.getZ() + 0.5D) <= 64.0D;
+        }
+    }
+
+    public ResourceLocation getLootTable() {
+        return lootTable;
+    }
+
+    public void setLootTable(ResourceLocation lootTable) {
+        this.lootTable = lootTable;
+    }
+
+}

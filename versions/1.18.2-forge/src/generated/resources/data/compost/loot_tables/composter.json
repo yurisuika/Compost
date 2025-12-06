@@ -1,0 +1,166 @@
+{
+  "type": "compost:composter",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minecraft:dirt"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:alternative",
+              "terms": [
+                {
+                  "condition": "compost:match_compostable",
+                  "predicate": {
+                    "tag": "minecraft:saplings"
+                  }
+                },
+                {
+                  "condition": "compost:match_compostable",
+                  "predicate": {
+                    "tag": "minecraft:leaves"
+                  }
+                }
+              ]
+            }
+          ],
+          "name": "minecraft:coarse_dirt"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bone_meal"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "compost:match_compostable",
+          "predicate": {
+            "items": [
+              "minecraft:wheat_seeds",
+              "minecraft:potato",
+              "minecraft:carrot",
+              "minecraft:beetroot_seeds"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 1.0,
+        "max": 2.0
+      },
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:location_check",
+              "predicate": {
+                "dimension": "minecraft:overworld"
+              }
+            },
+            {
+              "condition": "minecraft:weather_check",
+              "raining": true
+            }
+          ],
+          "name": "minecraft:brown_mushroom"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "compost:match_compostable",
+              "predicate": {
+                "items": [
+                  "minecraft:brown_mushroom"
+                ]
+              }
+            }
+          ],
+          "name": "minecraft:brown_mushroom"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:location_check",
+              "predicate": {
+                "dimension": "minecraft:overworld"
+              }
+            },
+            {
+              "condition": "minecraft:weather_check",
+              "raining": true
+            }
+          ],
+          "name": "minecraft:red_mushroom"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "compost:match_compostable",
+              "predicate": {
+                "items": [
+                  "minecraft:red_mushroom"
+                ]
+              }
+            }
+          ],
+          "name": "minecraft:red_mushroom"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "compost:match_compostable",
+              "predicate": {
+                "items": [
+                  "minecraft:warped_fungus"
+                ]
+              }
+            }
+          ],
+          "name": "minecraft:warped_fungus"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "compost:match_compostable",
+              "predicate": {
+                "items": [
+                  "minecraft:crimson_fungus"
+                ]
+              }
+            }
+          ],
+          "name": "minecraft:crimson_fungus"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:random_chance",
+          "chance": 0.25
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+{
+  "type": "compost:composter",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:dirt",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:any_of",
+              "terms": [
+                {
+                  "condition": "compost:match_compostable",
+                  "predicate": {
+                    "items": "#minecraft:saplings"
+                  }
+                },
+                {
+                  "condition": "compost:match_compostable",
+                  "predicate": {
+                    "items": "#minecraft:leaves"
+                  }
+                }
+              ]
+            }
+          ],
+          "name": "minecraft:coarse_dirt"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "compost:match_compostable",
+          "predicate": {
+            "items": "#minecraft:villager_plantable_seeds"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bone_meal"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "chance": 0.25,
+          "condition": "minecraft:random_chance"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:any_of",
+              "terms": [
+                {
+                  "condition": "minecraft:all_of",
+                  "terms": [
+                    {
+                      "condition": "minecraft:location_check",
+                      "predicate": {
+                        "dimension": "minecraft:overworld"
+                      }
+                    },
+                    {
+                      "condition": "minecraft:weather_check",
+                      "raining": true
+                    }
+                  ]
+                },
+                {
+                  "condition": "compost:match_compostable",
+                  "predicate": {
+                    "items": "minecraft:brown_mushroom"
+                  }
+                }
+              ]
+            }
+          ],
+          "name": "minecraft:brown_mushroom"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:any_of",
+              "terms": [
+                {
+                  "condition": "minecraft:all_of",
+                  "terms": [
+                    {
+                      "condition": "minecraft:location_check",
+                      "predicate": {
+                        "dimension": "minecraft:overworld"
+                      }
+                    },
+                    {
+                      "condition": "minecraft:weather_check",
+                      "raining": true
+                    }
+                  ]
+                },
+                {
+                  "condition": "compost:match_compostable",
+                  "predicate": {
+                    "items": "minecraft:red_mushroom"
+                  }
+                }
+              ]
+            }
+          ],
+          "name": "minecraft:red_mushroom"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "compost:match_compostable",
+              "predicate": {
+                "items": "minecraft:warped_fungus"
+              }
+            }
+          ],
+          "name": "minecraft:warped_fungus"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "compost:match_compostable",
+              "predicate": {
+                "items": "minecraft:crimson_fungus"
+              }
+            }
+          ],
+          "name": "minecraft:crimson_fungus"
+        }
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 2.0,
+        "min": 1.0
+      }
+    }
+  ],
+  "random_sequence": "compost:composter"
+}

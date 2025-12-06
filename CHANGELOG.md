@@ -1,0 +1,7 @@
+- Added loot table for composter to use under `composter:composter` identifier.
+- Added loot context key set `compost:composter` type for loot table to use.
+- Added loot context key `compost:compostable` that takes in an item predicate.
+- Changed ContainerComposterBlockEntity to support loot tables.
+- Replaced ContainerComposterBlock inventory fill from Composition configuration with loot table results from `compost:composter`.
+- Removed "Composition" system, commands, configuration, and networking in favor of vanilla styled loot table.
+- Fixed villager WorkAtComposter goal using vanilla compost extraction (always only bone meal).

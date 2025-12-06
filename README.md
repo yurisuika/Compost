@@ -1,31 +1,31 @@
-**Compost** is a mod for Minecraft that makes composters turn your food waste into whatever you want! Have you ever thought that bone meal wasn't quite the right product that a composter should bring to the game? Well, now you can change the composter to produce dirt, apples, or even diamonds! Bring out the true essence of a composter and get dirty!
+*Create compost based on what you toss into a composter!*
 
-Compost 2.x has reworked the configuration system! Compost now uses "compositions" that you configure, each with a unique name that you provide! Each composition contains both a compost entry (which contains the item to generate, the chance to generate, and the min/max count of the item) and a set of world names. If the worlds set is empty, the composition is used globally! This returns the ability to have a global configuration in Compost that you can adjust on the fly! Please see the wiki for details, as the commands have been equally improved!
+### Get more than just bone meal!
+Compost modifies the vanilla composter to allow you to change what compost you get out of it! With version 3.x, the composter now uses a vanilla styled loot table for generating compost, offering the vast configurability that loot tables make possible. Simply create a data pack with a `compost:composter` loot table to use your own configuration!
 
-#### Compiling
+You can make some items renewable that should be but are not, create deep interactions with different compostables for a complex and realistic compost, or simply make the compost give a modded compost item. The choice is yours!
 
-To build from source you will need have JDK 21 to compile and, optionally, Git to clone the repository. Otherwise, download the archive and just run `./gradlew build` from the root project folder.
+### Let the world change your compost!
+Compost supports using origin-based conditions in your loot table. You can have compost that generates only under certain light levels, elevations, biomes, dimensions, and more! Have a mod that adds an origin-based condition such as one that checks if it is snowing? Compost can use that to determine what compost is created, allowing nature to play a distinct role the composting process.
 
-When using Git, just choose a directory you wish to keep the project root folder in, decide which branch you wish to compile, and then run these commands:
+### Grow compost based on what compostables you add to it!
+Compost adds a loot condition for matching what compostables have been used on the composter, so what you put in can determine what you get out! Want a chance of getting apple seeds when you compost apples? How about modded mulch when you compost saplings? Compost gives you the ability to do such and more!
 
-```shell script
-git clone --branch <branch> --recursive https://github.com/yurisuika/compost.git
+Please note that the default compost loot table is designed to showcase Compost's compostable matching condition to make bone meal available for villager farmers. You may also find mushrooms growing in your compost when the composter is rained upon in game versions that support the necessary conditions.
 
-cd ./compost
+### Get the goods!
+You can find releases of Compost on both *[Modrinth]* and *[CurseForge]* and also access development builds on *[GitHub]*!
 
-./gradlew build
-```
+Compost supports Fabric 1.16+, Forge 1.16+, and NeoForge 1.20.2+.
 
-Afterwards, your compiled JAR will be in `./build/libs`.
+### Figure it all out!
+You can delve into the *[wiki]* for details or submit a *[bug report]* if something isn't quite right!
 
-#### Releases
+Still need help? Drop into the *[Discord]* for quick support.
 
-Don't want to bother building from source? Get the releases *[right here](https://github.com/yurisuika/Compost/releases)* now!
-
-#### Repositories
-
-You can find Compost on both *[CurseForge](https://www.curseforge.com/minecraft/mc-mods/compost)* and *[Modrinth](https://modrinth.com/mod/compost)*!
-
-#### Community
-
-The one and only! Join the *[Discord](https://discord.gg/0zdNEkQle7Qg9C1H)* for the latest discussion on our server, resource pack, mods, or just to chat!
+[Modrinth]: https://modrinth.com/mod/compost
+[CurseForge]: https://www.curseforge.com/minecraft/mc-mods/compost
+[GitHub]: https://github.com/yurisuika/compost
+[wiki]: https://github.com/yurisuika/compost/wiki
+[bug report]: https://github.com/yurisuika/compost/issues
+[Discord]: https://discord.gg/0zdNEkQle7Qg9C1H
