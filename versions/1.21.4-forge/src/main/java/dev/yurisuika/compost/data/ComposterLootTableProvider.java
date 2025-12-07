@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 public class ComposterLootTableProvider extends LootTableProvider {
 
     public ComposterLootTableProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(output, Set.of(CompostLootTables.COMPOSTER), List.of(new SubProviderEntry(ComposterLoot::new, CompostLootContextParamSets.COMPOSTER)), registries);
+        super(output, Set.of(CompostLootTables.COMPOSTERS_COMPOST), List.of(new SubProviderEntry(ComposterLoot::new, CompostLootContextParamSets.COMPOSTER)), registries);
     }
 
 }

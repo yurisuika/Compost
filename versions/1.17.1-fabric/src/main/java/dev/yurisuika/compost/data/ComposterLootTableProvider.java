@@ -18,7 +18,7 @@ public class ComposterLootTableProvider extends SimpleFabricLootTableProvider {
 
     @Override
     public void accept(BiConsumer<ResourceLocation, LootTable.Builder> output) {
-        output.accept(CompostLootTables.COMPOSTER, ComposterLoot.COMPOST);
+        output.accept(CompostLootTables.COMPOSTERS_COMPOST, ComposterLoot.COMPOST);
     }
 
 }

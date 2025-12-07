@@ -12,7 +12,7 @@ import java.util.Set;
 public class ComposterLootTableProvider extends LootTableProvider {
 
     public ComposterLootTableProvider(PackOutput output) {
-        super(output, Set.of(CompostLootTables.COMPOSTER), List.of(new SubProviderEntry(ComposterLoot::new, CompostLootContextParamSets.COMPOSTER)));
+        super(output, Set.of(CompostLootTables.COMPOSTERS_COMPOST), List.of(new SubProviderEntry(ComposterLoot::new, CompostLootContextParamSets.COMPOSTER)));
     }
 
 }

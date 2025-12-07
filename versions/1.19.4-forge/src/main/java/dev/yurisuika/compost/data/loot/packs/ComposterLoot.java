@@ -25,7 +25,7 @@ public class ComposterLoot implements LootTableSubProvider {
 
     @Override
     public void generate(BiConsumer<ResourceLocation, LootTable.Builder> output) {
-        output.accept(CompostLootTables.COMPOSTER, LootTable.lootTable()
+        output.accept(CompostLootTables.COMPOSTERS_COMPOST, LootTable.lootTable()
                 .withPool(LootPool.lootPool()
                         .setRolls(ConstantValue.exactly(1.0F))
                         .add(LootItem.lootTableItem(Items.DIRT)

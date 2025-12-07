@@ -135,7 +135,7 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
             BlockEntity levelBlockEntity = level.getBlockEntity(pos);
             if (levelBlockEntity instanceof ContainerComposterBlockEntity) {
                 ContainerComposterBlockEntity blockEntity  = (ContainerComposterBlockEntity) levelBlockEntity;
-                blockEntity.setLootTable(CompostLootTables.COMPOSTER, random.nextLong());
+                blockEntity.setLootTable(CompostLootTables.COMPOSTERS_COMPOST, random.nextLong());
 
                 ResourceLocation resourceLocation = blockEntity.getLootTable();
                 if (resourceLocation != null) {

@@ -138,7 +138,7 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (state.getValue(LEVEL) == 7) {
             if (level.getBlockEntity(pos) instanceof ContainerComposterBlockEntity blockEntity) {
-                blockEntity.setLootTable(CompostLootTables.COMPOSTER, random.nextLong());
+                blockEntity.setLootTable(CompostLootTables.COMPOSTERS_COMPOST, random.nextLong());
 
                 ResourceKey<LootTable> resourceKey = blockEntity.getLootTable();
                 if (resourceKey != null) {

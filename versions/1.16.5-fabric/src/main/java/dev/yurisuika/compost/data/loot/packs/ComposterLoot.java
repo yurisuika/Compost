@@ -21,7 +21,7 @@ public class ComposterLoot implements Consumer<BiConsumer<ResourceLocation, Loot
 
     @Override
     public void accept(BiConsumer<ResourceLocation, LootTable.Builder> output) {
-        output.accept(CompostLootTables.COMPOSTER, LootTable.lootTable()
+        output.accept(CompostLootTables.COMPOSTERS_COMPOST, LootTable.lootTable()
                 .withPool(LootPool.lootPool()
                         .setRolls(ConstantIntValue.exactly(1))
                         .add(LootItem.lootTableItem(Items.DIRT)

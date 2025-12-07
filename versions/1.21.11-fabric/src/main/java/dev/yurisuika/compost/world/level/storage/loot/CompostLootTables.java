@@ -7,6 +7,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 
 public class CompostLootTables {
 
-    public static final ResourceKey<LootTable> COMPOSTER = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath("compost", "composter"));
+    public static final ResourceKey<LootTable> COMPOSTERS_COMPOST = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath("compost", "composters/compost"));
 
 }

@@ -4,6 +4,6 @@ import net.minecraft.resources.ResourceLocation;
 
 public class CompostLootTables {
 
-    public static final ResourceLocation COMPOSTER = new ResourceLocation("compost", "composter");
+    public static final ResourceLocation COMPOSTERS_COMPOST = new ResourceLocation("compost", "composters/compost");
 
 }

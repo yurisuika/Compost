@@ -166,5 +166,5 @@
       }
     }
   ],
-  "random_sequence": "compost:composter"
+  "random_sequence": "compost:composters/compost"
 }
