@@ -1,6 +1,6 @@
 package dev.yurisuika.compost;
 
-import dev.yurisuika.compost.data.ComposterLootTableProvider;
+import dev.yurisuika.compost.data.loot.ComposterLootTableProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
