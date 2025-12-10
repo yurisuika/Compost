@@ -2,6 +2,6 @@
     "pack": {
         "description": "Compost",
         "pack_format": 46,
-        "supported_formats": [35, 44]
+        "supported_formats": [35, 46]
     }
 }
