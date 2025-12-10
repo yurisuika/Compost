@@ -74,6 +74,7 @@
                     {
                       "condition": "minecraft:location_check",
                       "predicate": {
+                        "can_see_sky": true,
                         "dimension": "minecraft:overworld"
                       }
                     },
@@ -106,6 +107,7 @@
                     {
                       "condition": "minecraft:location_check",
                       "predicate": {
+                        "can_see_sky": true,
                         "dimension": "minecraft:overworld"
                       }
                     },
@@ -158,5 +160,5 @@
       }
     }
   ],
-  "random_sequence": "compost:composter"
+  "random_sequence": "compost:composters/compost"
 }
