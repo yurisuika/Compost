@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.yurisuika.compost.mixin",
+  "refmap": "compost.refmap.json",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "fabric.api.transfer.v1.item.ItemStorageMixin",
+    "minecraft.world.entity.ai.behavior.WorkAtComposterMixin",
+    "minecraft.world.level.block.BlocksMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
