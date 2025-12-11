@@ -2,8 +2,8 @@
     "pack": {
         "description": "Compost",
         "pack_format": 75.0,
-        "supported_formats": [56, 75.0],
-        "min_format": 56,
+        "supported_formats": [70.0, 75.0],
+        "min_format": 70.0,
         "max_format": 75.0
     }
 }
