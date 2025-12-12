@@ -140,12 +140,9 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
                 if (resourceLocation != null) {
                     LootTable lootTable = level.getServer().getLootTables().get(resourceLocation);
                     blockEntity.setLootTable(null);
-                    LootContext.Builder builder = new LootContext.Builder(level)
-                            .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos));
+                    LootContext.Builder builder = new LootContext.Builder(level).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos));
                     if (!blockEntity.compostables.isEmpty()) {
-                        for (ItemStack compostable : blockEntity.compostables) {
-                            builder.withOptionalParameter(CompostLootContextParams.COMPOSTABLE, compostable);
-                        }
+                        builder.withOptionalParameter(CompostLootContextParams.COMPOSTABLES, blockEntity.compostables);
                     }
                     lootTable.fill(blockEntity, builder.create(CompostLootContextParamSets.COMPOSTER));
                 }

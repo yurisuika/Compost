@@ -11,6 +11,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -25,12 +26,20 @@ public record MatchCompostable(Optional<ItemPredicate> predicate) implements Loo
 
     @Override
     public Set<ContextKey<?>> getReferencedContextParams() {
-        return ImmutableSet.of(CompostLootContextParams.COMPOSTABLE);
+        return ImmutableSet.of(CompostLootContextParams.COMPOSTABLES);
     }
     @Override
     public boolean test(LootContext context) {
-        ItemStack itemStack = context.getOptionalParameter(CompostLootContextParams.COMPOSTABLE);
-        return itemStack != null && (predicate.isEmpty() || predicate.get().test(itemStack));
+        List<ItemStack> stacks = context.getOptionalParameter(CompostLootContextParams.COMPOSTABLES);
+
+        if (stacks != null) {
+            for (ItemStack itemStack : stacks) {
+                if (itemStack != null && (predicate.isEmpty() || predicate.get().test(itemStack))) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static Builder compostableMatches(ItemPredicate.Builder builder) {

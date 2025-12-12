@@ -5,6 +5,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public class CompostLootContextParamSets {
 
-    public static final ContextKeySet COMPOSTER = new ContextKeySet.Builder().required(LootContextParams.ORIGIN).optional(CompostLootContextParams.COMPOSTABLE).build();
+    public static final ContextKeySet COMPOSTER = new ContextKeySet.Builder().required(LootContextParams.ORIGIN).optional(CompostLootContextParams.COMPOSTABLES).build();
 
 }

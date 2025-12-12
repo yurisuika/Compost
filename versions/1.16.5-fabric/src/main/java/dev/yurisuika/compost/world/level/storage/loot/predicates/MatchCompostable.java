@@ -12,6 +12,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
+import java.util.List;
 import java.util.Set;
 
 public class MatchCompostable implements LootItemCondition {
@@ -29,13 +30,21 @@ public class MatchCompostable implements LootItemCondition {
 
     @Override
     public Set<LootContextParam<?>> getReferencedContextParams() {
-        return ImmutableSet.of(CompostLootContextParams.COMPOSTABLE);
+        return ImmutableSet.of(CompostLootContextParams.COMPOSTABLES);
     }
 
     @Override
     public boolean test(LootContext context) {
-        ItemStack itemStack = context.getParamOrNull(CompostLootContextParams.COMPOSTABLE);
-        return itemStack != null && predicate.matches(itemStack);
+        List<ItemStack> stacks = context.getParamOrNull(CompostLootContextParams.COMPOSTABLES);
+
+        if (stacks != null) {
+            for (ItemStack itemStack : stacks) {
+                if (itemStack != null && predicate.matches(itemStack)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static Builder compostableMatches(ItemPredicate.Builder builder) {
