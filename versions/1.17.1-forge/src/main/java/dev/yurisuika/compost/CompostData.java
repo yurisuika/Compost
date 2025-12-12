@@ -1,6 +1,6 @@
 package dev.yurisuika.compost;
 
-import dev.yurisuika.compost.data.loot.ComposterLootTableProvider;
+import dev.yurisuika.compost.data.loot.CompostLootTableProvider;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
@@ -14,7 +14,7 @@ public class CompostData {
         @SubscribeEvent
         public static void gatherServerData(GatherDataEvent event) {
             if (event.includeServer()) {
-                event.getGenerator().addProvider(new ComposterLootTableProvider(event.getGenerator()));
+                event.getGenerator().addProvider(new CompostLootTableProvider(event.getGenerator()));
             }
         }
 

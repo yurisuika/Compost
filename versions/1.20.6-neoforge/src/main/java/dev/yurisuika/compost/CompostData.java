@@ -1,6 +1,6 @@
 package dev.yurisuika.compost;
 
-import dev.yurisuika.compost.data.loot.ComposterLootTableProvider;
+import dev.yurisuika.compost.data.loot.CompostLootTableProvider;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
@@ -14,7 +14,7 @@ public class CompostData {
 
         @SubscribeEvent
         public static void gatherServerData(GatherDataEvent event) {
-            event.getGenerator().addProvider(event.includeServer(), new ComposterLootTableProvider(event.getGenerator().getPackOutput(), event.getLookupProvider()));
+            event.getGenerator().addProvider(event.includeServer(), new CompostLootTableProvider(event.getGenerator().getPackOutput(), event.getLookupProvider()));
         }
 
     }
