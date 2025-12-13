@@ -14,7 +14,7 @@ import net.neoforged.neoforge.registries.RegisterEvent;
 @Mod("compost")
 public class Compost {
 
-    @EventBusSubscriber(modid = "compost")
+    @EventBusSubscriber(modid = "compost", bus = EventBusSubscriber.Bus.MOD)
     public static class ModEvents {
 
         @SubscribeEvent

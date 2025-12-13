@@ -13,8 +13,8 @@ public class CompostData {
     public static class ModEvents {
 
         @SubscribeEvent
-        public static void gatherServerData(GatherDataEvent.Server event) {
-            event.addProvider(new CompostLootTableProvider(event.getGenerator().getPackOutput(), event.getLookupProvider()));
+        public static void gatherServerData(GatherDataEvent event) {
+            event.getGenerator().addProvider(event.includeServer(), new CompostLootTableProvider(event.getGenerator().getPackOutput(), event.getLookupProvider()));
         }
 
     }

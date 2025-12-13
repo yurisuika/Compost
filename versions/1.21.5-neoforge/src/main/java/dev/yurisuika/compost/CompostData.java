@@ -9,7 +9,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 @Mod("compost")
 public class CompostData {
 
-    @EventBusSubscriber(modid = "compost")
+    @EventBusSubscriber(modid = "compost", bus = EventBusSubscriber.Bus.MOD)
     public static class ModEvents {
 
         @SubscribeEvent
