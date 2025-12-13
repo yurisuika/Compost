@@ -9,26 +9,31 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.registries.RegisterEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Mod("compost")
+@Mod(Compost.MOD_ID)
 public class Compost {
 
-    @Mod.EventBusSubscriber(modid = "compost", bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static final String MOD_ID = "compost";
+    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+
+    @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class ModEvents {
 
         @SubscribeEvent
         public static void registerLootContextKeySets(RegisterEvent event) {
-            LootContextParamSets.REGISTRY.put(new ResourceLocation("compost", "composter"), CompostLootContextParamSets.COMPOSTER);
+            LootContextParamSets.REGISTRY.put(new ResourceLocation(MOD_ID, "composter"), CompostLootContextParamSets.COMPOSTER);
         }
 
         @SubscribeEvent
         public static void registerLootItemConditionTypes(RegisterEvent event) {
-            event.register(BuiltInRegistries.LOOT_CONDITION_TYPE.key(), helper -> helper.register(new ResourceLocation("compost", "match_compostable"), CompostLootItemConditions.MATCH_COMPOSTABLE));
+            event.register(BuiltInRegistries.LOOT_CONDITION_TYPE.key(), helper -> helper.register(new ResourceLocation(MOD_ID, "match_compostable"), CompostLootItemConditions.MATCH_COMPOSTABLE));
         }
 
         @SubscribeEvent
         public static void registerBlockEntityTypes(RegisterEvent event) {
-            event.register(BuiltInRegistries.BLOCK_ENTITY_TYPE.key(), helper -> helper.register(new ResourceLocation("compost", "composter"), CompostBlockEntityType.COMPOSTER));
+            event.register(BuiltInRegistries.BLOCK_ENTITY_TYPE.key(), helper -> helper.register(new ResourceLocation(MOD_ID, "composter"), CompostBlockEntityType.COMPOSTER));
         }
 
     }

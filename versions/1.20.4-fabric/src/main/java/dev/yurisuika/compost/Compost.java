@@ -8,19 +8,24 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Compost implements ModInitializer {
 
+    public static final String MOD_ID = "compost";
+    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+
     public static void registerLootContextKeySets() {
-        LootContextParamSets.REGISTRY.put(new ResourceLocation("compost", "composter"), CompostLootContextParamSets.COMPOSTER);
+        LootContextParamSets.REGISTRY.put(new ResourceLocation(MOD_ID, "composter"), CompostLootContextParamSets.COMPOSTER);
     }
 
     public static void registerLootItemConditionTypes() {
-        Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, new ResourceLocation("compost", "match_compostable"), CompostLootItemConditions.MATCH_COMPOSTABLE);
+        Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, new ResourceLocation(MOD_ID, "match_compostable"), CompostLootItemConditions.MATCH_COMPOSTABLE);
     }
 
     public static void registerBlockEntityTypes() {
-        Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation("compost", "composter"), CompostBlockEntityType.COMPOSTER);
+        Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(MOD_ID, "composter"), CompostBlockEntityType.COMPOSTER);
     }
 
     @Override

@@ -6,10 +6,10 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
-@Mod("compost")
+@Mod(Compost.MOD_ID)
 public class CompostData {
 
-    @EventBusSubscriber(modid = "compost", bus = EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(modid = Compost.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
     public static class ModEvents {
 
         @SubscribeEvent

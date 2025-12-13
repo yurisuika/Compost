@@ -11,26 +11,31 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-@Mod("compost")
+@Mod(Compost.MOD_ID)
 public class Compost {
 
-    @Mod.EventBusSubscriber(modid = "compost", bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static final String MOD_ID = "compost";
+    public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+
+    @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class ModEvents {
 
         @SubscribeEvent
         public static void registerLootContextKeySets(FMLCommonSetupEvent event) {
-            LootContextParamSets.REGISTRY.put(new ResourceLocation("compost", "composter"), CompostLootContextParamSets.COMPOSTER);
+            LootContextParamSets.REGISTRY.put(new ResourceLocation(MOD_ID, "composter"), CompostLootContextParamSets.COMPOSTER);
         }
 
         @SubscribeEvent
         public static void registerLootItemConditionTypes(FMLCommonSetupEvent event) {
-            Registry.register(Registry.LOOT_CONDITION_TYPE, new ResourceLocation("compost", "match_compostable"), CompostLootItemConditions.MATCH_COMPOSTABLE);
+            Registry.register(Registry.LOOT_CONDITION_TYPE, new ResourceLocation(MOD_ID, "match_compostable"), CompostLootItemConditions.MATCH_COMPOSTABLE);
         }
 
         @SubscribeEvent
         public static void registerBlockEntityTypes(RegistryEvent.Register<BlockEntityType<?>> event) {
-            event.getRegistry().register(CompostBlockEntityType.COMPOSTER.setRegistryName(new ResourceLocation("compost", "composter")));
+            event.getRegistry().register(CompostBlockEntityType.COMPOSTER.setRegistryName(new ResourceLocation(MOD_ID, "composter")));
         }
 
     }
