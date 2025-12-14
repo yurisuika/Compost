@@ -1,1 +1,2 @@
 - Fixed NeoForge event bus not being defined crashing 1.21.2 through 1.21.5.
+- Fixed mod failing to load due to datagen entrypoint for NeoForge 21.4 not being compatible with 21.2/3.
