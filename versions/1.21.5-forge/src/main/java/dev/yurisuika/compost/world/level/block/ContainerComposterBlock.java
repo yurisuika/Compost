@@ -1,5 +1,6 @@
 package dev.yurisuika.compost.world.level.block;
 
+import dev.yurisuika.compost.Compost;
 import dev.yurisuika.compost.world.level.block.entity.ContainerComposterBlockEntity;
 import dev.yurisuika.compost.world.level.storage.loot.CompostLootTables;
 import dev.yurisuika.compost.world.level.storage.loot.parameters.CompostLootContextParamSets;
@@ -110,7 +111,7 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
         }
     }
 
-    public static BlockState extractProduce(Entity user, BlockState state, Level level, BlockPos pos) {
+    public static BlockState extractProduce(Entity entity, BlockState state, Level level, BlockPos pos) {
         if (!level.isClientSide()) {
             if (level.getBlockEntity(pos) instanceof ContainerComposterBlockEntity blockEntity) {
                 for (int i = 0; i < 27; i++) {
@@ -123,13 +124,13 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
             }
         }
         level.playSound(null, pos, SoundEvents.COMPOSTER_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
-        return empty(user, state, level, pos);
+        return empty(entity, state, level, pos);
     }
 
-    public static BlockState empty(Entity user, BlockState state, LevelAccessor level, BlockPos pos) {
+    public static BlockState empty(Entity entity, BlockState state, LevelAccessor level, BlockPos pos) {
         BlockState blockState = state.setValue(LEVEL, 0);
         level.setBlock(pos, blockState, Block.UPDATE_ALL);
-        level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(user, blockState));
+        level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(entity, blockState));
         return blockState;
     }
 
@@ -146,6 +147,8 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
                     LootParams.Builder builder = new LootParams.Builder(level).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos));
                     if (!blockEntity.compostables.isEmpty()) {
                         builder.withOptionalParameter(CompostLootContextParams.COMPOSTABLES, blockEntity.compostables);
+                    } else {
+                        Compost.LOGGER.warn("Composter has had no compostables added and will not be able to match against them!");
                     }
                     lootTable.fill(blockEntity, builder.create(CompostLootContextParamSets.COMPOSTER), blockEntity.getLootTableSeed());
                 }

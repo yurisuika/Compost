@@ -1,5 +1,6 @@
 package dev.yurisuika.compost.world.level.block;
 
+import dev.yurisuika.compost.Compost;
 import dev.yurisuika.compost.world.level.block.entity.ContainerComposterBlockEntity;
 import dev.yurisuika.compost.world.level.storage.loot.CompostLootTables;
 import dev.yurisuika.compost.world.level.storage.loot.parameters.CompostLootContextParamSets;
@@ -142,6 +143,8 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
                     LootContext.Builder builder = new LootContext.Builder(level).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos));
                     if (!blockEntity.compostables.isEmpty()) {
                         builder.withOptionalParameter(CompostLootContextParams.COMPOSTABLES, blockEntity.compostables);
+                    } else {
+                        Compost.LOGGER.warn("Composter has had no compostables added and will not be able to match against them!");
                     }
                     lootTable.fill(blockEntity, builder.create(CompostLootContextParamSets.COMPOSTER));
                 }

@@ -42,7 +42,6 @@ public record MatchCompostable(Optional<ItemPredicate> predicate) implements Loo
             }
         }
         return false;
-
     }
 
     public static Builder compostableMatches(ItemPredicate.Builder builder) {

@@ -1,5 +1,6 @@
 package dev.yurisuika.compost.mixin.minecraft.world.level.block;
 
+import dev.yurisuika.compost.Compost;
 import dev.yurisuika.compost.world.level.block.ContainerComposterBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ComposterBlock;
@@ -16,6 +17,7 @@ public abstract class BlocksMixin {
 
     @Redirect(method = "<clinit>", slice = @Slice(from = @At(value = "CONSTANT", args = "stringValue=composter")), at = @At(value = "NEW", target = "net/minecraft/world/level/block/ComposterBlock", ordinal = 0))
     private static ComposterBlock replaceComposter(Properties properties) {
+        Compost.LOGGER.info("Replacing the vanilla composter with a Compost composter!");
         return new ContainerComposterBlock(Properties.of(Material.WOOD).strength(0.6F).sound(SoundType.WOOD));
     }
 
