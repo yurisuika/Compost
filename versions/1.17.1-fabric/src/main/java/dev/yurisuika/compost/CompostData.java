@@ -7,8 +7,8 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 public class CompostData implements DataGeneratorEntrypoint {
 
     @Override
-    public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
-        fabricDataGenerator.addProvider(CompostLootTableProvider::new);
+    public void onInitializeDataGenerator(FabricDataGenerator generator) {
+        generator.addProvider(CompostLootTableProvider::new);
     }
 
 }
