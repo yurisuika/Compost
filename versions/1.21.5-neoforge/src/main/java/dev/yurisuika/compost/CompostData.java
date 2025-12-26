@@ -3,10 +3,8 @@ package dev.yurisuika.compost;
 import dev.yurisuika.compost.data.loot.CompostLootTableProvider;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
-@Mod(Compost.MOD_ID)
 public class CompostData {
 
     @EventBusSubscriber(modid = Compost.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
