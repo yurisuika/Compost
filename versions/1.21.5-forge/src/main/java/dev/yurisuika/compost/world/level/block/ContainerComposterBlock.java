@@ -115,7 +115,7 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
         if (!level.isClientSide()) {
             if (level.getBlockEntity(pos) instanceof ContainerComposterBlockEntity blockEntity) {
                 for (int i = 0; i < 27; i++) {
-                    Vec3 vec3 = Vec3.atLowerCornerWithOffset(pos, 0.5D, 1.01D, 0.5D).offsetRandom(level.random, 0.7F);
+                    Vec3 vec3 = Vec3.atLowerCornerWithOffset(pos, 0.5D, 1.01D, 0.5D).offsetRandom(level.getRandom(), 0.7F);
                     ItemEntity itemEntity = new ItemEntity(level, vec3.x(), vec3.y(), vec3.z(), blockEntity.removeItemNoUpdate(i));
                     itemEntity.setDefaultPickUpDelay();
                     level.addFreshEntity(itemEntity);
