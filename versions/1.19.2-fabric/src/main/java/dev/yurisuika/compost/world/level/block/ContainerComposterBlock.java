@@ -143,7 +143,7 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
                     if (!blockEntity.compostables.isEmpty()) {
                         builder.withOptionalParameter(CompostLootContextParams.COMPOSTABLES, blockEntity.compostables);
                     } else {
-                        Compost.LOGGER.warn("Composter has had no compostables added and will not be able to match against them!");
+                        Compost.LOGGER.warn("Composter at x={} y={} z={} has been filled with loot generated using an empty compostables list. It may not contain any compost!", pos.getX(), pos.getY(), pos.getZ());
                     }
                     lootTable.fill(blockEntity, builder.create(CompostLootContextParamSets.COMPOSTER));
                 }
