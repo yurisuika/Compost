@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Slice;
 
 import java.util.function.Function;
 
-@Mixin(Blocks.class)
+@Mixin(value = Blocks.class, remap = false)
 public abstract class BlocksMixin {
 
     @ModifyArg(method = "<clinit>", slice = @Slice(from = @At(value = "CONSTANT", args = "stringValue=composter")), at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Blocks;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;)Lnet/minecraft/world/level/block/Block;", ordinal = 0), index = 1)

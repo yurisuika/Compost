@@ -3,7 +3,7 @@
   "minVersion": "0.8",
   "package": "dev.yurisuika.compost.mixin",
   "refmap": "compost.refmap.json",
-  "compatibilityLevel": "JAVA_25",
+  "compatibilityLevel": "JAVA_21",
   "mixins": [
     "minecraft.world.entity.ai.behavior.WorkAtComposterMixin",
     "minecraft.world.level.block.BlocksMixin"

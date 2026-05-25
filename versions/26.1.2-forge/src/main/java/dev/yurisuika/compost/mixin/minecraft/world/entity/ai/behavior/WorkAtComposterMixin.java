@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(WorkAtComposter.class)
+@Mixin(value = WorkAtComposter.class, remap = false)
 public class WorkAtComposterMixin {
 
     @Redirect(method = "compostItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/ComposterBlock;insertItem(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;"))
