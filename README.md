@@ -1,4 +1,6 @@
-*Create compost based on what you toss into a composter!*
+# COMPOST
+#### *Create compost based on what you toss into a composter!*
+![Compost](https://raw.githubusercontent.com/yurisuika/Compost/refs/heads/assets/compost.png)
 
 ### Get more than just bone meal!
 Compost modifies the vanilla composter to allow you to change what compost you get out of it! With version 3.x, the composter now uses a vanilla styled loot table for generating compost, offering the vast configurability that loot tables make possible. Simply create a data pack with a `compost:composter` loot table to use your own configuration!
