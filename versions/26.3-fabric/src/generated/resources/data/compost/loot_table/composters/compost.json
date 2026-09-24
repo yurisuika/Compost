@@ -1,0 +1,146 @@
+{
+  "type": "compost:composter",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:dirt",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:any_of",
+            "terms": [
+              {
+                "type": "compost:match_compostable",
+                "predicate": {
+                  "items": "#minecraft:saplings"
+                }
+              },
+              {
+                "type": "compost:match_compostable",
+                "predicate": {
+                  "items": "#minecraft:leaves"
+                }
+              }
+            ]
+          },
+          "name": "minecraft:coarse_dirt"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "compost:match_compostable",
+        "predicate": {
+          "items": "#minecraft:villager_plantable_seeds"
+        }
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bone_meal"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.25
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:any_of",
+            "terms": [
+              {
+                "type": "minecraft:all_of",
+                "terms": [
+                  {
+                    "type": "minecraft:location_check",
+                    "predicate": {
+                      "can_see_sky": true,
+                      "dimension": "minecraft:overworld"
+                    }
+                  },
+                  {
+                    "type": "minecraft:weather_check",
+                    "raining": true
+                  }
+                ]
+              },
+              {
+                "type": "compost:match_compostable",
+                "predicate": {
+                  "items": "minecraft:brown_mushroom"
+                }
+              }
+            ]
+          },
+          "name": "minecraft:brown_mushroom"
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:any_of",
+            "terms": [
+              {
+                "type": "minecraft:all_of",
+                "terms": [
+                  {
+                    "type": "minecraft:location_check",
+                    "predicate": {
+                      "can_see_sky": true,
+                      "dimension": "minecraft:overworld"
+                    }
+                  },
+                  {
+                    "type": "minecraft:weather_check",
+                    "raining": true
+                  }
+                ]
+              },
+              {
+                "type": "compost:match_compostable",
+                "predicate": {
+                  "items": "minecraft:red_mushroom"
+                }
+              }
+            ]
+          },
+          "name": "minecraft:red_mushroom"
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "compost:match_compostable",
+            "predicate": {
+              "items": "minecraft:warped_fungus"
+            }
+          },
+          "name": "minecraft:warped_fungus"
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "compost:match_compostable",
+            "predicate": {
+              "items": "minecraft:crimson_fungus"
+            }
+          },
+          "name": "minecraft:crimson_fungus"
+        }
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 2,
+        "min": 1
+      }
+    }
+  ]
+}

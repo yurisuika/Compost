@@ -24,7 +24,10 @@ import java.util.stream.IntStream;
 
 public class ContainerComposterBlockEntity extends RandomizableContainerBlockEntity implements WorldlyContainer {
 
-    public NonNullList<ItemStack> compost = NonNullList.withSize(27 + 1, ItemStack.EMPTY);
+    public static final int OUTPUT_SIZE = 27;
+    public static final int INPUT_SIZE = 1;
+    public static final int INPUT_SLOT = 27;
+    public NonNullList<ItemStack> compost = NonNullList.withSize(OUTPUT_SIZE + INPUT_SIZE, ItemStack.EMPTY);
     public List<ItemStack> compostables = new ArrayList<>();
 
     public ContainerComposterBlockEntity(BlockPos pos, BlockState state) {
@@ -84,7 +87,7 @@ public class ContainerComposterBlockEntity extends RandomizableContainerBlockEnt
     @Override
     public void setItem(int slot, ItemStack stack) {
         compost.set(slot, stack);
-        if (slot == 27) {
+        if (slot == INPUT_SLOT) {
             stack.setCount(1);
             setChanged();
         } else if (stack.getCount() > 64) {
@@ -118,8 +121,8 @@ public class ContainerComposterBlockEntity extends RandomizableContainerBlockEnt
     }
 
     @Override
-    public AbstractContainerMenu createMenu(int syncId, Inventory inventory) {
-        return ChestMenu.threeRows(syncId, inventory, this);
+    public AbstractContainerMenu createMenu(int containerId, Inventory inventory) {
+        return ChestMenu.threeRows(containerId, inventory, this);
     }
 
     @Override
@@ -128,33 +131,33 @@ public class ContainerComposterBlockEntity extends RandomizableContainerBlockEnt
     }
 
     @Override
-    public int[] getSlotsForFace(Direction side) {
-        return side == Direction.DOWN ? IntStream.range(0, 27).toArray() : new int[]{27};
+    public int[] getSlotsForFace(Direction direction) {
+        return direction == Direction.DOWN ? IntStream.range(0, OUTPUT_SIZE).toArray() : new int[]{INPUT_SLOT};
     }
 
     @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
-        return getBlockState().getValue(ContainerComposterBlock.LEVEL) < 7 && slot == 27 && getItem(27).isEmpty() && ContainerComposterBlock.getValue(stack) > 0.0F;
+        return getBlockState().getValue(ContainerComposterBlock.LEVEL) < 7 && slot == INPUT_SLOT && getItem(INPUT_SLOT).isEmpty() && ContainerComposterBlock.getValue(stack) > 0.0F;
     }
 
     @Override
-    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, Direction dir) {
-        return dir == Direction.UP && getBlockState().getValue(ContainerComposterBlock.LEVEL) < 7 && slot == 27 && getItem(27).isEmpty() && ContainerComposterBlock.getValue(stack) > 0.0F;
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, Direction direction) {
+        return direction == Direction.UP && getBlockState().getValue(ContainerComposterBlock.LEVEL) < 7 && slot == INPUT_SLOT && getItem(INPUT_SLOT).isEmpty() && ContainerComposterBlock.getValue(stack) > 0.0F;
     }
 
     @Override
-    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
-        return dir == Direction.DOWN && slot < 27 && !stack.isEmpty();
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction direction) {
+        return direction == Direction.DOWN && slot < INPUT_SLOT && !stack.isEmpty();
     }
 
     @Override
     public void setChanged() {
         BlockState state = getBlockState();
-        ItemStack input = getItem(27);
+        ItemStack input = getItem(INPUT_SLOT);
         if (!input.isEmpty() && state.getValue(ContainerComposterBlock.LEVEL) < 7) {
             state = ContainerComposterBlock.addItem(null, getBlockState(), getLevel(), getBlockPos(), input);
             getLevel().levelEvent(LevelEvent.COMPOSTER_FILL, getBlockPos(), state != getBlockState() ? 1 : 0);
-            removeItemNoUpdate(27);
+            removeItemNoUpdate(INPUT_SLOT);
         }
         if (state.getValue(ContainerComposterBlock.LEVEL) == 8 && isEmpty() && getLevel() != null) {
             ContainerComposterBlock.empty(null, getBlockState(), getLevel(), getBlockPos());

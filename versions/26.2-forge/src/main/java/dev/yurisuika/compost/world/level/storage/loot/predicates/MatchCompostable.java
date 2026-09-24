@@ -27,6 +27,7 @@ public record MatchCompostable(Optional<ItemPredicate> predicate) implements Loo
     public Set<ContextKey<?>> getReferencedContextParams() {
         return ImmutableSet.of(CompostLootContextParams.COMPOSTABLES);
     }
+
     @Override
     public boolean test(LootContext context) {
         List<ItemStack> stacks = context.getOptionalParameter(CompostLootContextParams.COMPOSTABLES);

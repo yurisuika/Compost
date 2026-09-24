@@ -56,9 +56,9 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
 
     @Override
     public InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        int i = state.getValue(LEVEL);
-        if (i < 8 && COMPOSTABLES.containsKey(stack.getItem())) {
-            if (i < 7 && !level.isClientSide()) {
+        int fillLevel = state.getValue(LEVEL);
+        if (fillLevel < 8 && COMPOSTABLES.containsKey(stack.getItem())) {
+            if (fillLevel < 7 && !level.isClientSide()) {
                 level.levelEvent(LevelEvent.COMPOSTER_FILL, pos, state != addItem(player, state, level, pos, stack) ? 1 : 0);
                 player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
                 stack.consume(1, player);
@@ -71,7 +71,8 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
 
     @Override
     public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        if (state.getValue(LEVEL) == 8) {
+        int fillLevel = state.getValue(LEVEL);
+        if (fillLevel == 8) {
             extractProduce(player, state, level, pos);
             return InteractionResult.SUCCESS;
         } else {
@@ -79,45 +80,47 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
         }
     }
 
-    public static BlockState insertItem(Entity entity, BlockState state, ServerLevel level, ItemStack stack, BlockPos pos) {
-        int i = state.getValue(LEVEL);
-        if (i < 7 && COMPOSTABLES.containsKey(stack.getItem())) {
-            BlockState blockstate = addItem(entity, state, level, pos, stack);
+    public static BlockState insertItem(Entity sourceEntity, BlockState state, ServerLevel level, ItemStack stack, BlockPos pos) {
+        int fillLevel = state.getValue(LEVEL);
+        if (fillLevel < 7 && COMPOSTABLES.containsKey(stack.getItem())) {
+            BlockState blockState = addItem(sourceEntity, state, level, pos, stack);
             stack.shrink(1);
-            return blockstate;
+            return blockState;
         } else {
             return state;
         }
     }
 
-    public static BlockState addItem(Entity entity, BlockState state, LevelAccessor level, BlockPos pos, ItemStack stack) {
-        int i = state.getValue(LEVEL);
-        float f = COMPOSTABLES.getFloat(stack.getItem());
-        if ((i != 0 || !(f > 0.0F)) && !(level.getRandom().nextDouble() < (double) f)) {
+    public static BlockState addItem(Entity sourceEntity, BlockState state, LevelAccessor level, BlockPos pos, ItemStack stack) {
+        int fillLevel = state.getValue(LEVEL);
+        float chance = COMPOSTABLES.getFloat(stack.getItem());
+        if ((fillLevel != 0 || !(chance > 0.0F)) && !(level.getRandom().nextDouble() < (double) chance)) {
             return state;
         } else {
             if (level.getBlockEntity(pos) instanceof ContainerComposterBlockEntity blockEntity) {
-                blockEntity.compostables.add(stack);
+                ItemStack input = stack.copy();
+                input.setCount(1);
+                blockEntity.compostables.add(input);
             }
 
-            int j = i + 1;
-            BlockState blockstate = state.setValue(LEVEL, j);
-            level.setBlock(pos, blockstate, 3);
-            level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(entity, blockstate));
-            if (j == 7) {
+            int newLevel = fillLevel + 1;
+            BlockState newState = state.setValue(LEVEL, newLevel);
+            level.setBlock(pos, newState, 3);
+            level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(sourceEntity, newState));
+            if (newLevel == 7) {
                 level.scheduleTick(pos, state.getBlock(), 20);
             }
 
-            return blockstate;
+            return newState;
         }
     }
 
-    public static BlockState extractProduce(Entity entity, BlockState state, Level level, BlockPos pos) {
+    public static BlockState extractProduce(Entity sourceEntity, BlockState state, Level level, BlockPos pos) {
         if (!level.isClientSide()) {
             if (level.getBlockEntity(pos) instanceof ContainerComposterBlockEntity blockEntity) {
-                for (int i = 0; i < 27; i++) {
+                for (int slot = 0; slot < ContainerComposterBlockEntity.INPUT_SLOT; slot++) {
                     Vec3 vec3 = Vec3.atLowerCornerWithOffset(pos, 0.5D, 1.01D, 0.5D).offsetRandom(level.getRandom(), 0.7F);
-                    ItemEntity itemEntity = new ItemEntity(level, vec3.x(), vec3.y(), vec3.z(), blockEntity.removeItemNoUpdate(i));
+                    ItemEntity itemEntity = new ItemEntity(level, vec3.x(), vec3.y(), vec3.z(), blockEntity.removeItemNoUpdate(slot));
                     itemEntity.setDefaultPickUpDelay();
                     level.addFreshEntity(itemEntity);
                 }
@@ -125,13 +128,13 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
             }
         }
         level.playSound(null, pos, SoundEvents.COMPOSTER_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
-        return empty(entity, state, level, pos);
+        return empty(sourceEntity, state, level, pos);
     }
 
-    public static BlockState empty(Entity entity, BlockState state, LevelAccessor level, BlockPos pos) {
+    public static BlockState empty(Entity sourceEntity, BlockState state, LevelAccessor level, BlockPos pos) {
         BlockState blockState = state.setValue(LEVEL, 0);
         level.setBlock(pos, blockState, Block.UPDATE_ALL);
-        level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(entity, blockState));
+        level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(sourceEntity, blockState));
         return blockState;
     }
 
@@ -151,7 +154,11 @@ public class ContainerComposterBlock extends ComposterBlock implements EntityBlo
                     } else {
                         Compost.LOGGER.warn("Composter at x={} y={} z={} has been filled with loot generated using an empty compostables list. It may not contain any compost!", pos.getX(), pos.getY(), pos.getZ());
                     }
-                    lootTable.fill(blockEntity, builder.create(CompostLootContextParamSets.COMPOSTER), blockEntity.getLootTableSeed());
+                    SimpleContainer lootContainer = new SimpleContainer(ContainerComposterBlockEntity.OUTPUT_SIZE);
+                    lootTable.fill(lootContainer, builder.create(CompostLootContextParamSets.COMPOSTER), blockEntity.getLootTableSeed());
+                    for (int slot = 0; slot <ContainerComposterBlockEntity.INPUT_SLOT; slot++) {
+                        blockEntity.setItem(slot, lootContainer.getItem(slot).copy());
+                    }
                 }
 
                 blockEntity.compostables.clear();
