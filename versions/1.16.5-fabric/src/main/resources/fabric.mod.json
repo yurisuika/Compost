@@ -28,7 +28,7 @@
     "compost.mixins.json"
   ],
 
-  "accessWidener": "compost.accesswidener",
+  "accessWidener": "compost.classtweaker",
 
   "depends": {
     "fabricloader": "${loader_version_range}",

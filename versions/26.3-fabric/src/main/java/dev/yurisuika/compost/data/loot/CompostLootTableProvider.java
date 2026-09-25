@@ -44,6 +44,7 @@ public class CompostLootTableProvider {
         @Override
         public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> output) {
             output.accept(CompostLootTables.COMPOSTERS_COMPOST, LootTable.lootTable()
+                    .setRandomSequence(CompostLootTables.COMPOSTERS_COMPOST.identifier())
                     .withPool(LootPool.lootPool()
                             .setRolls(ContextIntProviders.exactly(1))
                             .add(LootItem.lootTableItem(Items.DIRT)

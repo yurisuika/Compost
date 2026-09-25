@@ -142,5 +142,6 @@
         "min": 1
       }
     }
-  ]
+  ],
+  "random_sequence": "compost:composters/compost"
 }
