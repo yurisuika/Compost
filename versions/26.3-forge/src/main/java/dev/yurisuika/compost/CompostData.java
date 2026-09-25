@@ -3,7 +3,7 @@ package dev.yurisuika.compost;
 import dev.yurisuika.compost.data.loot.CompostLootTableProvider;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.registries.RegistriesDatapackGenerator;
+import net.minecraftforge.common.data.RegistryDataBuilder;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -17,7 +17,7 @@ public class CompostData {
 
         @SubscribeEvent
         public static void gatherServerData(GatherDataEvent event) {
-            event.getGenerator().addProvider(event.includeServer(), RegistriesDatapackGenerator.forReloadableLayer(event.getGenerator().getPackOutput(), event.getLookupProvider()));
+            event.getGenerator().addProvider(event.includeServer(), RegistryDataBuilder.of().modid(Compost.MOD_ID).reloadable(RELOADABLE_BUILDER).reloadableGenerator(event.getGenerator().getPackOutput()));
         }
 
     }

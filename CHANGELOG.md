@@ -1,2 +1,4 @@
-- Fixed composter block entity container transfer logic not using NeoForge 20.4+ data map (hoppers could not insert modded compostables into a composter).
-- Changed warning log for composters filling loot from empty compostables list to include position of block.
+Where did my dirt go? It's in slot 27.
+
+Changes:
+- Fixed loot generation filling input slot.
